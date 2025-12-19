@@ -1,7 +1,5 @@
 import React, { useMemo, useState } from "react";
-import * as LogoModule from "../components/ui/Logo";
-
-const Logo = LogoModule.default || LogoModule.Logo;
+import Logo from "../components/ui/Logo";
 
 export default function Onboarding({ onDone }) {
   const tujuanList = useMemo(
@@ -55,11 +53,13 @@ export default function Onboarding({ onDone }) {
       <div className="w-full max-w-xl rounded-3xl border border-emerald-200 bg-white p-8 shadow-lg">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            {Logo ? <Logo className="h-12 w-auto" /> : null}
+            <div className="scale-110 origin-center">
+              <Logo title="Monexia" subtitle="Edukasi fintech, aman, terarah" />
+            </div>
           </div>
 
           <div className="text-3xl font-extrabold text-emerald-700">
-            Selamat datang di RupiahRapi
+            Selamat datang di Monexia
           </div>
 
           <div className="text-sm text-slate-600 mt-3">
