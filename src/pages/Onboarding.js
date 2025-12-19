@@ -101,7 +101,7 @@ export default function Onboarding({ onDone }) {
               "w-full rounded-xl px-4 py-3 font-bold transition " +
               (bisaLanjut
                 ? "bg-green-500 text-black hover:bg-green-400"
-                : "bg-black/10 text-black/50 cursor-not-allowed")
+                : "bg-green/10 text-black/50 cursor-not-allowed")
             }
           >
             Masuk ke Home
