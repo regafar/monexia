@@ -54,7 +54,7 @@ export default function Onboarding({ onDone }) {
           <div className="text-2xl font-extrabold leading-tight">
             Selamat datang di RupiahRapi
           </div>
-          <div className="text-sm text-white/70 mt-2">
+          <div className="text-sm text-black/70 mt-2">
             Isi nama dan tujuan dulu. Setelah itu kamu masuk ke Home.
           </div>
         </div>
@@ -66,9 +66,9 @@ export default function Onboarding({ onDone }) {
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Contoh: Rega"
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-emerald-400"
+              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-green-400"
             />
-            <div className="text-xs text-white/50 mt-2">
+            <div className="text-xs text-black/50 mt-2">
               Minimal 2 karakter.
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function Onboarding({ onDone }) {
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-emerald-400"
+              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-green-400"
             >
               {tujuanList.map((t) => (
                 <option key={t.value} value={t.value} className="bg-zinc-900">
@@ -100,14 +100,14 @@ export default function Onboarding({ onDone }) {
             className={
               "w-full rounded-xl px-4 py-3 font-bold transition " +
               (bisaLanjut
-                ? "bg-emerald-500 text-black hover:bg-emerald-400"
-                : "bg-white/10 text-white/50 cursor-not-allowed")
+                ? "bg-green-500 text-black hover:bg-green-400"
+                : "bg-black/10 text-black/50 cursor-not-allowed")
             }
           >
             Masuk ke Home
           </button>
 
-          <div className="text-xs text-white/50">
+          <div className="text-xs text-black/50">
             Data disimpan di browser (localStorage). Bisa di-reset kapan saja.
           </div>
         </form>
