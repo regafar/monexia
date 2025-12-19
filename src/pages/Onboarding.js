@@ -66,7 +66,7 @@ export default function Onboarding({ onDone }) {
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Contoh: Rega"
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-green-400"
+              className="w-full rounded-xl bg-green/5 border border-green/10 px-4 py-3 outline-none focus:border-green-400"
             />
             <div className="text-xs text-black/50 mt-2">
               Minimal 2 karakter.
@@ -78,7 +78,7 @@ export default function Onboarding({ onDone }) {
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-green-400"
+              className="w-full rounded-xl bg-green/5 border border-green/10 px-4 py-3 outline-none focus:border-green-400"
             >
               {tujuanList.map((t) => (
                 <option key={t.value} value={t.value} className="bg-zinc-900">
