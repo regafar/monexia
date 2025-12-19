@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import Logo from "../components/ui/Logo";
 
 export default function Onboarding({ onDone }) {
   const tujuanList = useMemo(
@@ -49,47 +48,40 @@ export default function Onboarding({ onDone }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-emerald-50 to-emerald-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-xl rounded-3xl border border-emerald-200 bg-white p-8 shadow-lg">
-        <div className="mb-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="scale-110 origin-center">
-              <Logo title="Monexia" subtitle="Edukasi fintech, aman, terarah" />
-            </div>
+    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-emerald-950 text-white flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-xl rounded-2xl border border-emerald-500/20 bg-black/40 backdrop-blur p-6 shadow-xl">
+        <div className="mb-6">
+          <div className="text-2xl font-extrabold leading-tight">
+            Selamat datang di RupiahRapi
           </div>
-
-          <div className="text-3xl font-extrabold text-emerald-700">
-            Selamat datang di Monexia
-          </div>
-
-          <div className="text-sm text-slate-600 mt-3">
-            Isi nama dan tujuan kamu dulu. Setelah itu kamu masuk ke beranda.
+          <div className="text-sm text-white/70 mt-2">
+            Isi nama dan tujuan dulu. Setelah itu kamu masuk ke Home.
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <div className="text-sm font-semibold mb-2 text-slate-700">Nama</div>
+            <div className="text-sm font-semibold mb-2">Nama</div>
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
-              placeholder="Masukkan nama kamu"
-              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-slate-800"
+              placeholder="Contoh: Rega"
+              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-emerald-400"
             />
-            <div className="text-xs text-slate-500 mt-2">Minimal 2 karakter.</div>
+            <div className="text-xs text-white/50 mt-2">
+              Minimal 2 karakter.
+            </div>
           </div>
 
           <div>
-            <div className="text-sm font-semibold mb-2 text-slate-700">
-              Tujuan penggunaan
-            </div>
+            <div className="text-sm font-semibold mb-2">Tujuan penggunaan</div>
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
-              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-slate-800"
+              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-emerald-400"
             >
               {tujuanList.map((t) => (
-                <option key={t.value} value={t.value} className="bg-white">
+                <option key={t.value} value={t.value} className="bg-zinc-900">
                   {t.label}
                 </option>
               ))}
@@ -97,7 +89,7 @@ export default function Onboarding({ onDone }) {
           </div>
 
           {error ? (
-            <div className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
               {error}
             </div>
           ) : null}
@@ -108,15 +100,15 @@ export default function Onboarding({ onDone }) {
             className={
               "w-full rounded-xl px-4 py-3 font-bold transition " +
               (bisaLanjut
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "bg-slate-200 text-slate-400 cursor-not-allowed")
+                ? "bg-emerald-500 text-black hover:bg-emerald-400"
+                : "bg-white/10 text-white/50 cursor-not-allowed")
             }
           >
-            Lanjut ke Beranda
+            Masuk ke Home
           </button>
 
-          <div className="text-xs text-slate-500 text-center">
-            Data disimpan di perangkat kamu (localStorage).
+          <div className="text-xs text-white/50">
+            Data disimpan di browser (localStorage). Bisa di-reset kapan saja.
           </div>
         </form>
       </div>
