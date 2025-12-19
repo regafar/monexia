@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import Logo from "../components/logo";
+import Logo from "../components/ui/Logo";
 
 export default function Onboarding({ onDone }) {
   const tujuanList = useMemo(
@@ -55,17 +55,22 @@ export default function Onboarding({ onDone }) {
           <div className="flex justify-center mb-4">
             <Logo className="h-12 w-auto" />
           </div>
+
           <div className="text-3xl font-extrabold text-emerald-700">
             Selamat datang di RupiahRapi
           </div>
+
           <div className="text-sm text-slate-600 mt-3">
-            Kenali kebutuhan kamu agar kami bisa menampilkan pengalaman belajar yang lebih relevan.
+            Kenali kebutuhan kamu agar kami bisa menampilkan pengalaman belajar
+            yang lebih relevan.
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <div className="text-sm font-semibold mb-2 text-slate-700">Nama</div>
+            <div className="text-sm font-semibold mb-2 text-slate-700">
+              Nama
+            </div>
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
@@ -78,7 +83,9 @@ export default function Onboarding({ onDone }) {
           </div>
 
           <div>
-            <div className="text-sm font-semibold mb-2 text-slate-700">Tujuan penggunaan</div>
+            <div className="text-sm font-semibold mb-2 text-slate-700">
+              Tujuan penggunaan
+            </div>
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
