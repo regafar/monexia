@@ -1,5 +1,6 @@
 // src/pages/Planner.jsx
-import React, { useMemo, useState } from "react";
+// src/pages/Planner.jsx
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import Card from "../components/ui/Card";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -12,6 +13,50 @@ function formatIDR(n) {
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
+}
+
+function digitsOnly(s) {
+  return String(s || "").replace(/[^\d]/g, "");
+}
+
+// Hook kecil supaya input angka tidak “maksa” value.toString() tiap render
+// (ini yang biasanya bikin user harus delete dulu dan ngetik satu-satu, serta caret loncat)
+function useMoneyField(numberValue, setNumberValue, opts = {}) {
+  const { min = 0, max = 1000000000 } = opts;
+
+  const [text, setText] = useState(() => String(Number.isFinite(numberValue) ? numberValue : 0));
+  const isEditingRef = useRef(false);
+
+  // Sync dari luar (misal slider geser) ke text, tapi jangan ganggu saat user lagi ngetik
+  useEffect(() => {
+    if (isEditingRef.current) return;
+    setText(String(Number.isFinite(numberValue) ? numberValue : 0));
+  }, [numberValue]);
+
+  const onFocus = () => {
+    isEditingRef.current = true;
+  };
+
+  const onBlur = () => {
+    isEditingRef.current = false;
+
+    const raw = digitsOnly(text);
+    const v = clamp(parseInt(raw || "0", 10), min, max);
+    setNumberValue(v);
+    setText(String(v));
+  };
+
+  const onChange = (e) => {
+    const raw = digitsOnly(e.target.value);
+
+    // Boleh kosong saat ngetik (biar tidak maksa jadi 0 dan tidak “ngunci”)
+    setText(raw);
+
+    const v = clamp(parseInt(raw || "0", 10), min, max);
+    setNumberValue(v);
+  };
+
+  return { text, setText, onFocus, onBlur, onChange };
 }
 
 export default function Planner() {
@@ -33,6 +78,18 @@ export default function Planner() {
   const sisa = useMemo(() => income - totalExpense, [income, totalExpense]);
 
   const maxSlider = useMemo(() => Math.max(1000000, income), [income]);
+
+  // Jaga agar pos tidak “di luar jangkauan” saat income turun drastis.
+  // Ini mencegah range slider terasa macet/ketarik balik karena max < value.
+  useEffect(() => {
+    const hardMax = Math.max(1000000, income);
+
+    setWajib((v) => clamp(v, 0, hardMax));
+    setMakan((v) => clamp(v, 0, hardMax));
+    setNonwajib((v) => clamp(v, 0, hardMax));
+    setHiburan((v) => clamp(v, 0, hardMax));
+    setTabungan((v) => clamp(v, 0, hardMax));
+  }, [income]);
 
   const status = useMemo(() => {
     if (income <= 0) {
@@ -141,14 +198,14 @@ export default function Planner() {
     return "text-slate-800";
   }, [status.tone]);
 
-  function handleIncomeInput(e) {
-    const raw = e.target.value.replace(/[^\d]/g, "");
-    const v = clamp(parseInt(raw || "0", 10), 0, 1000000000);
-    setIncome(v);
-  }
+  // Pendapatan: pakai money field supaya ngetik tidak “ngunci”
+  const incomeField = useMoneyField(income, setIncome, { min: 0, max: 1000000000 });
 
   function BudgetRow({ label, value, setValue }) {
-    const sliderMax = maxSlider;
+    // Pastikan slider selalu punya max >= value (biar drag tidak macet)
+    const sliderMax = Math.max(maxSlider, value);
+
+    const field = useMoneyField(value, setValue, { min: 0, max: 1000000000 });
 
     return (
       <div className="space-y-2">
@@ -171,14 +228,13 @@ export default function Planner() {
           <div className="text-xs text-slate-500">Geser untuk mengubah nominal.</div>
 
           <input
-            value={value.toString()}
-            onChange={(e) => {
-              const raw = e.target.value.replace(/[^\d]/g, "");
-              const v = clamp(parseInt(raw || "0", 10), 0, 1000000000);
-              setValue(v);
-            }}
+            value={field.text}
+            onFocus={field.onFocus}
+            onBlur={field.onBlur}
+            onChange={field.onChange}
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
             inputMode="numeric"
+            placeholder="0"
           />
         </div>
       </div>
@@ -204,8 +260,10 @@ export default function Planner() {
 
           <div className="mt-3">
             <input
-              value={income.toString()}
-              onChange={handleIncomeInput}
+              value={incomeField.text}
+              onFocus={incomeField.onFocus}
+              onBlur={incomeField.onBlur}
+              onChange={incomeField.onChange}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-4 text-3xl font-extrabold text-green-700 outline-none focus:border-green-300"
               inputMode="numeric"
               placeholder="0"
@@ -274,15 +332,11 @@ export default function Planner() {
             </div>
 
             <div className={`rounded-2xl border p-4 ${toneBoxClass}`}>
-              <div className={`font-extrabold ${toneTextClass}`}>
-                {status.title}
-              </div>
+              <div className={`font-extrabold ${toneTextClass}`}>{status.title}</div>
 
               <div className="mt-2 space-y-2 text-slate-700">
                 {status.desc.map((line, idx) => (
-                  <div key={idx}>
-                    {line === "" ? <div className="h-2" /> : line}
-                  </div>
+                  <div key={idx}>{line === "" ? <div className="h-2" /> : line}</div>
                 ))}
               </div>
 
