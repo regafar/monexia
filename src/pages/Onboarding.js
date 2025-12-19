@@ -48,11 +48,11 @@ export default function Onboarding({ onDone }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-zinc-950 to-green-950 text-black flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-green via-zinc-950 to-green-950 text-black flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-xl rounded-2xl border border-green-500/20 bg-white/40 backdrop-blur p-6 shadow-xl">
         <div className="mb-6">
           <div className="text-2xl font-extrabold leading-tight">
-            Selamat datang di RupiahRapi
+            Selamat datang di Monexia
           </div>
           <div className="text-sm text-black/70 mt-2">
             Isi nama dan tujuan dulu. Setelah itu kamu masuk ke Home.
@@ -65,7 +65,7 @@ export default function Onboarding({ onDone }) {
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
-              placeholder="Contoh: Rega"
+              placeholder="Contoh: Ridwan"
               className="w-full rounded-xl bg-green/5 border border-green/10 px-4 py-3 outline-none focus:border-green-400"
             />
             <div className="text-xs text-black/50 mt-2">
