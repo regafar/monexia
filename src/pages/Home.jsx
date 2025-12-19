@@ -58,7 +58,7 @@ export default function Home() {
           {/* ✅ TAMBAHAN: sapaan dari onboarding */}
           {nama ? (
             <div className="mb-2 text-sm font-semibold text-green-700">
-              Selamat datang, {nama}
+              Selamat datang, {nama} di Monexia
             </div>
           ) : null}
 
