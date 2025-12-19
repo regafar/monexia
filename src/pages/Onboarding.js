@@ -49,7 +49,7 @@ export default function Onboarding({ onDone }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green via-zinc-950 to-green-950 text-black flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-xl rounded-2xl border border-green-500/20 bg-white/40 backdrop-blur p-6 shadow-xl">
+      <div className="w-full max-w-xl rounded-2xl border border-green-500/20 bg-green/40 backdrop-blur p-6 shadow-xl">
         <div className="mb-6">
           <div className="text-2xl font-extrabold leading-tight">
             Selamat datang di Monexia
@@ -61,7 +61,7 @@ export default function Onboarding({ onDone }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <div className="text-sm font-semibold mb-2">Nama</div>
+            <div className="text-sm font-extrabold mb-2">Nama</div>
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
