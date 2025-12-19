@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import SecondaryButton from "../components/ui/SecondaryButton";
@@ -30,6 +30,23 @@ function FeatureCard({ icon, title, desc, cta, onClick }) {
 export default function Home() {
   const nav = useNavigate();
 
+  // ✅ TAMBAHAN: ambil nama dari onboarding
+  const [nama, setNama] = useState("");
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("rr_onboarding");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.name) {
+          setNama(parsed.name);
+        }
+      }
+    } catch (e) {
+      // diamkan jika data rusak
+    }
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* HERO */}
@@ -38,12 +55,21 @@ export default function Home() {
         <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl" />
 
         <div className="relative max-w-3xl">
+          {/* ✅ TAMBAHAN: sapaan dari onboarding */}
+          {nama ? (
+            <div className="mb-2 text-sm font-semibold text-green-700">
+              Selamat datang, {nama}
+            </div>
+          ) : null}
+
           <div className="text-xs font-extrabold uppercase tracking-wide text-slate-500">
             Platform Edukasi Fintech
           </div>
+
           <h1 className="mt-2 text-3xl font-extrabold text-slate-900 md:text-4xl">
             Belajar fintech dengan cara yang aman dan terarah
           </h1>
+
           <p className="mt-3 text-sm leading-relaxed text-slate-700">
             Monexia membantu kamu memahami layanan keuangan digital melalui
             pembelajaran bertahap, simulasi anti-penipuan, evaluasi pemahaman,
@@ -59,10 +85,6 @@ export default function Home() {
               Coba Simulasi
             </SecondaryButton>
           </div>
-
-          {/* ✅ HANYA ini yang dihilangkan: tombol "Beranda" di halaman Home
-              (Kalau sebelumnya ada tombol Beranda di Home, jangan ditaruh di sini)
-          */}
         </div>
       </div>
 
