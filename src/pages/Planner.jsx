@@ -1,6 +1,13 @@
 // src/pages/Planner.jsx
-// src/pages/Planner.jsx
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, {
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  memo,
+  useTransition
+} from "react";
 import Card from "../components/ui/Card";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -16,51 +23,133 @@ function clamp(n, min, max) {
 }
 
 function digitsOnly(s) {
-  return String(s || "").replace(/[^\d]/g, "");
+  return String(s ?? "").replace(/[^\d]/g, "");
 }
 
-// Hook kecil supaya input angka tidak “maksa” value.toString() tiap render
-// (ini yang biasanya bikin user harus delete dulu dan ngetik satu-satu, serta caret loncat)
-function useMoneyField(numberValue, setNumberValue, opts = {}) {
-  const { min = 0, max = 1000000000 } = opts;
+const BudgetRow = memo(function BudgetRow({ label, value, setValue, sliderMax }) {
+  const [isPending, startTransition] = useTransition();
 
-  const [text, setText] = useState(() => String(Number.isFinite(numberValue) ? numberValue : 0));
-  const isEditingRef = useRef(false);
+  const [localVal, setLocalVal] = useState(value);
+  const [text, setText] = useState(String(value));
 
-  // Sync dari luar (misal slider geser) ke text, tapi jangan ganggu saat user lagi ngetik
+  const draggingRef = useRef(false);
+  const typingRef = useRef(false);
+
+  // Sync dari parent -> local (tapi jangan ganggu saat drag / ngetik)
   useEffect(() => {
-    if (isEditingRef.current) return;
-    setText(String(Number.isFinite(numberValue) ? numberValue : 0));
-  }, [numberValue]);
+    if (draggingRef.current) return;
+    if (typingRef.current) return;
+    setLocalVal(value);
+    setText(String(value));
+  }, [value]);
 
-  const onFocus = () => {
-    isEditingRef.current = true;
-  };
+  const safeMax = Math.max(sliderMax, localVal);
 
-  const onBlur = () => {
-    isEditingRef.current = false;
+  const commit = useCallback(
+    (nextVal) => {
+      const v = clamp(Number.isFinite(nextVal) ? nextVal : 0, 0, 1000000000);
+      startTransition(() => setValue(v));
+    },
+    [setValue, startTransition]
+  );
 
-    const raw = digitsOnly(text);
-    const v = clamp(parseInt(raw || "0", 10), min, max);
-    setNumberValue(v);
+  // Range: halus karena selama drag hanya update state lokal,
+  // commit ke parent cuma saat lepas drag.
+  const onRangeChange = useCallback((e) => {
+    draggingRef.current = true;
+    const v = parseInt(e.target.value, 10) || 0;
+    setLocalVal(v);
     setText(String(v));
-  };
+  }, []);
 
-  const onChange = (e) => {
-    const raw = digitsOnly(e.target.value);
+  const endDrag = useCallback(() => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    commit(localVal);
+  }, [commit, localVal]);
 
-    // Boleh kosong saat ngetik (biar tidak maksa jadi 0 dan tidak “ngunci”)
-    setText(raw);
+  // Input nominal: tidak maksa update parent tiap ketikan (biar tidak “satu-satu”).
+  // Parent di-update saat blur atau Enter.
+  const onTextFocus = useCallback(() => {
+    typingRef.current = true;
+  }, []);
 
-    const v = clamp(parseInt(raw || "0", 10), min, max);
-    setNumberValue(v);
-  };
+  const onTextChange = useCallback(
+    (e) => {
+      typingRef.current = true;
+      const raw = digitsOnly(e.target.value);
+      setText(raw);
 
-  return { text, setText, onFocus, onBlur, onChange };
-}
+      // Biar label Rp di kanan tetap nyambung saat user ngetik,
+      // kita update localVal saja (tidak rerender seluruh page).
+      const v = clamp(parseInt(raw || "0", 10), 0, 1000000000);
+      setLocalVal(v);
+    },
+    []
+  );
+
+  const onTextBlur = useCallback(() => {
+    typingRef.current = false;
+    const raw = digitsOnly(text);
+    const v = clamp(parseInt(raw || "0", 10), 0, 1000000000);
+    setText(String(v));
+    setLocalVal(v);
+    commit(v);
+  }, [text, commit]);
+
+  const onTextKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.currentTarget.blur();
+      }
+    },
+    []
+  );
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-end justify-between gap-3">
+        <div className="text-sm font-extrabold text-slate-900">{label}</div>
+        <div className="text-sm text-slate-700">{formatIDR(localVal)}</div>
+      </div>
+
+      <input
+        type="range"
+        min={0}
+        max={safeMax}
+        step={50000}
+        value={localVal}
+        onChange={onRangeChange}
+        onMouseUp={endDrag}
+        onTouchEnd={endDrag}
+        onPointerUp={endDrag}
+        className="w-full accent-blue-600"
+      />
+
+      <div className="grid grid-cols-[1fr_140px] gap-2">
+        <div className="text-xs text-slate-500">
+          Geser untuk mengubah nominal.
+          {isPending ? " " : ""}
+        </div>
+
+        <input
+          value={text}
+          onFocus={onTextFocus}
+          onChange={onTextChange}
+          onBlur={onTextBlur}
+          onKeyDown={onTextKeyDown}
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
+          inputMode="numeric"
+          placeholder="0"
+        />
+      </div>
+    </div>
+  );
+});
 
 export default function Planner() {
   const nav = useNavigate();
+  const [isPending, startTransition] = useTransition();
 
   const [income, setIncome] = useState(5000000);
 
@@ -79,17 +168,61 @@ export default function Planner() {
 
   const maxSlider = useMemo(() => Math.max(1000000, income), [income]);
 
-  // Jaga agar pos tidak “di luar jangkauan” saat income turun drastis.
-  // Ini mencegah range slider terasa macet/ketarik balik karena max < value.
+  // Income input: local text (biar tidak “satu-satu” dan tidak maksa delete)
+  const [incomeText, setIncomeText] = useState(String(income));
+  const incomeTypingRef = useRef(false);
+
+  useEffect(() => {
+    if (incomeTypingRef.current) return;
+    setIncomeText(String(income));
+  }, [income]);
+
+  const commitIncome = useCallback(
+    (next) => {
+      const v = clamp(parseInt(digitsOnly(next) || "0", 10), 0, 1000000000);
+      startTransition(() => setIncome(v));
+    },
+    [startTransition]
+  );
+
+  const onIncomeFocus = useCallback(() => {
+    incomeTypingRef.current = true;
+  }, []);
+
+  const onIncomeChange = useCallback(
+    (e) => {
+      incomeTypingRef.current = true;
+      const raw = digitsOnly(e.target.value);
+      setIncomeText(raw);
+      // update income low-priority supaya UI lain tidak bikin seret
+      commitIncome(raw);
+    },
+    [commitIncome]
+  );
+
+  const onIncomeBlur = useCallback(() => {
+    incomeTypingRef.current = false;
+    const raw = digitsOnly(incomeText);
+    const v = clamp(parseInt(raw || "0", 10), 0, 1000000000);
+    setIncomeText(String(v));
+    startTransition(() => setIncome(v));
+  }, [incomeText, startTransition]);
+
+  const onIncomeKeyDown = useCallback((e) => {
+    if (e.key === "Enter") e.currentTarget.blur();
+  }, []);
+
+  // Jaga pos tidak lewat max saat income turun
   useEffect(() => {
     const hardMax = Math.max(1000000, income);
-
-    setWajib((v) => clamp(v, 0, hardMax));
-    setMakan((v) => clamp(v, 0, hardMax));
-    setNonwajib((v) => clamp(v, 0, hardMax));
-    setHiburan((v) => clamp(v, 0, hardMax));
-    setTabungan((v) => clamp(v, 0, hardMax));
-  }, [income]);
+    startTransition(() => {
+      setWajib((v) => clamp(v, 0, hardMax));
+      setMakan((v) => clamp(v, 0, hardMax));
+      setNonwajib((v) => clamp(v, 0, hardMax));
+      setHiburan((v) => clamp(v, 0, hardMax));
+      setTabungan((v) => clamp(v, 0, hardMax));
+    });
+  }, [income, startTransition]);
 
   const status = useMemo(() => {
     if (income <= 0) {
@@ -198,49 +331,6 @@ export default function Planner() {
     return "text-slate-800";
   }, [status.tone]);
 
-  // Pendapatan: pakai money field supaya ngetik tidak “ngunci”
-  const incomeField = useMoneyField(income, setIncome, { min: 0, max: 1000000000 });
-
-  function BudgetRow({ label, value, setValue }) {
-    // Pastikan slider selalu punya max >= value (biar drag tidak macet)
-    const sliderMax = Math.max(maxSlider, value);
-
-    const field = useMoneyField(value, setValue, { min: 0, max: 1000000000 });
-
-    return (
-      <div className="space-y-2">
-        <div className="flex items-end justify-between gap-3">
-          <div className="text-sm font-extrabold text-slate-900">{label}</div>
-          <div className="text-sm text-slate-700">{formatIDR(value)}</div>
-        </div>
-
-        <input
-          type="range"
-          min={0}
-          max={sliderMax}
-          step={50000}
-          value={value}
-          onChange={(e) => setValue(parseInt(e.target.value, 10))}
-          className="w-full accent-blue-600"
-        />
-
-        <div className="grid grid-cols-[1fr_140px] gap-2">
-          <div className="text-xs text-slate-500">Geser untuk mengubah nominal.</div>
-
-          <input
-            value={field.text}
-            onFocus={field.onFocus}
-            onBlur={field.onBlur}
-            onChange={field.onChange}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
-            inputMode="numeric"
-            placeholder="0"
-          />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <Card
@@ -260,16 +350,18 @@ export default function Planner() {
 
           <div className="mt-3">
             <input
-              value={incomeField.text}
-              onFocus={incomeField.onFocus}
-              onBlur={incomeField.onBlur}
-              onChange={incomeField.onChange}
+              value={incomeText}
+              onFocus={onIncomeFocus}
+              onChange={onIncomeChange}
+              onBlur={onIncomeBlur}
+              onKeyDown={onIncomeKeyDown}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-4 text-3xl font-extrabold text-green-700 outline-none focus:border-green-300"
               inputMode="numeric"
               placeholder="0"
             />
             <div className="mt-2 text-xs text-slate-500">
               Ketik angka saja. Contoh: 5000000
+              {isPending ? " " : ""}
             </div>
           </div>
         </div>
@@ -284,26 +376,31 @@ export default function Planner() {
               label="Kebutuhan Wajib (Sewa/Cicilan)"
               value={wajib}
               setValue={setWajib}
+              sliderMax={maxSlider}
             />
             <BudgetRow
               label="Makanan & Transportasi"
               value={makan}
               setValue={setMakan}
+              sliderMax={maxSlider}
             />
             <BudgetRow
               label="Utang/Cicilan (Non-wajib)"
               value={nonwajib}
               setValue={setNonwajib}
+              sliderMax={maxSlider}
             />
             <BudgetRow
               label="Hiburan & Gaya Hidup"
               value={hiburan}
               setValue={setHiburan}
+              sliderMax={maxSlider}
             />
             <BudgetRow
               label="Tabungan/Investasi"
               value={tabungan}
               setValue={setTabungan}
+              sliderMax={maxSlider}
             />
           </div>
         </div>
