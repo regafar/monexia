@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
-import Logo from "../components/ui/Logo";
+import * as LogoModule from "../components/ui/Logo";
+
+const Logo = LogoModule.default || LogoModule.Logo;
 
 export default function Onboarding({ onDone }) {
   const tujuanList = useMemo(
@@ -49,11 +51,11 @@ export default function Onboarding({ onDone }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-emerald-50 to-emerald-100 text-slate-800 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-white via-emerald-50 to-emerald-100 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-xl rounded-3xl border border-emerald-200 bg-white p-8 shadow-lg">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            <Logo className="h-12 w-auto" />
+            {Logo ? <Logo className="h-12 w-auto" /> : null}
           </div>
 
           <div className="text-3xl font-extrabold text-emerald-700">
@@ -61,25 +63,20 @@ export default function Onboarding({ onDone }) {
           </div>
 
           <div className="text-sm text-slate-600 mt-3">
-            Kenali kebutuhan kamu agar kami bisa menampilkan pengalaman belajar
-            yang lebih relevan.
+            Isi nama dan tujuan kamu dulu. Setelah itu kamu masuk ke beranda.
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <div className="text-sm font-semibold mb-2 text-slate-700">
-              Nama
-            </div>
+            <div className="text-sm font-semibold mb-2 text-slate-700">Nama</div>
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Masukkan nama kamu"
-              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-slate-800"
             />
-            <div className="text-xs text-slate-500 mt-2">
-              Minimal 2 karakter.
-            </div>
+            <div className="text-xs text-slate-500 mt-2">Minimal 2 karakter.</div>
           </div>
 
           <div>
@@ -89,7 +86,7 @@ export default function Onboarding({ onDone }) {
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
-              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-xl bg-white border border-slate-300 px-4 py-3 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-slate-800"
             >
               {tujuanList.map((t) => (
                 <option key={t.value} value={t.value} className="bg-white">
@@ -119,7 +116,7 @@ export default function Onboarding({ onDone }) {
           </button>
 
           <div className="text-xs text-slate-500 text-center">
-            Data hanya disimpan di perangkat kamu dan tidak dikirim ke server.
+            Data disimpan di perangkat kamu (localStorage).
           </div>
         </form>
       </div>
