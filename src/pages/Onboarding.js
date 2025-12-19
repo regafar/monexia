@@ -48,10 +48,10 @@ export default function Onboarding({ onDone }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green via-zinc-950 to-green-950 text-black flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-xl rounded-2xl border border-green-500/20 bg-green/40 backdrop-blur p-6 shadow-xl">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-10 text-black">
+      <div className="w-full max-w-xl rounded-2xl border border-green-200 bg-white p-6 shadow-lg">
         <div className="mb-6">
-          <div className="text-2xl font-extrabold leading-tight">
+          <div className="text-2xl font-extrabold">
             Selamat datang di Monexia
           </div>
           <div className="text-sm text-black/70 mt-2">
@@ -61,27 +61,29 @@ export default function Onboarding({ onDone }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <div className="text-sm font-extrabold mb-2">Nama</div>
+            <div className="text-sm font-semibold mb-2">Nama</div>
             <input
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Contoh: Ridwan"
-              className="w-full rounded-xl bg-green/5 border border-green/10 px-4 py-3 outline-none focus:border-green-400"
+              className="w-full rounded-xl bg-white border border-green-300 px-4 py-3 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
             />
-            <div className="text-xs text-black/50 mt-2">
+            <div className="text-xs text-black/60 mt-2">
               Minimal 2 karakter.
             </div>
           </div>
 
           <div>
-            <div className="text-sm font-semibold mb-2">Tujuan penggunaan</div>
+            <div className="text-sm font-semibold mb-2">
+              Tujuan penggunaan
+            </div>
             <select
               value={tujuan}
               onChange={(e) => setTujuan(e.target.value)}
-              className="w-full rounded-xl bg-green/5 border border-green/10 px-4 py-3 outline-none focus:border-green-400"
+              className="w-full rounded-xl bg-white border border-green-300 px-4 py-3 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
             >
               {tujuanList.map((t) => (
-                <option key={t.value} value={t.value} className="bg-zinc-900">
+                <option key={t.value} value={t.value}>
                   {t.label}
                 </option>
               ))}
@@ -89,7 +91,7 @@ export default function Onboarding({ onDone }) {
           </div>
 
           {error ? (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            <div className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           ) : null}
@@ -100,14 +102,14 @@ export default function Onboarding({ onDone }) {
             className={
               "w-full rounded-xl px-4 py-3 font-bold transition " +
               (bisaLanjut
-                ? "bg-green-500 text-black hover:bg-green-400"
-                : "bg-green/10 text-black/50 cursor-not-allowed")
+                ? "bg-green-600 text-white hover:bg-green-500"
+                : "bg-green-100 text-black/50 cursor-not-allowed")
             }
           >
             Masuk ke Home
           </button>
 
-          <div className="text-xs text-black/50">
+          <div className="text-xs text-black/60">
             Data disimpan di browser (localStorage). Bisa di-reset kapan saja.
           </div>
         </form>
