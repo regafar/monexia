@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -7,19 +7,29 @@ import SecondaryButton from "../components/ui/SecondaryButton";
 export default function VideoHub() {
   const nav = useNavigate();
 
-  // ⬇️ VIDEO LANGSUNG DIMASUKKAN DI SINI
-  const [embed, setEmbed] = useState(`
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube.com/embed/5RHmGwAoY88?si=SR5HNUyNUPWNCJR0"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen
-    ></iframe>
-  `);
+  const defaultIframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/5RHmGwAoY88?si=SR5HNUyNUPWNCJR0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+
+  // textarea (draft)
+  const [embed, setEmbed] = useState(defaultIframe);
+
+  // yang ditampilkan di preview (saved)
+  const [savedEmbed, setSavedEmbed] = useState(defaultIframe);
+
+  // ambil src dari iframe kalau ada
+  const iframeSrc = useMemo(() => {
+    const raw = (savedEmbed || "").trim();
+    const m = raw.match(/src\s*=\s*["']([^"']+)["']/i);
+    return m ? m[1] : "";
+  }, [savedEmbed]);
+
+  const handleSave = () => {
+    setSavedEmbed(embed);
+  };
+
+  const handleClear = () => {
+    setEmbed("");
+    setSavedEmbed("");
+  };
 
   return (
     <div className="space-y-6">
@@ -43,9 +53,7 @@ export default function VideoHub() {
 
       <Card title="Slot Video" desc="Kamu bisa tempel iframe kapan saja.">
         <div className="space-y-3">
-          <div className="text-sm text-slate-600">
-            Tempel kode iframe di bawah (optional).
-          </div>
+          <div className="text-sm text-slate-600">Tempel kode iframe di bawah (optional).</div>
 
           <textarea
             value={embed}
@@ -55,21 +63,36 @@ export default function VideoHub() {
           />
 
           <div className="flex flex-wrap gap-2">
-            <PrimaryButton onClick={() => {}}>Simpan Tampilan</PrimaryButton>
-            <SecondaryButton onClick={() => setEmbed("")}>Kosongkan</SecondaryButton>
+            <PrimaryButton onClick={handleSave}>Simpan Tampilan</PrimaryButton>
+            <SecondaryButton onClick={handleClear}>Kosongkan</SecondaryButton>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-xs font-semibold text-slate-500">Preview</div>
+
             <div className="mt-3 rounded-3xl border border-slate-200 bg-white p-4">
-              {!embed ? (
+              {!savedEmbed ? (
                 <div className="text-sm text-slate-600">
                   Segment video masih kosong. Nanti kamu tinggal tempel iframe di atas.
+                </div>
+              ) : iframeSrc ? (
+                <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-black">
+                  <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                    <iframe
+                      src={iframeSrc}
+                      title="Video Pembelajaran"
+                      className="absolute left-0 top-0 h-full w-full"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </div>
                 </div>
               ) : (
                 <div
                   className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: embed }}
+                  dangerouslySetInnerHTML={{ __html: savedEmbed }}
                 />
               )}
             </div>
