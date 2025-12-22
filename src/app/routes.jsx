@@ -9,7 +9,6 @@ import QuizCenter from "../pages/QuizCenter";
 import Simulator from "../pages/Simulator";
 import Planner from "../pages/Planner";
 import ReportCenter from "../pages/ReportCenter";
-import VideoHub from "../pages/VideoHub";
 
 import Onboarding from "../pages/Onboarding";
 
