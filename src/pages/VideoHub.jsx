@@ -36,26 +36,16 @@ export default function VideoHub() {
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  // ambil src dari iframe kalau ada
   const iframeSrc = useMemo(() => {
     const html = (savedEmbed || "").trim();
-    if (!html) return "";
-
-    // cari src="..."
     const m = html.match(/src\s*=\s*"([^"]+)"/i);
     if (m && m[1]) return m[1];
-
-    // fallback kalau pakai src='...'
     const m2 = html.match(/src\s*=\s*'([^']+)'/i);
     if (m2 && m2[1]) return m2[1];
-
     return "";
   }, [savedEmbed]);
 
-  const looksLikeIframe = useMemo(() => {
-    const t = (savedEmbed || "").toLowerCase();
-    return t.includes("<iframe") && t.includes("src=");
-  }, [savedEmbed]);
+  const buildId = "VIDEOHUB_DEBUG_V1"; // kalau ini tidak muncul, berarti file yang jalan bukan ini
 
   return (
     <div className="space-y-6">
@@ -66,6 +56,11 @@ export default function VideoHub() {
             <div className="mt-1 text-3xl font-extrabold text-slate-900">Video Pembelajaran</div>
             <div className="mt-2 text-sm text-slate-600">
               Tempel iframe YouTube atau embed lain. Halaman ini dibuat khusus supaya rapi.
+            </div>
+
+            {/* DEBUG: harus kelihatan */}
+            <div className="mt-2 text-xs text-slate-400">
+              {buildId} | src: {iframeSrc ? "OK" : "KOSONG"}
             </div>
           </div>
           <div className="flex gap-2">
@@ -78,6 +73,7 @@ export default function VideoHub() {
       <Card title="Slot Video" desc="Kamu bisa tempel iframe kapan saja.">
         <div className="space-y-3">
           <div className="text-sm text-slate-600">Tempel kode iframe di bawah (optional).</div>
+
           <textarea
             value={embed}
             onChange={(e) => setEmbed(e.target.value)}
@@ -92,24 +88,22 @@ export default function VideoHub() {
 
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-xs font-semibold text-slate-500">Preview</div>
+
             <div className="mt-3 rounded-3xl border border-slate-200 bg-white p-4">
-              {!savedEmbed ? (
+              {!iframeSrc ? (
                 <div className="text-sm text-slate-600">
-                  Segment video masih kosong. Nanti kamu tinggal tempel iframe di atas.
-                </div>
-              ) : !looksLikeIframe || !iframeSrc ? (
-                <div className="text-sm text-slate-600">
-                  Format yang kamu tempel belum terbaca sebagai iframe.
-                  Pastikan diawali &lt;iframe ...&gt; dan ada atribut src="...".
+                  src iframe belum terbaca. Klik “Simpan Tampilan” sekali.
                 </div>
               ) : (
-                <div className="w-full overflow-hidden rounded-2xl border border-slate-200">
-                  <div className="aspect-video w-full bg-black">
+                <div className="rounded-2xl border border-slate-200 bg-white p-3">
+                  <div className="text-xs text-slate-500">Jika video tidak muncul, berarti iframe diblok CSS/global.</div>
+
+                  {/* tinggi dipaksa, tidak pakai aspect-video */}
+                  <div style={{ width: "100%", height: 420, background: "#000", marginTop: 12 }}>
                     <iframe
                       src={iframeSrc}
                       title="Video Pembelajaran"
-                      className="h-full w-full"
-                      frameBorder="0"
+                      style={{ width: "100%", height: "100%", border: 0, display: "block" }}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
                       allowFullScreen
