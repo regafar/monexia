@@ -167,7 +167,7 @@ export default function Home() {
       {/* VIDEO EDUKASI - UPDATED WITH WORKING EMBED */}
       <Card
         title="Video Edukasi"
-        desc="Bagian ini disediakan untuk konten video. Kamu bisa menempelkan iframe kapan saja."
+        desc="Berikut adalah vidio mengenai edukasi fintech."
       >
         <div className="mt-4 flex justify-center">
           <div className="w-full max-w-2xl">
