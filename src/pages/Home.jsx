@@ -30,8 +30,11 @@ function FeatureCard({ icon, title, desc, cta, onClick }) {
 export default function Home() {
   const nav = useNavigate();
 
-  // ✅ TAMBAHAN: ambil nama dari onboarding
+  // Ambil nama dari onboarding
   const [nama, setNama] = useState("");
+
+  // State untuk video
+  const [videoID, setVideoID] = useState("5RHmGwAoY88"); // Default video ID
 
   useEffect(() => {
     try {
@@ -45,6 +48,16 @@ export default function Home() {
     } catch (e) {
       // diamkan jika data rusak
     }
+
+    // Load video ID dari localStorage jika ada
+    try {
+      const savedVideo = localStorage.getItem("monexia_video_id");
+      if (savedVideo) {
+        setVideoID(savedVideo);
+      }
+    } catch (e) {
+      // diamkan jika error
+    }
   }, []);
 
   return (
@@ -55,7 +68,6 @@ export default function Home() {
         <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl" />
 
         <div className="relative max-w-3xl">
-          {/* ✅ TAMBAHAN: sapaan dari onboarding */}
           {nama ? (
             <div className="mb-2 text-sm font-semibold text-green-700">
               Selamat datang, {nama} di Monexia
@@ -76,7 +88,6 @@ export default function Home() {
             perencanaan keuangan sederhana, dan panduan pelaporan resmi.
           </p>
 
-          {/* Tombol di Hero tetap seperti semula (tidak diubah) */}
           <div className="mt-5 flex flex-wrap gap-2">
             <PrimaryButton onClick={() => nav("/modul")}>
               Mulai dari Modul
@@ -153,16 +164,32 @@ export default function Home() {
         </div>
       </Card>
 
-      {/* VIDEO DI BERANDA (TANPA BUTTON) */}
+      {/* VIDEO EDUKASI - UPDATED WITH WORKING EMBED */}
       <Card
         title="Video Edukasi"
         desc="Bagian ini disediakan untuk konten video. Kamu bisa menempelkan iframe kapan saja."
       >
         <div className="mt-4 flex justify-center">
           <div className="w-full max-w-2xl">
-            <div className="aspect-video w-full rounded-3xl border border-slate-200 bg-slate-50 flex items-center justify-center text-sm text-slate-500">
-              Placeholder Video
-            </div>
+            {videoID ? (
+              <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-black shadow-sm">
+                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoID}?rel=0`}
+                    title="Video Pembelajaran Monexia"
+                    className="absolute left-0 top-0 h-full w-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="aspect-video w-full rounded-3xl border border-slate-200 bg-slate-50 flex items-center justify-center text-sm text-slate-500">
+                Placeholder Video
+              </div>
+            )}
           </div>
         </div>
       </Card>
