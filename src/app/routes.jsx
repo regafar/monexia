@@ -59,7 +59,6 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/modul" element={<Modules />} />
           <Route path="/modul/:slug" element={<ModuleDetail />} />
-          <Route path="/video" element={<VideoHub />} />
           <Route path="/kuis" element={<QuizCenter />} />
           <Route path="/simulasi" element={<Simulator />} />
           <Route path="/planner" element={<Planner />} />
