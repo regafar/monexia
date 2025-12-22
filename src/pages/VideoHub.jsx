@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -18,11 +18,22 @@ export default function VideoHub() {
   // ambil src dari iframe kalau ada
   const iframeSrc = useMemo(() => {
     const raw = (savedEmbed || "").trim();
+    console.log("Raw savedEmbed:", raw); // Debug
     const m = raw.match(/src\s*=\s*["']([^"']+)["']/i);
-    return m ? m[1] : "";
+    const extractedSrc = m ? m[1] : "";
+    console.log("Extracted src:", extractedSrc); // Debug
+    return extractedSrc;
   }, [savedEmbed]);
 
+  // Debug saat komponen mount
+  useEffect(() => {
+    console.log("VideoHub mounted");
+    console.log("Initial savedEmbed:", savedEmbed);
+    console.log("Initial iframeSrc:", iframeSrc);
+  }, []);
+
   const handleSave = () => {
+    console.log("Saving embed:", embed); // Debug
     setSavedEmbed(embed);
   };
 
@@ -67,6 +78,15 @@ export default function VideoHub() {
             <SecondaryButton onClick={handleClear}>Kosongkan</SecondaryButton>
           </div>
 
+          {/* Info Debug */}
+          <div className="rounded-2xl border border-blue-200 bg-blue-50 p-3 text-xs">
+            <div className="font-semibold text-blue-700">Debug Info:</div>
+            <div className="mt-1 text-blue-600">
+              <div>Iframe Src: {iframeSrc || "(kosong)"}</div>
+              <div>Has Saved Embed: {savedEmbed ? "Ya" : "Tidak"}</div>
+            </div>
+          </div>
+
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-xs font-semibold text-slate-500">Preview</div>
 
@@ -86,6 +106,8 @@ export default function VideoHub() {
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
                       allowFullScreen
+                      onError={(e) => console.error("Iframe error:", e)}
+                      onLoad={() => console.log("Iframe loaded successfully")}
                     />
                   </div>
                 </div>
