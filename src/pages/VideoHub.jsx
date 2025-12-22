@@ -6,7 +6,20 @@ import SecondaryButton from "../components/ui/SecondaryButton";
 
 export default function VideoHub() {
   const nav = useNavigate();
-  const [embed, setEmbed] = useState("");
+
+  // ⬇️ VIDEO LANGSUNG DIMASUKKAN DI SINI
+  const [embed, setEmbed] = useState(`
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/5RHmGwAoY88?si=SR5HNUyNUPWNCJR0"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+    ></iframe>
+  `);
 
   return (
     <div className="space-y-6">
@@ -14,7 +27,9 @@ export default function VideoHub() {
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="text-sm font-semibold text-slate-500">Monexia</div>
-            <div className="mt-1 text-3xl font-extrabold text-slate-900">Video Pembelajaran</div>
+            <div className="mt-1 text-3xl font-extrabold text-slate-900">
+              Video Pembelajaran
+            </div>
             <div className="mt-2 text-sm text-slate-600">
               Tempel iframe YouTube atau embed lain. Halaman ini dibuat khusus supaya rapi.
             </div>
@@ -28,7 +43,10 @@ export default function VideoHub() {
 
       <Card title="Slot Video" desc="Kamu bisa tempel iframe kapan saja.">
         <div className="space-y-3">
-          <div className="text-sm text-slate-600">Tempel kode iframe di bawah (optional).</div>
+          <div className="text-sm text-slate-600">
+            Tempel kode iframe di bawah (optional).
+          </div>
+
           <textarea
             value={embed}
             onChange={(e) => setEmbed(e.target.value)}
