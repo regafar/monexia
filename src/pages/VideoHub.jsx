@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -9,8 +9,7 @@ export default function VideoHub() {
 
   const STORAGE_KEY = "monexia_video_embed";
 
-  const DEFAULT_EMBED =
-    `<iframe width="560" height="315" src="https://www.youtube.com/embed/oRYo3zHc-10?si=8eq9ebe36wKU2Dx3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+  const DEFAULT_EMBED = `<iframe width="560" height="315" src="https://www.youtube.com/embed/oRYo3zHc-10?si=8eq9ebe36wKU2Dx3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
 
   const [embed, setEmbed] = useState("");
   const [savedEmbed, setSavedEmbed] = useState("");
@@ -36,6 +35,27 @@ export default function VideoHub() {
     setSavedEmbed("");
     localStorage.removeItem(STORAGE_KEY);
   };
+
+  // ambil src dari iframe kalau ada
+  const iframeSrc = useMemo(() => {
+    const html = (savedEmbed || "").trim();
+    if (!html) return "";
+
+    // cari src="..."
+    const m = html.match(/src\s*=\s*"([^"]+)"/i);
+    if (m && m[1]) return m[1];
+
+    // fallback kalau pakai src='...'
+    const m2 = html.match(/src\s*=\s*'([^']+)'/i);
+    if (m2 && m2[1]) return m2[1];
+
+    return "";
+  }, [savedEmbed]);
+
+  const looksLikeIframe = useMemo(() => {
+    const t = (savedEmbed || "").toLowerCase();
+    return t.includes("<iframe") && t.includes("src=");
+  }, [savedEmbed]);
 
   return (
     <div className="space-y-6">
@@ -72,29 +92,29 @@ export default function VideoHub() {
 
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-xs font-semibold text-slate-500">Preview</div>
-
             <div className="mt-3 rounded-3xl border border-slate-200 bg-white p-4">
               {!savedEmbed ? (
                 <div className="text-sm text-slate-600">
                   Segment video masih kosong. Nanti kamu tinggal tempel iframe di atas.
                 </div>
+              ) : !looksLikeIframe || !iframeSrc ? (
+                <div className="text-sm text-slate-600">
+                  Format yang kamu tempel belum terbaca sebagai iframe.
+                  Pastikan diawali &lt;iframe ...&gt; dan ada atribut src="...".
+                </div>
               ) : (
-                <div className="w-full">
-                  <div className="aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 bg-black">
-                    <div
+                <div className="w-full overflow-hidden rounded-2xl border border-slate-200">
+                  <div className="aspect-video w-full bg-black">
+                    <iframe
+                      src={iframeSrc}
+                      title="Video Pembelajaran"
                       className="h-full w-full"
-                      dangerouslySetInnerHTML={{ __html: savedEmbed }}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
                     />
                   </div>
-
-                  <style>{`
-                    iframe {
-                      width: 100% !important;
-                      height: 100% !important;
-                      display: block;
-                      border: 0;
-                    }
-                  `}</style>
                 </div>
               )}
             </div>
