@@ -33,8 +33,8 @@ export default function Home() {
   // Ambil nama dari onboarding
   const [nama, setNama] = useState("");
 
-  // State untuk video
-  const [videoID, setVideoID] = useState("5RHmGwAoY88"); // Default video ID
+  // State untuk video - VIDEO DIGANTI DI SINI
+  const [videoID, setVideoID] = useState("Ash_fKK-daU"); // Video baru
 
   useEffect(() => {
     try {
