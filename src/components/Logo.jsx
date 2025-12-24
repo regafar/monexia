@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Logo({
-  title = "Monexia",
+  title = "MoneEdu",
   subtitle = "Edukasi fintech, aman, terarah",
 }) {
   return (
