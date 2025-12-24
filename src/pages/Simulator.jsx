@@ -7,7 +7,7 @@ import SecondaryButton from "../components/ui/SecondaryButton";
 import { addXPOnce, getProgress } from "../data/progressStore";
 
 /*
-SIMULASI ANTI-PHISHING (Monexia)
+SIMULASI ANTI-PHISHING (MoneEdu)
 - Level 1: Awareness (jelas palsu) -> aksi 2 (Abaikan/Klik)
 - Level 2: Analisis (semi meyakinkan) -> aksi 3 (Abaikan/Cek sumber/Klik)
 - Level 3: Critical judgment (sangat realistis) -> observasi dulu (pilih 2 indikator), baru aksi 2 (Lanjutkan/Batalkan)
