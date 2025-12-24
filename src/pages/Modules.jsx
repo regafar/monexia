@@ -49,7 +49,7 @@ export default function Modules() {
         {modules.map((m, idx) => (
           <div
             key={m.slug}
-            className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-green-300"
+            className="group relative rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-green-300"
           >
             {/* Accent Bar with Number */}
             <div className="relative h-2 bg-gradient-to-r from-green-500 to-emerald-400">
@@ -59,7 +59,7 @@ export default function Modules() {
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-6 pt-8">
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="text-xs font-extrabold uppercase tracking-wide text-green-700">
