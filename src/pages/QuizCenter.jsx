@@ -1,5 +1,56 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Card from "../components/ui/Card";
+import SecondaryButton from "../components/ui/SecondaryButton";
+import { modules } from "../data/content";
+
+export default function Modules() {
+  const nav = useNavigate();
+
+  return (
+    <div className="space-y-6">
+      {/* HANYA WARNA: background putih + hijau (tanpa ubah konten/struktur modul) */}
+      <div className="rounded-3xl border border-green-200 bg-gradient-to-br from-white to-green-50 p-5">
+        <Card title="Modul Pembelajaran" desc="Pilih modul untuk mulai belajar secara bertahap.">
+          <div className="mt-5 grid gap-4">
+            {modules.map((m) => (
+              <div
+                key={m.slug}
+                className="rounded-3xl border border-green-200 bg-white shadow-sm"
+              >
+                {/* aksen hijau tipis, tidak mengubah isi */}
+                <div className="h-2 rounded-t-3xl bg-gradient-to-r from-green-500 to-emerald-400" />
+
+                <div className="p-4">
+                  {/* JUDUL MODUL TIDAK DIUBAH */}
+                  <Card title={m.title} desc={m.subtitle}>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="text-xs font-semibold text-slate-500">
+                        Klik untuk membuka modul
+                      </div>
+
+                      <SecondaryButton onClick={() => nav(`/modul/${m.slug}`)}>
+                        Buka
+                      </SecondaryButton>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+Kuis
+
 import React, { useMemo, useState } from "react";
-import { CheckCircle2, XCircle, Award, BookOpen, ArrowLeft, Home, AlertCircle, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Card from "../components/ui/Card";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import SecondaryButton from "../components/ui/SecondaryButton";
 
 const questions = [
   {
@@ -119,6 +170,8 @@ function clamp(n, a, b) {
 }
 
 export default function QuizCenter() {
+  const nav = useNavigate();
+
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
@@ -141,6 +194,7 @@ export default function QuizCenter() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  // Skor skala 1–100
   const score100 = useMemo(() => {
     const raw = Math.round((correctCount / questions.length) * 100);
     return clamp(raw, 0, 100);
@@ -153,271 +207,173 @@ export default function QuizCenter() {
     return "Perlu belajar ulang. Fokus pada keamanan digital, phishing, OTP, dan jalur pelaporan resmi.";
   }
 
-  const progressPercent = checked ? score100 : Math.round((answeredCount / questions.length) * 100);
+  const ringStyle = useMemo(() => {
+    const pct = checked ? score100 : Math.round((answeredCount / questions.length) * 100);
+    const deg = Math.round((pct / 100) * 360);
+    return {
+      background: `conic-gradient(#16a34a ${deg}deg, #e5e7eb 0deg)`
+    };
+  }, [checked, score100, answeredCount]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 shadow-xl">
-          <div className="p-8">
-            <div className="flex items-center gap-3 text-green-100">
-              <Award className="h-6 w-6" />
-              <span className="text-sm font-bold uppercase tracking-wider">MoneEdu • Evaluasi Pembelajaran</span>
+    <div className="space-y-6">
+      {/* Header seperti referensi */}
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-slate-500">MoneEdu • Kuis</div>
+            <div className="mt-1 text-3xl font-extrabold text-slate-900">
+              Kuis Evaluasi Literasi Fintech
             </div>
-            <h1 className="mt-3 text-4xl font-bold text-white">
-              Kuis Literasi Fintech
-            </h1>
-            <p className="mt-3 max-w-2xl text-lg text-green-50">
-              Uji pemahaman kamu tentang fintech, keamanan digital, dan literasi keuangan melalui 15 pertanyaan komprehensif.
-            </p>
-            
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button className="flex items-center gap-2 rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/30">
-                <ArrowLeft className="h-4 w-4" />
-                Kembali
-              </button>
-              <button className="flex items-center gap-2 rounded-xl bg-white/20 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/30">
-                <Home className="h-4 w-4" />
-                Beranda
-              </button>
+            <div className="mt-2 max-w-2xl text-sm text-slate-600">
+              Jawab 15 pertanyaan untuk menguji pemahaman kamu dari seluruh modul pembelajaran.
+              Nilai akhir menggunakan skala 1–100.
             </div>
-          </div>
-        </div>
 
-        <div className="grid gap-6 lg:grid-cols-12">
-          {/* Sidebar Hasil */}
-          <div className="lg:col-span-4">
-            <div className="sticky top-8 space-y-4">
-              {/* Progress Card */}
-              <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
-                <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6">
-                  <div className="flex items-center gap-3 text-white">
-                    <TrendingUp className="h-5 w-5" />
-                    <h3 className="text-lg font-bold">
-                      {checked ? "Hasil Evaluasi" : "Progres Pengerjaan"}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  {/* Circular Progress */}
-                  <div className="flex items-center justify-center">
-                    <div className="relative h-40 w-40">
-                      <svg className="h-40 w-40 -rotate-90 transform">
-                        <circle
-                          cx="80"
-                          cy="80"
-                          r="70"
-                          stroke="#e5e7eb"
-                          strokeWidth="12"
-                          fill="none"
-                        />
-                        <circle
-                          cx="80"
-                          cy="80"
-                          r="70"
-                          stroke={checked ? (score100 >= 70 ? "#10b981" : "#ef4444") : "#10b981"}
-                          strokeWidth="12"
-                          fill="none"
-                          strokeDasharray={`${2 * Math.PI * 70}`}
-                          strokeDashoffset={`${2 * Math.PI * 70 * (1 - progressPercent / 100)}`}
-                          strokeLinecap="round"
-                          className="transition-all duration-1000"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <div className="text-4xl font-bold text-slate-900">
-                          {checked ? score100 : progressPercent}
-                        </div>
-                        <div className="text-sm font-semibold text-slate-500">
-                          {checked ? "Nilai" : "Progress"}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="mt-6 space-y-3">
-                    <div className="flex items-center justify-between rounded-xl bg-green-50 p-4">
-                      <span className="text-sm font-semibold text-slate-600">Terjawab</span>
-                      <span className="text-lg font-bold text-green-700">
-                        {answeredCount}/{questions.length}
-                      </span>
-                    </div>
-
-                    {checked && (
-                      <>
-                        <div className="flex items-center justify-between rounded-xl bg-emerald-50 p-4">
-                          <span className="text-sm font-semibold text-slate-600">Jawaban Benar</span>
-                          <span className="text-lg font-bold text-emerald-700">
-                            {correctCount}/{questions.length}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-green-100 to-emerald-100 p-4">
-                          <span className="text-sm font-semibold text-slate-600">Nilai Akhir</span>
-                          <span className="text-2xl font-bold text-green-700">
-                            {score100}/100
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Feedback */}
-                  {checked ? (
-                    <div className="mt-6 rounded-xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-5">
-                      <div className="flex items-start gap-3">
-                        <Award className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
-                        <div>
-                          <div className="font-bold text-green-900">Umpan Balik</div>
-                          <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                            {getFeedback()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-6 rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 p-5">
-                      <div className="flex items-start gap-3">
-                        <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
-                        <div>
-                          <div className="font-bold text-blue-900">Tips Pengerjaan</div>
-                          <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                            Kalau ragu, ingat prinsip aman: verifikasi sumber, jangan bagikan OTP, dan hindari klik link mencurigakan.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div className="mt-6 space-y-3">
-                    <button
-                      onClick={checkQuiz}
-                      disabled={answeredCount < questions.length || checked}
-                      className="w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3.5 font-bold text-white shadow-lg transition hover:from-green-700 hover:to-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:from-green-600 disabled:hover:to-emerald-600"
-                    >
-                      <CheckCircle2 className="mr-2 inline h-5 w-5" />
-                      Cek Jawaban
-                    </button>
-                    <button className="w-full rounded-xl border-2 border-green-600 bg-white px-6 py-3 font-semibold text-green-700 transition hover:bg-green-50">
-                      <BookOpen className="mr-2 inline h-5 w-5" />
-                      Buka Modul
-                    </button>
-                  </div>
-                </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-extrabold text-slate-600">
+                Terjawab: {answeredCount}/{questions.length}
               </div>
             </div>
           </div>
 
-          {/* Questions List */}
-          <div className="lg:col-span-8">
-            <div className="space-y-5">
-              {questions.map((item, qi) => (
-                <div
-                  key={qi}
-                  className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition hover:shadow-md"
-                >
-                  <div className="border-b-2 border-slate-100 bg-gradient-to-r from-slate-50 to-green-50 p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="mb-2 inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-1 text-xs font-bold text-white">
-                          Soal {qi + 1}
-                        </div>
-                        <h3 className="mt-2 text-lg font-bold leading-relaxed text-slate-900">
-                          {item.q}
-                        </h3>
-                      </div>
+          <div className="flex flex-wrap gap-2">
+            <SecondaryButton onClick={() => nav(-1)}>← Kembali</SecondaryButton>
+            <SecondaryButton onClick={() => nav("/")}>Beranda</SecondaryButton>
+          </div>
+        </div>
+      </div>
 
-                      {checked ? (
-                        <div
-                          className={`flex items-center gap-2 rounded-xl px-4 py-2 font-bold ${
-                            answers[qi] === item.answer
-                              ? "bg-green-600 text-white"
-                              : "bg-red-600 text-white"
-                          }`}
-                        >
-                          {answers[qi] === item.answer ? (
-                            <>
-                              <CheckCircle2 className="h-5 w-5" />
-                              Benar
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="h-5 w-5" />
-                              Salah
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <div
-                          className={`rounded-xl px-4 py-2 text-xs font-bold ${
-                            typeof answers[qi] === "number"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {typeof answers[qi] === "number" ? "✓ Terjawab" : "Belum dijawab"}
-                        </div>
-                      )}
+      {/* Ringkasan progress / hasil */}
+      <div className="grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="text-sm font-extrabold text-slate-900">
+              {checked ? "Hasil Kuis" : "Progres Kuis"}
+            </div>
+            <div className="mt-2 text-sm text-slate-600">
+              {checked
+                ? "Lihat nilai akhir dan jumlah jawaban benar."
+                : "Selesaikan semua soal, lalu klik Cek Jawaban."}
+            </div>
+
+            <div className="mt-4 flex items-center gap-4">
+              <div className="relative h-20 w-20 rounded-full p-[6px]" style={ringStyle}>
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-sm font-extrabold text-slate-900">
+                  {checked ? `${score100}` : `${Math.round((answeredCount / questions.length) * 100)}%`}
+                </div>
+              </div>
+
+              <div className="flex-1">
+                {checked ? (
+                  <>
+                    <div className="text-xs font-semibold text-slate-500">Jawaban benar</div>
+                    <div className="mt-1 text-lg font-extrabold text-slate-900">
+                      {correctCount}/{questions.length}
                     </div>
+                    <div className="mt-2 text-xs font-semibold text-slate-500">Nilai akhir</div>
+                    <div className="mt-1 text-2xl font-extrabold text-green-700">
+                      {score100}/100
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xs font-semibold text-slate-500">Checklist</div>
+                    <div className="mt-1 text-sm font-bold text-slate-900">
+                      Pastikan semua soal terjawab
+                    </div>
+                    <div className="mt-2 text-xs text-slate-600">
+                      Kamu baru bisa cek jawaban setelah 15 soal terisi.
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {checked ? (
+              <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-slate-700">
+                <div className="font-extrabold text-green-800">Feedback</div>
+                <div className="mt-1">{getFeedback()}</div>
+              </div>
+            ) : (
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                Tips: kalau ragu, ingat prinsip aman: verifikasi sumber, jangan bagikan OTP, dan hindari klik link mencurigakan.
+              </div>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <PrimaryButton
+                onClick={checkQuiz}
+                disabled={answeredCount < questions.length || checked}
+              >
+                Cek Jawaban
+              </PrimaryButton>
+              <SecondaryButton onClick={() => nav("/modul")}>Buka Modul</SecondaryButton>
+            </div>
+          </div>
+        </div>
+
+        {/* Daftar pertanyaan */}
+        <div className="lg:col-span-8">
+          <Card
+            title="Pertanyaan"
+            desc="Pilih satu jawaban untuk setiap nomor. Setelah dicek, jawaban tidak bisa diubah."
+          >
+            <div className="space-y-4">
+              {questions.map((item, qi) => (
+                <div key={qi} className="rounded-3xl border border-slate-200 bg-white p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="text-xs font-extrabold text-slate-500">Soal {qi + 1}</div>
+                      <div className="mt-1 text-sm font-extrabold text-slate-900">
+                        {item.q}
+                      </div>
+                    </div>
+
+                    {checked ? (
+                      <div
+                        className={
+                          "rounded-2xl px-3 py-1 text-xs font-extrabold " +
+                          (answers[qi] === item.answer
+                            ? "bg-green-600 text-white"
+                            : "bg-red-600 text-white")
+                        }
+                      >
+                        {answers[qi] === item.answer ? "Benar" : "Salah"}
+                      </div>
+                    ) : (
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-extrabold text-slate-600">
+                        {typeof answers[qi] === "number" ? "Terjawab" : "Belum"}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="space-y-3 p-5">
+                  <div className="mt-4 grid gap-2">
                     {item.options.map((opt, oi) => {
-                      let baseClass = "relative w-full rounded-xl border-2 p-4 text-left transition-all ";
-                      let contentClass = "flex items-start gap-3";
+                      let cls = "rounded-2xl border p-3 text-left text-sm transition";
 
                       if (!checked) {
-                        if (answers[qi] === oi) {
-                          baseClass += "border-green-500 bg-green-50 shadow-md ring-2 ring-green-200";
-                        } else {
-                          baseClass += "border-slate-200 bg-white hover:border-green-300 hover:bg-green-50/50 hover:shadow-sm";
-                        }
+                        cls += answers[qi] === oi
+                          ? " border-green-300 bg-green-50"
+                          : " border-slate-200 hover:bg-slate-50";
                       } else {
-                        if (oi === item.answer) {
-                          baseClass += "border-green-500 bg-green-50 ring-2 ring-green-300";
-                        } else if (answers[qi] === oi) {
-                          baseClass += "border-red-500 bg-red-50 ring-2 ring-red-300";
-                        } else {
-                          baseClass += "border-slate-200 bg-slate-50";
-                        }
+                        if (oi === item.answer) cls += " border-green-300 bg-green-50";
+                        else if (answers[qi] === oi) cls += " border-red-300 bg-red-50";
+                        else cls += " border-slate-200 bg-white";
                       }
 
                       return (
                         <button
                           key={oi}
                           onClick={() => pickAnswer(qi, oi)}
-                          className={baseClass}
+                          className={cls}
                           disabled={checked}
                         >
-                          <div className={contentClass}>
-                            <div
-                              className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 font-bold ${
-                                !checked && answers[qi] === oi
-                                  ? "border-green-600 bg-green-600 text-white"
-                                  : checked && oi === item.answer
-                                  ? "border-green-600 bg-green-600 text-white"
-                                  : checked && answers[qi] === oi
-                                  ? "border-red-600 bg-red-600 text-white"
-                                  : "border-slate-300 text-slate-400"
-                              }`}
-                            >
-                              {String.fromCharCode(65 + oi)}
-                            </div>
-                            <div className="flex-1 pt-0.5 font-medium text-slate-800">
-                              {opt}
-                            </div>
-                            {!checked && answers[qi] === oi && (
-                              <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-600" />
-                            )}
-                            {checked && oi === item.answer && (
-                              <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-600" />
-                            )}
-                            {checked && answers[qi] === oi && oi !== item.answer && (
-                              <XCircle className="h-5 w-5 flex-shrink-0 text-red-600" />
-                            )}
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="text-slate-800">{opt}</div>
+                            {!checked && answers[qi] === oi ? (
+                              <div className="text-xs font-extrabold text-green-700">Dipilih</div>
+                            ) : null}
                           </div>
                         </button>
                       );
@@ -426,23 +382,20 @@ export default function QuizCenter() {
                 </div>
               ))}
 
-              {/* Bottom Actions */}
-              <div className="flex flex-wrap gap-3 rounded-2xl bg-white p-6 shadow-sm">
-                <button
+              <div className="flex flex-wrap gap-2">
+                <PrimaryButton
                   onClick={checkQuiz}
                   disabled={answeredCount < questions.length || checked}
-                  className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-3.5 font-bold text-white shadow-lg transition hover:from-green-700 hover:to-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <CheckCircle2 className="mr-2 inline h-5 w-5" />
-                  Cek Semua Jawaban
-                </button>
-                <button className="rounded-xl border-2 border-slate-300 bg-white px-8 py-3 font-semibold text-slate-700 transition hover:bg-slate-50">
-                  <Home className="mr-2 inline h-5 w-5" />
-                  Kembali ke Beranda
-                </button>
+                  Cek Jawaban
+                </PrimaryButton>
+
+                <SecondaryButton onClick={() => nav("/")}>
+                  Kembali ke Home
+                </SecondaryButton>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
