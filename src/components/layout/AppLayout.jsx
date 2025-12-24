@@ -10,7 +10,7 @@ export default function AppLayout() {
       <header className="sticky top-0 z-40 border-b bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="cursor-pointer" onClick={() => nav("/")}>
-            <Logo title="Monexia" />
+            <Logo title="MoneEdu" />
           </div>
 
           <div className="flex items-center gap-2">
