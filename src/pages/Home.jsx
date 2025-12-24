@@ -62,18 +62,31 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
+      {/* WELCOME BANNER - HIGHLIGHTED */}
+      {nama ? (
+        <div className="rounded-3xl border border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-600 text-2xl">
+              👋
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-green-700">
+                Selamat datang kembali!
+              </div>
+              <div className="text-xl font-extrabold text-slate-900">
+                {nama}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {/* HERO */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-green-200/40 blur-3xl" />
         <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl" />
 
         <div className="relative max-w-3xl">
-          {nama ? (
-            <div className="mb-2 text-sm font-semibold text-green-700">
-              Selamat datang, {nama} di MoneEdu
-            </div>
-          ) : null}
-
           <div className="text-xs font-extrabold uppercase tracking-wide text-slate-500">
             Platform Edukasi Fintech
           </div>
