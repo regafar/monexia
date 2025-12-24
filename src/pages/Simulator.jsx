@@ -1,799 +1,575 @@
-// src/pages/Simulator.jsx
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useMemo, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
-import { addXPOnce, getProgress } from "../data/progressStore";
+import { modules } from "../data/content";
+import { addXPOnce, awardBadgeOnce, completeModuleOnce, getProgress } from "../data/progressStore";
 
-/*
-SIMULASI ANTI-PHISHING (MoneEdu)
-- Level 1: Awareness (jelas palsu) -> aksi 2 (Abaikan/Klik)
-- Level 2: Analisis (semi meyakinkan) -> aksi 3 (Abaikan/Cek sumber/Klik)
-- Level 3: Critical judgment (sangat realistis) -> observasi dulu (pilih 2 indikator), baru aksi 2 (Lanjutkan/Batalkan)
-- Tidak ada spoiler jebakan sebelum user memilih
-- Feedback setelah memilih dibuat lebih detail dan jelas
-*/
+const miniQuizBank = {
+  "apa-itu-fintech": [
+    {
+      q: "Fintech paling tepat berarti…",
+      options: [
+        "Aplikasi hiburan yang punya fitur transfer",
+        "Layanan keuangan yang dipermudah teknologi",
+        "Semua hal tentang kripto",
+        "Satu perusahaan dompet digital"
+      ],
+      answer: 1,
+      explain: "Fintech adalah layanan keuangan yang dibuat atau dipermudah dengan teknologi."
+    },
+    {
+      q: "Risiko fintech yang paling sering terjadi adalah…",
+      options: ["Antrian panjang", "Phishing dan pencurian OTP", "Keterlambatan pos", "Uang tunai rusak"],
+      answer: 1,
+      explain: "Phishing dan pencurian OTP adalah modus yang sering terjadi di layanan digital."
+    },
+    {
+      q: "Literasi keuangan digital membantu pengguna untuk…",
+      options: [
+        "Membagikan OTP ke CS",
+        "Mengabaikan syarat dan biaya",
+        "Memahami manfaat, biaya, risiko, dan cara pakai aman",
+        "Selalu ikut tren produk"
+      ],
+      answer: 2,
+      explain: "Literasi digital membuat pengguna paham cara kerja, biaya, risiko, dan keamanan."
+    }
+  ],
 
-const LEVELS = [
-  {
-    id: "level1",
-    title: "Level 1 — Dasar",
-    focus:
-      "Fokus: Mengenali tanda phishing yang paling jelas. Pesan sangat mencurigakan, banyak tanda merah, tanpa tekanan waktu. Tujuan: membangun kebiasaan dasar “jangan klik”.",
-    skill: "Skill: Awareness (mengenali bahaya yang tampak jelas).",
-    actions: ["Abaikan", "Klik"],
-    scenarios: [
-      {
-        id: "sms-undian",
-        label: "SMS hadiah undian",
-        type: "sms",
-        sender: "+62 8xx xxxx",
-        message:
-          "SELAMAT!!! Anda menang undian Rp10.000.000. Klaim hadiah sekarang: klik tautan ini.",
-        xpAwardActions: ["Abaikan"],
-        evaluation: {
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Keputusan kamu tepat karena pesan hadiah/undian tiba-tiba adalah pola phishing paling umum.",
-              "Penipu sengaja memancing emosi “sayang kalau dilewatkan” agar korban klik tanpa berpikir.",
-              "Mengabaikan pesan memutus risiko sebelum masuk tahap tautan, form, atau permintaan data."
-            ],
-            lesson: [
-              "Kalau kamu tidak pernah ikut undian, anggap itu mencurigakan.",
-              "Biasakan: jangan klik, jangan balas, jangan sebar."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik tautan pada pesan seperti ini berisiko karena bisa mengarah ke situs palsu yang meminta data, atau memasang malware.",
-              "Phishing level dasar memang terlihat ‘ngasal’, tetapi banyak korban tertipu karena penasaran dan terburu-buru.",
-              "Jika terlanjur klik di dunia nyata: tutup halaman, jangan isi apa pun, lakukan pengecekan keamanan perangkat."
-            ],
-            lesson: [
-              "Rasa penasaran adalah pintu masuk penipuan digital.",
-              "Begitu melihat pola hadiah/iming-iming, hentikan interaksi."
-            ]
-          }
-        }
-      },
-      {
-        id: "wa-pinjaman-cepat",
-        label: "WhatsApp pinjaman cepat",
-        type: "wa",
-        senderName: "Promo Dana Cepat",
-        senderNumber: "+62 8xx xxxx",
-        message:
-          "Pinjaman cair 5 menit tanpa syarat! Limit besar! Klik tautan untuk daftar sekarang.",
-        xpAwardActions: ["Abaikan"],
-        evaluation: {
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Keputusan kamu tepat. Tawaran ‘tanpa syarat’ dan ‘cair instan’ dari nomor tak jelas sering dipakai untuk memancing klik.",
-              "Tujuan belajar di level ini adalah membangun kebiasaan aman: jangan berinteraksi dengan tautan dari sumber tidak dikenal.",
-              "Kalau benar-benar butuh layanan, cari lewat kanal resmi dan lakukan verifikasi."
-            ],
-            lesson: [
-              "Tawaran terlalu mudah sering menyembunyikan risiko.",
-              "Abaikan pesan promo mencurigakan."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik link dari chat tidak dikenal bisa mengarah ke form palsu yang meminta data pribadi.",
-              "Penipu memanfaatkan kata-kata ‘limit besar’ dan ‘cair cepat’ agar korban bertindak impulsif.",
-              "Di kondisi nyata: hentikan sebelum mengisi data dan verifikasi lewat kanal resmi."
-            ],
-            lesson: [
-              "Jangan isi data di link yang datang dari chat random.",
-              "Verifikasi dulu, jangan reaktif."
-            ]
-          }
-        }
-      },
-      {
-        id: "email-akun-diblokir",
-        label: "Email akun diblokir",
-        type: "email",
-        from: "support@layanan-aman.com",
-        subject: "Akun Anda Akan Diblokir",
-        body:
-          "Halo,\n\nKami mendeteksi aktivitas mencurigakan. Akun Anda akan diblokir dalam 30 menit.\nKlik tautan verifikasi untuk menghindari pemblokiran.\n\nTerima kasih,\nTim Dukungan",
-        xpAwardActions: ["Abaikan"],
-        evaluation: {
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Keputusan aman. Frasa ‘diblokir dalam X menit’ sering dipakai untuk memicu panik agar korban klik.",
-              "Sumber email tidak jelas dan meminta tindakan lewat tautan adalah tanda kuat phishing.",
-              "Cara aman: cek informasi lewat aplikasi resmi/website resmi yang kamu ketik sendiri."
-            ],
-            lesson: [
-              "Pesan yang memaksa cepat bertindak harus dicurigai.",
-              "Cek lewat kanal resmi, bukan lewat link pesan."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik bisa membawa kamu ke halaman yang meniru login/konfirmasi data.",
-              "Begitu kamu memasukkan data, pelaku bisa mengambil alih akun.",
-              "Di dunia nyata: hentikan, ganti password dari kanal resmi, aktifkan 2FA, dan cek aktivitas login."
-            ],
-            lesson: [
-              "Jangan klik tautan dari email yang memaksa.",
-              "Keamanan akun bergantung pada kebiasaan verifikasi."
-            ]
-          }
-        }
-      }
-    ]
-  },
+  "jenis-jenis-fintech": [
+    {
+      q: "Payment, settlement, dan clearing masuk kategori…",
+      options: ["Market aggregator", "Sistem pembayaran", "Manajemen investasi dan risiko", "Jasa finansial lainnya"],
+      answer: 1,
+      explain: "Payment, settlement, dan clearing adalah bagian dari sistem pembayaran."
+    },
+    {
+      q: "Market aggregator paling tepat digunakan untuk…",
+      options: [
+        "Membandingkan produk atau fitur dari banyak penyedia",
+        "Meminta OTP untuk verifikasi",
+        "Menghapus semua risiko penipuan",
+        "Mengubah saldo tanpa transaksi"
+      ],
+      answer: 0,
+      explain: "Aggregator membantu riset dan perbandingan. Keputusan akhir tetap cek sumber resmi."
+    },
+    {
+      q: "Crowdfunding dan P2P lending termasuk kategori…",
+      options: ["Sistem pembayaran", "Pendukung pasar", "Peminjaman dan pembiayaan", "Jasa finansial lainnya"],
+      answer: 2,
+      explain: "Keduanya berfokus pada pendanaan dan pembiayaan."
+    }
+  ],
 
-  {
-    id: "level2",
-    title: "Level 2 — Menengah",
-    focus:
-      "Fokus: Membedakan pesan palsu yang terlihat rapi dan hampir meyakinkan. Ada tekanan ringan. Tujuan: membentuk kebiasaan ‘verifikasi sebelum bertindak’.",
-    skill: "Skill: Analisis (memeriksa sumber dan konteks).",
-    actions: ["Abaikan", "Cek sumber", "Klik"],
-    scenarios: [
-      {
-        id: "email-domain-mirip",
-        label: "Email bank domain mirip",
-        type: "email",
-        from: "cs@bank-bnka.co.id",
-        subject: "Pemberitahuan Verifikasi Akun",
-        body:
-          "Yth Nasabah,\n\nKami mendeteksi aktivitas tidak biasa. Untuk menjaga keamanan, silakan verifikasi akun Anda melalui tautan pada email ini.\n\nHormat kami,\nLayanan Nasabah",
-        xpAwardActions: ["Cek sumber"],
-        verifyGuide: [
-          "Periksa alamat pengirim: apakah domain benar-benar sama dengan domain resmi institusi?",
-          "Jangan klik tautan dari email. Lebih aman membuka aplikasi/website resmi melalui cara yang kamu ketik sendiri.",
-          "Jika ragu, cek pengumuman di aplikasi resmi atau hubungi layanan resmi melalui nomor resmi."
-        ],
-        evaluation: {
-          "Cek sumber": {
-            status: "Aman",
-            detail: [
-              "Pilihan kamu paling tepat untuk Level 2. Kamu tidak reaktif dan memilih verifikasi dahulu.",
-              "Pesan rapi sering dipakai untuk membuat korban lengah. Karena itu, kebiasaan verifikasi lebih penting daripada menilai tampilan.",
-              "Verifikasi yang benar dilakukan lewat kanal resmi: aplikasi resmi, website resmi yang kamu ketik sendiri, atau kontak resmi."
-            ],
-            lesson: [
-              "Jangan percaya hanya karena tampilan rapi.",
-              "Cek domain dan akses kanal resmi sebelum bertindak."
-            ]
-          },
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Mengabaikan lebih aman dibanding klik. Ini masih keputusan aman.",
-              "Namun target Level 2 adalah membentuk kebiasaan verifikasi, bukan sekadar menghindar.",
-              "Cara paling ideal: cek sumber tanpa klik tautan, lalu putuskan."
-            ],
-            lesson: [
-              "Aman itu juga berarti memastikan informasi lewat kanal resmi.",
-              "Biasakan verifikasi tanpa klik link."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik berisiko karena bisa mengarah ke halaman palsu yang meniru institusi.",
-              "Di Level 2, jebakannya bukan bahasa berantakan, tapi profesional dan meyakinkan.",
-              "Cara aman: jangan klik dari pesan. Buka aplikasi/website resmi lewat cara kamu sendiri."
-            ],
-            lesson: [
-              "Verifikasi dulu, baru bertindak.",
-              "Hindari klik tautan langsung dari email/pesan."
-            ]
-          }
-        }
-      },
-      {
-        id: "notif-paket",
-        label: "Notifikasi paket tertahan",
-        type: "notif",
-        appName: "Layanan Pengiriman",
-        title: "Paket tertahan",
-        message:
-          "Paket kamu tertahan. Lengkapi data penerima agar pengiriman dilanjutkan melalui tautan berikut.",
-        xpAwardActions: ["Cek sumber"],
-        verifyGuide: [
-          "Cek nomor resi di aplikasi resmi atau website resmi jasa kirim.",
-          "Jika ada biaya, pastikan pembayarannya melalui kanal resmi, bukan link acak.",
-          "Waspadai pesan yang memaksa ‘lengkapi data’ lewat tautan."
-        ],
-        evaluation: {
-          "Cek sumber": {
-            status: "Aman",
-            detail: [
-              "Pilihan kamu tepat karena kamu memeriksa fakta lebih dulu.",
-              "Tema paket sering dipakai karena banyak orang menunggu kiriman sehingga lebih mudah panik.",
-              "Dengan cek sumber, kamu mencegah tahap berikutnya: pengisian data di halaman palsu."
-            ],
-            lesson: [
-              "Verifikasi resi lewat kanal resmi.",
-              "Jangan isi data dari tautan yang datang mendadak."
-            ]
-          },
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Mengabaikan aman jika kamu tidak menunggu paket.",
-              "Kalau sedang menunggu paket, tindakan terbaik tetap cek sumber melalui aplikasi resmi.",
-              "Target Level 2 adalah membangun kebiasaan verifikasi, bukan hanya menghindar."
-            ],
-            lesson: [
-              "Cek sumber melalui aplikasi/website resmi.",
-              "Jangan reaktif pada notifikasi mendadak."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik berisiko mengarah ke halaman palsu yang meminta data alamat, nomor, atau metode pembayaran.",
-              "Penipu memanfaatkan kepanikan ringan agar korban cepat bertindak.",
-              "Cara aman: cek resi di kanal resmi, lalu lakukan tindakan di platform resmi jika perlu."
-            ],
-            lesson: [
-              "Verifikasi dulu, baru bertindak.",
-              "Hindari klik tautan dari pesan."
-            ]
-          }
-        }
-      },
-      {
-        id: "promo-ewallet",
-        label: "Promo e-wallet palsu",
-        type: "wa",
-        senderName: "Promo E-Wallet",
-        senderNumber: "+62 8xx xxxx",
-        message:
-          "Promo cashback besar hari ini! Klaim sekarang lewat link berikut sebelum hangus.",
-        xpAwardActions: ["Cek sumber", "Abaikan"],
-        verifyGuide: [
-          "Cek promo hanya melalui aplikasi resmi e-wallet.",
-          "Cari pengumuman promo di menu resmi atau media resmi terverifikasi.",
-          "Hindari link promo yang dikirim lewat chat dari nomor tak dikenal."
-        ],
-        evaluation: {
-          "Cek sumber": {
-            status: "Aman",
-            detail: [
-              "Pilihan kamu paling aman. Promo sering dipakai sebagai umpan karena banyak orang tertarik diskon/cashback.",
-              "Verifikasi promo harus melalui aplikasi resmi, bukan link chat.",
-              "Dengan cek sumber, kamu mencegah risiko diarahkan ke halaman login palsu."
-            ],
-            lesson: [
-              "Promo tidak pernah mengharuskan klik link dari chat random.",
-              "Biasakan cek promo di aplikasi resmi."
-            ]
-          },
-          Abaikan: {
-            status: "Aman",
-            detail: [
-              "Mengabaikan aman dibanding klik, apalagi jika sumber tidak jelas.",
-              "Namun lebih baik jika kamu juga membiasakan cek promo di aplikasi resmi untuk memastikan apakah promo itu memang ada.",
-              "Target Level 2 adalah membangun kebiasaan verifikasi."
-            ],
-            lesson: [
-              "Aman itu juga berarti memverifikasi lewat kanal resmi.",
-              "Hindari link dari pesan tak dikenal."
-            ]
-          },
-          Klik: {
-            status: "Berisiko",
-            detail: [
-              "Klik link promo bisa membawa kamu ke situs tiruan untuk mengambil data login atau OTP.",
-              "Urgensi “sebelum hangus” adalah trik untuk membuat kamu terburu-buru.",
-              "Di dunia nyata: hentikan proses, jangan isi data, lalu cek promo di aplikasi resmi."
-            ],
-            lesson: [
-              "Hati-hati pada promo yang memaksa cepat bertindak.",
-              "Verifikasi dulu, jangan reaktif."
-            ]
-          }
-        }
-      }
-    ]
-  },
+  "keamanan-digital": [
+    {
+      q: "OTP itu seharusnya…",
+      options: [
+        "Dibagikan ke siapa pun yang mengaku CS",
+        "Dikirim ke teman dekat",
+        "Dirahasiakan dan tidak dibagikan",
+        "Diposting jika diminta admin"
+      ],
+      answer: 2,
+      explain: "OTP adalah kode rahasia. Memberikannya bisa membuat akun diambil alih."
+    },
+    {
+      q: "Ciri pesan penipuan yang umum adalah…",
+      options: [
+        "Bahasanya tenang dan tidak mendesak",
+        "Meminta kamu cepat klik link dan panik",
+        "Selalu memakai email resmi",
+        "Tidak pernah minta data"
+      ],
+      answer: 1,
+      explain: "Modus sering memakai tekanan waktu, ancaman, atau iming-iming."
+    },
+    {
+      q: "Langkah aman saat dapat link verifikasi mencurigakan adalah…",
+      options: ["Klik dulu baru cek", "Kirim OTP agar cepat selesai", "Abaikan, cek lewat aplikasi atau kanal resmi", "Forward ke grup"],
+      answer: 2,
+      explain: "Verifikasi harus lewat kanal resmi, bukan dari link pesan."
+    }
+  ],
 
-  {
-    id: "level3",
-    title: "Level 3 — Lanjutan",
-    focus:
-      "Fokus: Deteksi detail teknis dan manipulasi psikologis. Skenario sangat realistis, minim kesalahan visual. Kamu harus observasi dulu (pilih 2 indikator) sebelum memutuskan lanjut atau batal.",
-    skill: "Skill: Critical judgment (ketelitian teknis + kontrol emosi di bawah urgensi).",
-    actions: ["Lanjutkan", "Batalkan"],
-    requireObservation: true,
-    observationPrompt:
-      "Sebelum memilih Lanjutkan atau Batalkan, tandai 2 hal yang paling mencurigakan. Ini melatih kebiasaan: berhenti, cek detail, baru bertindak.",
-    scenarios: [
-      {
-        id: "website-login",
-        label: "Website login palsu (sangat realistis)",
-        type: "website",
-        urlBar: "http://ibanking-bnka.co.id/login",
-        pageTitle: "Internet Banking",
-        hints: [
-          { id: "hint1", text: "Alamat URL memakai HTTP, bukan HTTPS" },
-          { id: "hint2", text: "Domain terlihat mirip, tapi perlu dipastikan domain resmi" },
-          { id: "hint3", text: "Ada pesan urgensi yang mendorong login sekarang juga" },
-          { id: "hint4", text: "Form login meminta data tambahan yang tidak biasa (misal OTP/nomor kartu) sebelum login berhasil" },
-          { id: "hint5", text: "Tampilan rapi bukan jaminan aman, tetap harus cek URL dan sumber akses" }
-        ],
-        correctObservationIds: ["hint1", "hint3"],
-        xpAwardActions: ["Batalkan"],
-        evaluation: {
-          Batalkan: {
-            status: "Aman",
-            detail: [
-              "Keputusan kamu tepat. Pada phishing modern, indikator berbahaya sering kecil tapi dampaknya besar.",
-              "Level 3 menguji kebiasaan ‘pause’: berhenti, cek detail, dan jangan terpengaruh urgensi.",
-              "Dengan membatalkan, kamu mencegah tahap paling berbahaya: memasukkan kredensial (user id/password/OTP) pada situs yang belum terverifikasi."
-            ],
-            lesson: [
-              "Jika URL tidak aman (HTTP) atau ada urgensi yang memaksa, jangan lanjut.",
-              "Akses layanan hanya lewat aplikasi resmi atau alamat yang kamu ketik sendiri."
-            ]
-          },
-          Lanjutkan: {
-            status: "Berisiko",
-            detail: [
-              "Melanjutkan login berisiko karena kamu membuka peluang pencurian kredensial.",
-              "Phishing level lanjutan memanfaatkan tampilan yang sangat mirip asli agar korban ‘lupa’ memeriksa URL dan protokol keamanan.",
-              "Di dunia nyata: hentikan sebelum mengisi data, lalu akses layanan melalui aplikasi resmi atau domain yang kamu ketik sendiri."
-            ],
-            lesson: [
-              "Keamanan bukan soal tampilan, tapi soal URL, protokol, dan sumber akses.",
-              "Begitu ragu, hentikan proses."
-            ]
-          }
-        },
-        afterReview: [
-          "Ringkasan kebiasaan aman Level 3:",
-          "1) Cek protokol dan URL (HTTPS + domain resmi).",
-          "2) Waspadai urgensi mendadak (akun diblokir, harus login sekarang).",
-          "3) Akses layanan lewat kanal resmi (aplikasi/website yang kamu ketik sendiri)."
-        ]
-      }
-    ]
-  }
-];
+  "regulasi-dan-perlindungan": [
+    {
+      q: "Tujuan regulasi fintech adalah…",
+      options: ["Menghambat inovasi", "Melindungi konsumen dan memberi kepastian", "Mewajibkan semua orang memakai e-wallet", "Menghapus semua risiko digital"],
+      answer: 1,
+      explain: "Regulasi bertujuan menjaga layanan tetap aman dan adil bagi konsumen."
+    },
+    {
+      q: "Salah satu prinsip perlindungan konsumen adalah…",
+      options: ["OTP boleh diminta CS", "Transparansi biaya, syarat, dan risiko", "Syarat disembunyikan agar cepat", "Komplain tidak perlu"],
+      answer: 1,
+      explain: "Transparansi membuat pengguna paham konsekuensi sebelum menggunakan layanan."
+    },
+    {
+      q: "Jika jadi korban penipuan transaksi, langkah penting adalah…",
+      options: ["Hapus semua bukti", "Kumpulkan bukti dan lapor lewat jalur resmi", "Bayar lagi agar uang kembali", "Berikan password ke pihak tak dikenal"],
+      answer: 1,
+      explain: "Amankan akun, kumpulkan bukti, dan gunakan jalur resmi untuk pelaporan."
+    }
+  ]
+};
 
-export default function Simulator() {
+export default function ModuleDetail() {
+  const { slug } = useParams();
   const nav = useNavigate();
-  const progress = getProgress();
 
-  const [step, setStep] = useState("level"); // level | scenario | case
-  const [level, setLevel] = useState(null);
-  const [scenario, setScenario] = useState(null);
+  const moduleIndex = useMemo(() => modules.findIndex((x) => x.slug === slug), [slug]);
+  const module = useMemo(() => modules.find((x) => x.slug === slug), [slug]);
 
-  const [actionTaken, setActionTaken] = useState(null);
+  const [subIndex, setSubIndex] = useState(0);
+  const [showAllDone, setShowAllDone] = useState(false);
 
-  // Level 3 observation
-  const [selectedHints, setSelectedHints] = useState([]);
+  const [mqAnswers, setMqAnswers] = useState({});
+  const [mqChecked, setMqChecked] = useState(false);
 
-  const canTakeActions = useMemo(() => {
-    if (!level?.requireObservation) return true;
-    return selectedHints.length === 2;
-  }, [level, selectedHints]);
+  useEffect(() => {
+    setSubIndex(0);
+    setShowAllDone(false);
+    setMqAnswers({});
+    setMqChecked(false);
+  }, [slug]);
 
-  function goBackStep() {
-    if (step === "case") {
-      setStep("scenario");
-      setScenario(null);
-      setActionTaken(null);
-      setSelectedHints([]);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    if (step === "scenario") {
-      setStep("level");
-      setLevel(null);
-      setScenario(null);
-      setActionTaken(null);
-      setSelectedHints([]);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    nav(-1);
+  const subs = module && module.subchapters ? module.subchapters : [];
+  const currentSub = subs.length ? subs[subIndex] : null;
+
+  const hasPrevModule = moduleIndex > 0;
+  const hasNextModule = moduleIndex >= 0 && moduleIndex < modules.length - 1;
+  const prevModule = hasPrevModule ? modules[moduleIndex - 1] : null;
+  const nextModule = hasNextModule ? modules[moduleIndex + 1] : null;
+
+  const isLastSub = subs.length ? subIndex === subs.length - 1 : true;
+  const miniQuiz = module ? miniQuizBank[module.slug] || [] : [];
+  const canShowMiniQuiz = !!module && isLastSub && miniQuiz.length === 3;
+
+  const canPrevSub = subs.length ? subIndex > 0 : false;
+  const canNextSub = subs.length ? subIndex < subs.length - 1 : false;
+
+  function goPrevModule() {
+    if (!prevModule) return;
+    nav(`/modul/${prevModule.slug}`);
   }
 
-  function chooseLevel(lv) {
-    setLevel(lv);
-    setStep("scenario");
-    setScenario(null);
-    setActionTaken(null);
-    setSelectedHints([]);
+  function goNextModule() {
+    if (!nextModule) return;
+    nav(`/modul/${nextModule.slug}`);
+  }
+
+  function prevSub() {
+    setSubIndex((v) => Math.max(0, v - 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function chooseScenario(sc) {
-    setScenario(sc);
-    setStep("case");
-    setActionTaken(null);
-    setSelectedHints([]);
+  function nextSub() {
+    setSubIndex((v) => Math.min(subs.length - 1, v + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function toggleHint(hintId) {
-    setSelectedHints((prev) => {
-      if (prev.includes(hintId)) return prev.filter((x) => x !== hintId);
-      if (prev.length >= 2) return prev;
-      return [...prev, hintId];
-    });
+  function pickAnswer(qIndex, optIndex) {
+    setMqAnswers((prev) => ({ ...prev, [qIndex]: optIndex }));
   }
 
-  function takeAction(act) {
-    setActionTaken(act);
-
-    const awards = scenario?.xpAwardActions || [];
-    if (awards.includes(act)) {
-      addXPOnce(
-        `anti_phishing_${level.id}_${scenario.id}_${act}`,
-        10,
-        "Jawaban tepat pada simulasi anti-phishing"
-      );
-    }
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function closeAllDone() {
+    setShowAllDone(false);
+    nav("/");
   }
 
-  function resetCase() {
-    setActionTaken(null);
-    setSelectedHints([]);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function finalizeModuleOnce(score) {
+    if (!module) return;
+
+    completeModuleOnce(module.slug);
+    addXPOnce(`module_complete:${module.slug}`, 40, "Selesai modul");
+
+    if (score === 3) addXPOnce(`module_quiz_bonus:${module.slug}`, 20, "Bonus mini kuis");
+    else if (score === 2) addXPOnce(`module_quiz_bonus:${module.slug}`, 10, "Bonus mini kuis");
+
+    if (module.slug === "keamanan-digital") awardBadgeOnce("shield");
+    if (module.slug === "regulasi-dan-perlindungan") awardBadgeOnce("gavel");
+    if (module.slug === "jenis-jenis-fintech") awardBadgeOnce("layers");
+    if (module.slug === "apa-itu-fintech") awardBadgeOnce("spark");
+
+    const after = getProgress();
+    const allDone = modules.every((m) => after.completedModules.includes(m.slug));
+    if (allDone) addXPOnce("all_modules_complete", 60, "Selesai semua modul");
+
+    const isLastModule = moduleIndex === modules.length - 1;
+    if (isLastModule && allDone) setShowAllDone(true);
   }
 
-  function renderCaseMock() {
-    if (!scenario) return null;
+  function checkMiniQuiz() {
+    if (!module) return;
 
-    if (scenario.type === "sms") {
-      return (
-        <div className="rounded-2xl border bg-white p-4 text-sm">
-          <div className="mb-1 text-xs text-slate-500">SMS dari {scenario.sender}</div>
-          <div className="text-slate-900">{scenario.message}</div>
-        </div>
-      );
+    setMqChecked(true);
+
+    let score = 0;
+    for (let i = 0; i < miniQuiz.length; i++) {
+      if (mqAnswers[i] === miniQuiz[i].answer) score += 1;
     }
 
-    if (scenario.type === "wa") {
-      return (
-        <div className="rounded-2xl border bg-white p-4 text-sm">
-          <div className="mb-1 text-xs text-slate-500">
-            WhatsApp dari {scenario.senderName} ({scenario.senderNumber})
-          </div>
-          <div className="rounded-xl bg-slate-50 p-3 text-slate-900">{scenario.message}</div>
-        </div>
-      );
-    }
-
-    if (scenario.type === "email") {
-      return (
-        <div className="rounded-2xl border bg-white p-4 text-sm">
-          <div className="mb-1 text-xs text-slate-500">Dari: {scenario.from}</div>
-          <div className="mb-2 font-extrabold text-slate-900">{scenario.subject}</div>
-          <pre className="whitespace-pre-wrap text-slate-900">{scenario.body}</pre>
-        </div>
-      );
-    }
-
-    if (scenario.type === "notif") {
-      return (
-        <div className="rounded-2xl border bg-white p-4 text-sm">
-          <div className="mb-1 text-xs text-slate-500">{scenario.appName}</div>
-          <div className="font-extrabold text-slate-900">{scenario.title}</div>
-          <div className="mt-2 rounded-xl bg-slate-50 p-3 text-slate-900">{scenario.message}</div>
-        </div>
-      );
-    }
-
-    if (scenario.type === "website") {
-      return (
-        <div className="rounded-2xl border bg-white p-4 text-sm">
-          <div className="mb-2 text-xs text-slate-500">URL: {scenario.urlBar}</div>
-
-          <div className="mb-3 rounded-xl border bg-slate-50 p-3">
-            <div className="text-center font-extrabold text-slate-900">{scenario.pageTitle}</div>
-            <div className="mt-3">
-              <input disabled className="mb-2 w-full rounded-xl border p-3" placeholder="User ID" />
-              <input
-                disabled
-                type="password"
-                className="mb-3 w-full rounded-xl border p-3"
-                placeholder="Password"
-              />
-              <div className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
-                Sistem mendeteksi aktivitas tidak biasa. Silakan login ulang untuk melanjutkan.
-              </div>
-              <button
-                disabled
-                className="w-full rounded-xl bg-green-600 py-2 text-sm font-extrabold text-white opacity-80"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-
-          <div className="text-xs text-slate-500">
-            Catatan: ini adalah tampilan simulasi. Tidak ada data nyata dan semua contoh bersifat fiktif.
-          </div>
-        </div>
-      );
-    }
-
-    return null;
+    finalizeModuleOnce(score);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }
 
-  function renderFeedback() {
-    if (!scenario || !actionTaken) return null;
-
-    const evalObj = scenario.evaluation?.[actionTaken];
-
-    const statusLabel = evalObj?.status || "—";
-
-    // Level 3 observation review AFTER choosing action
-    const showObsReview = !!level?.requireObservation && !!scenario?.correctObservationIds?.length;
-
-    let obsBlock = null;
-    if (showObsReview) {
-      const correctIds = scenario.correctObservationIds;
-      const correctPicked = selectedHints.filter((h) => correctIds.includes(h));
-      const missed = correctIds.filter((h) => !selectedHints.includes(h));
-
-      obsBlock = (
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-          <div className="font-extrabold text-slate-900">Review Observasi</div>
-
-          <div className="mt-2 text-slate-700">
-            Kamu menandai: <b>{selectedHints.length}</b> indikator.
-          </div>
-          <div className="mt-2 text-slate-700">
-            Indikator yang tepat kamu pilih: <b>{correctPicked.length}</b>
-          </div>
-
-          <div className="mt-2 text-slate-700">
-            Indikator yang seharusnya diperhatikan:
-            <ul className="mt-2 list-disc pl-5">
-              {scenario.hints
-                .filter((h) => scenario.correctObservationIds.includes(h.id))
-                .map((h) => (
-                  <li key={h.id}>{h.text}</li>
-                ))}
-            </ul>
-          </div>
-
-          {missed.length > 0 ? (
-            <div className="mt-2 text-slate-700">
-              Kamu melewatkan:
-              <ul className="mt-2 list-disc pl-5">
-                {scenario.hints
-                  .filter((h) => missed.includes(h.id))
-                  .map((h) => (
-                    <li key={h.id}>{h.text}</li>
-                  ))}
-              </ul>
-            </div>
-          ) : null}
-        </div>
-      );
+  let miniScore = 0;
+  if (canShowMiniQuiz) {
+    for (let i = 0; i < miniQuiz.length; i++) {
+      if (mqAnswers[i] === miniQuiz[i].answer) miniScore += 1;
     }
+  }
 
-    // Level 2 verification guide after choosing
-    let verifyBlock = null;
-    if (level?.id === "level2" && scenario.verifyGuide?.length) {
-      verifyBlock = (
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-          <div className="font-extrabold text-slate-900">Cara Verifikasi yang Benar</div>
-          <ul className="mt-2 list-disc pl-5 text-slate-700">
-            {scenario.verifyGuide.map((x, idx) => (
-              <li key={idx}>{x}</li>
-            ))}
-          </ul>
-        </div>
-      );
-    }
+  const p = getProgress();
+  const isDone = module ? p.completedModules.includes(module.slug) : false;
 
-    // AfterReview lines
-    let afterReview = null;
-    if (scenario.afterReview?.length) {
-      afterReview = (
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-          <div className="font-extrabold text-slate-900">Ringkasan</div>
-          <div className="mt-2 text-slate-700">
-            {scenario.afterReview.map((line, idx) => (
-              <div key={idx}>{line}</div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
+  if (!module) {
     return (
-      <div className="rounded-2xl border border-green-200 bg-green-50 p-4 text-sm">
-        <div className="font-extrabold text-green-800">Status: {statusLabel}</div>
-
-        {evalObj?.detail?.length ? (
-          <div className="mt-2 space-y-2 text-slate-800">
-            {evalObj.detail.map((p, idx) => (
-              <div key={idx}>{p}</div>
-            ))}
-          </div>
-        ) : null}
-
-        {evalObj?.lesson?.length ? (
-          <div className="mt-3 rounded-2xl border border-green-200 bg-white p-4">
-            <div className="font-extrabold text-slate-900">Pelajaran Praktis</div>
-            <ul className="mt-2 list-disc pl-5 text-slate-700">
-              {evalObj.lesson.map((p, idx) => (
-                <li key={idx}>{p}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-
-        {verifyBlock}
-        {obsBlock}
-        {afterReview}
-      </div>
+      <Card title="Modul tidak ditemukan" desc="Cek kembali link modulnya.">
+        <div className="flex flex-wrap gap-2">
+          <SecondaryButton onClick={() => nav("/modul")}>Kembali ke Modul</SecondaryButton>
+          <SecondaryButton onClick={() => nav("/")}>Kembali ke Beranda</SecondaryButton>
+        </div>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-6">
-      <Card
-        title="Simulasi Anti-Phishing"
-        desc="Simulasi ini melatih kebiasaan aman: mengenali pola phishing, memverifikasi sumber, dan mengambil keputusan yang tepat."
-      >
-        <div className="flex flex-wrap gap-2">
-          <SecondaryButton onClick={goBackStep}>← Kembali</SecondaryButton>
-          <SecondaryButton onClick={() => nav("/")}>Beranda</SecondaryButton>
-        </div>
+      {showAllDone ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <style>{`
+            @keyframes popIn { 0% { transform: scale(.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+            @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+          `}</style>
 
-        {step === "level" && (
-          <div className="mt-4 space-y-3">
-            {LEVELS.map((lv) => (
-              <button
-                key={lv.id}
-                onClick={() => chooseLevel(lv)}
-                className="w-full rounded-2xl border border-slate-200 bg-white p-4 text-left hover:bg-slate-50"
-              >
-                <div className="text-base font-extrabold text-slate-900">{lv.title}</div>
-                <div className="mt-1 text-sm text-slate-700">{lv.focus}</div>
-                <div className="mt-1 text-xs font-semibold text-slate-500">{lv.skill}</div>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {step === "scenario" && level && (
-          <div className="mt-4 space-y-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-              <div className="font-extrabold text-slate-900">{level.title}</div>
-              <div className="mt-1 text-slate-700">{level.focus}</div>
-              <div className="mt-1 text-slate-600">{level.skill}</div>
-              <div className="mt-2 text-slate-700">
-                Opsi tindakan pada level ini (konsisten): <b>{level.actions.join(", ")}</b>
+          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl" style={{ animation: "popIn 180ms ease-out" }}>
+            <div
+              className="rounded-3xl p-5 text-center text-white"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(16,185,129,1) 0%, rgba(34,197,94,1) 50%, rgba(16,185,129,1) 100%)",
+                backgroundSize: "200% 200%",
+                animation: "shimmer 1.4s ease-in-out infinite alternate"
+              }}
+            >
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 text-3xl">✓</div>
+              <div className="text-xl font-extrabold">Kamu sudah menyelesaikan semua modul.</div>
+              <div className="mt-2 text-sm text-white/90">
+                Mantap. Kamu sudah paham dasar fintech, tahu jenis-jenisnya, bisa menjaga keamanan digital, dan paham jalur perlindungan kalau ada masalah.
               </div>
             </div>
 
-            {level.scenarios.map((sc) => (
-              <button
-                key={sc.id}
-                onClick={() => chooseScenario(sc)}
-                className="w-full rounded-2xl border border-slate-200 bg-white p-4 text-left hover:bg-slate-50"
-              >
-                <div className="font-extrabold text-slate-900">{sc.label}</div>
-                <div className="text-xs text-slate-500">Klik untuk masuk ke simulasi kasus.</div>
-              </button>
-            ))}
+            <div className="mt-4 flex flex-wrap gap-2">
+              <PrimaryButton onClick={closeAllDone}>Kembali ke Beranda</PrimaryButton>
+              <SecondaryButton onClick={() => nav("/modul")}>Buka Daftar Modul</SecondaryButton>
+            </div>
           </div>
-        )}
+        </div>
+      ) : null}
 
-        {step === "case" && level && scenario && (
-          <div className="mt-4 space-y-4">
-            {renderCaseMock()}
+      {/* HEADER MODULE */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-green-200/20 blur-3xl" />
+        <div className="absolute -left-32 -bottom-32 h-80 w-80 rounded-full bg-emerald-200/20 blur-3xl" />
+        
+        <div className="relative p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-600 text-xl">
+                  📚
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold uppercase tracking-wide text-green-700">
+                    Modul {moduleIndex + 1} dari {modules.length}
+                  </div>
+                  <h1 className="text-2xl font-extrabold text-slate-900">
+                    {module.title}
+                  </h1>
+                </div>
+              </div>
+              
+              <p className="mt-3 text-sm text-slate-600 max-w-2xl">
+                {module.subtitle}
+              </p>
 
-            {level.requireObservation && !actionTaken ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-                <div className="font-extrabold text-slate-900">Langkah Observasi</div>
-                <div className="mt-1 text-slate-700">{level.observationPrompt}</div>
+              {isDone ? (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-extrabold text-green-700">
+                  <span>✓</span> Modul Selesai
+                </div>
+              ) : null}
+            </div>
+          </div>
 
-                <div className="mt-3 grid gap-2">
-                  {scenario.hints.map((h) => {
-                    const checked = selectedHints.includes(h.id);
-                    const disabled = !checked && selectedHints.length >= 2;
+          {/* MODULE NAVIGATION */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {hasPrevModule ? (
+              <SecondaryButton onClick={goPrevModule}>
+                ← {prevModule.title}
+              </SecondaryButton>
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-400">
+                Tidak ada modul sebelumnya
+              </div>
+            )}
+
+            {hasNextModule ? (
+              <SecondaryButton onClick={goNextModule}>
+                {nextModule.title} →
+              </SecondaryButton>
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-400">
+                Tidak ada modul selanjutnya
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* CONTENT AREA */}
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* SIDEBAR - TABLE OF CONTENTS */}
+        <div className="lg:col-span-4">
+          <div className="sticky top-6 space-y-4">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="text-lg font-extrabold text-slate-900">Daftar Subbab</div>
+                <div className="rounded-full bg-green-600 px-2 py-0.5 text-xs font-extrabold text-white">
+                  {subs.length}
+                </div>
+              </div>
+
+              {subs.length ? (
+                <div className="space-y-2">
+                  {subs.map((s, i) => (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        setSubIndex(i);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={
+                        i === subIndex
+                          ? "w-full rounded-2xl border-2 border-green-500 bg-green-50 p-3 text-left transition"
+                          : "w-full rounded-2xl border border-slate-200 bg-white p-3 text-left transition hover:border-green-300 hover:bg-slate-50"
+                      }
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={
+                          i === subIndex
+                            ? "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-green-600 text-xs font-extrabold text-white"
+                            : "flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-slate-100 text-xs font-extrabold text-slate-600"
+                        }>
+                          {i + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={
+                            i === subIndex
+                              ? "text-sm font-extrabold text-slate-900"
+                              : "text-sm font-semibold text-slate-700"
+                          }>
+                            {s.title}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-slate-500">Belum ada subbab tersedia</div>
+              )}
+            </div>
+
+            {/* PROGRESS INFO */}
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <div className="text-sm font-extrabold text-slate-900">Progres Pembelajaran</div>
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-600">Subbab saat ini</span>
+                  <span className="font-extrabold text-slate-900">{subIndex + 1}/{subs.length}</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-500 to-emerald-400 transition-all"
+                    style={{ width: `${((subIndex + 1) / subs.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MAIN CONTENT */}
+        <div className="lg:col-span-8">
+          <div className="space-y-6">
+            {/* SUBCHAPTER CONTENT */}
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs font-extrabold uppercase tracking-wide text-slate-500">
+                    Subbab {subIndex + 1} dari {subs.length}
+                  </div>
+                  <h2 className="mt-1 text-xl font-extrabold text-slate-900">
+                    {currentSub ? currentSub.title : "Belum ada subbab"}
+                  </h2>
+                </div>
+              </div>
+
+              {currentSub ? (
+                <div className="prose prose-sm max-w-none">
+                  {currentSub.body.map((t, i) => (
+                    <p key={i} className="mb-4 text-sm leading-relaxed text-slate-700">
+                      {t}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-600">
+                  Tambahkan subbab di src/data/content.js
+                </div>
+              )}
+
+              {/* NAVIGATION BUTTONS */}
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-6">
+                <SecondaryButton onClick={prevSub} disabled={!canPrevSub}>
+                  ← Subbab Sebelumnya
+                </SecondaryButton>
+                <SecondaryButton onClick={nextSub} disabled={!canNextSub}>
+                  Subbab Selanjutnya →
+                </SecondaryButton>
+              </div>
+            </div>
+
+            {/* MINI QUIZ */}
+            {canShowMiniQuiz ? (
+              <div className="rounded-3xl border border-green-200 bg-gradient-to-br from-white to-green-50 p-6 shadow-sm">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-600 text-2xl">
+                    ✓
+                  </div>
+                  <div>
+                    <div className="text-xs font-extrabold uppercase tracking-wide text-green-700">
+                      Evaluasi Pemahaman
+                    </div>
+                    <div className="text-lg font-extrabold text-slate-900">Mini Kuis</div>
+                  </div>
+                </div>
+
+                <p className="text-sm text-slate-600">
+                  Jawab 3 pertanyaan berikut untuk menguji pemahamanmu. XP otomatis tercatat saat kamu klik "Cek Jawaban".
+                </p>
+
+                <div className="mt-6 space-y-4">
+                  {miniQuiz.map((item, qi) => {
+                    const chosen = mqAnswers[qi];
+                    const isAnswered = typeof chosen === "number";
+                    const isCorrect = isAnswered && chosen === item.answer;
 
                     return (
-                      <button
-                        key={h.id}
-                        onClick={() => toggleHint(h.id)}
-                        disabled={disabled}
-                        className={
-                          "rounded-2xl border p-3 text-left text-sm " +
-                          (checked
-                            ? "border-green-300 bg-green-50"
-                            : "border-slate-200 bg-white hover:bg-slate-50") +
-                          (disabled ? " opacity-60" : "")
-                        }
-                      >
-                        {checked ? "✓ " : ""}
-                        {h.text}
-                      </button>
+                      <div key={qi} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                        <div className="mb-4 flex items-start gap-3">
+                          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-slate-100 text-sm font-extrabold text-slate-700">
+                            {qi + 1}
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm font-extrabold text-slate-900">
+                              {item.q}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          {item.options.map((opt, oi) => {
+                            const selected = chosen === oi;
+                            let cls = "w-full rounded-2xl border p-3 text-left text-sm transition";
+
+                            if (!mqChecked) {
+                              cls += selected 
+                                ? " border-green-400 bg-green-50 font-semibold" 
+                                : " border-slate-200 hover:border-slate-300 hover:bg-slate-50";
+                            } else {
+                              if (oi === item.answer) {
+                                cls += " border-green-400 bg-green-50 font-semibold";
+                              } else if (selected && oi !== item.answer) {
+                                cls += " border-red-400 bg-red-50 font-semibold";
+                              } else {
+                                cls += " border-slate-200 bg-white";
+                              }
+                            }
+
+                            return (
+                              <button key={oi} onClick={() => pickAnswer(qi, oi)} className={cls} disabled={mqChecked}>
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="text-slate-800">{opt}</div>
+                                  {!mqChecked && selected ? (
+                                    <div className="rounded-full bg-green-600 px-2 py-0.5 text-xs font-extrabold text-white">
+                                      Dipilih
+                                    </div>
+                                  ) : null}
+                                  {mqChecked && oi === item.answer ? (
+                                    <div className="text-lg">✓</div>
+                                  ) : null}
+                                  {mqChecked && selected && oi !== item.answer ? (
+                                    <div className="text-lg">✗</div>
+                                  ) : null}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {mqChecked ? (
+                          <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                            <div className={
+                              isCorrect 
+                                ? "mb-2 text-sm font-extrabold text-green-700" 
+                                : "mb-2 text-sm font-extrabold text-red-700"
+                            }>
+                              {isCorrect ? "✓ Jawaban Benar" : "✗ Kurang Tepat"}
+                            </div>
+                            <div className="text-sm text-slate-700">{item.explain}</div>
+                          </div>
+                        ) : null}
+                      </div>
                     );
                   })}
                 </div>
 
-                <div className="mt-2 text-xs text-slate-500">
-                  Kamu harus memilih tepat 2 indikator untuk melanjutkan.
-                </div>
-              </div>
-            ) : null}
-
-            {!actionTaken ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
-                <div className="font-extrabold text-slate-900">Ambil Keputusan</div>
-                <div className="mt-1 text-slate-700">
-                  Pilih satu tindakan. Feedback akan muncul setelah kamu memilih.
-                </div>
-
-                <div className="mt-3 grid gap-2">
-                  {level.actions.map((act) => (
-                    <button
-                      key={act}
-                      onClick={() => takeAction(act)}
-                      disabled={!canTakeActions}
-                      className={
-                        "rounded-2xl border p-3 text-left text-sm " +
-                        (canTakeActions
-                          ? "border-slate-200 bg-white hover:bg-slate-50"
-                          : "border-slate-200 bg-white opacity-60")
-                      }
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="flex items-center gap-3">
+                    <PrimaryButton 
+                      onClick={checkMiniQuiz} 
+                      disabled={Object.keys(mqAnswers).length < 3 || mqChecked}
                     >
-                      {act}
-                    </button>
-                  ))}
-                </div>
+                      {mqChecked ? "Sudah Dicek" : "Cek Jawaban"}
+                    </PrimaryButton>
 
-                {!canTakeActions && level.requireObservation ? (
-                  <div className="mt-2 text-xs text-slate-500">
-                    Selesaikan observasi dulu (pilih 2 indikator) sebelum memilih tindakan.
+                    {mqChecked ? (
+                      <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-2">
+                        <span className="text-xs font-semibold text-green-700">Skor:</span>
+                        <span className="ml-2 text-lg font-extrabold text-green-800">
+                          {miniScore}/3
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
+
+                  {!mqChecked ? (
+                    <div className="text-xs text-slate-500">
+                      Jawab semua pertanyaan terlebih dahulu
+                    </div>
+                  ) : null}
+                </div>
               </div>
             ) : null}
-
-            {renderFeedback()}
-
-            {actionTaken ? (
-              <div className="flex flex-wrap gap-2">
-                <SecondaryButton onClick={resetCase}>Ulangi skenario ini</SecondaryButton>
-                <SecondaryButton
-                  onClick={() => {
-                    setStep("scenario");
-                    setScenario(null);
-                    setActionTaken(null);
-                    setSelectedHints([]);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  Kembali ke daftar skenario
-                </SecondaryButton>
-                <PrimaryButton onClick={() => nav("/")}>Kembali ke Home</PrimaryButton>
-              </div>
-            ) : null}
-
-            <div className="text-xs text-slate-500">XP saat ini: {progress.xp}/300</div>
           </div>
-        )}
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
