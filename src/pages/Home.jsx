@@ -71,7 +71,7 @@ export default function Home() {
             </div>
             <div>
               <div className="text-sm font-semibold text-green-700">
-                Selamat datang kembali!
+                Selamat datang!
               </div>
               <div className="text-xl font-extrabold text-slate-900">
                 {nama}
