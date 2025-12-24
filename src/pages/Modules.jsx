@@ -21,7 +21,7 @@ export default function Modules() {
             </div>
             <div>
               <div className="text-xs font-extrabold uppercase tracking-wide text-slate-500">
-                Learning Path
+                Selamat Belajar!
               </div>
               <h1 className="text-2xl font-extrabold text-slate-900">
                 Modul Pembelajaran
