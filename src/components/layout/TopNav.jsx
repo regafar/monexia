@@ -34,7 +34,7 @@ export default function TopNav() {
         >
           <LogoMark />
           <div className="text-left">
-            <div className="text-sm font-extrabold leading-4">Finovo Edu</div>
+            <div className="text-sm font-extrabold leading-4">MoneEdu</div>
             <div className="text-xs text-slate-500">Belajar fintech, aman, terarah</div>
           </div>
         </button>
