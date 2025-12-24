@@ -51,7 +51,7 @@ export default function Home() {
 
     // Load video ID dari localStorage jika ada
     try {
-      const savedVideo = localStorage.getItem("moneEdu_video_id");
+      const savedVideo = localStorage.getItem("MoneEdu_video_id");
       if (savedVideo) {
         setVideoID(savedVideo);
       }
