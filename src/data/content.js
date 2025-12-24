@@ -1,4 +1,4 @@
-export const appName = "Finovo Edu";
+export const appName = "MoneEdu";
 
 export const modules = [{
         slug: "apa-itu-fintech",
