@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
-import { addXPOnce, getProgress } from "../data/progressStore";
 
 const questions = [
   {
@@ -124,7 +123,6 @@ function clamp(n, a, b) {
 
 export default function QuizCenter() {
   const nav = useNavigate();
-  const progress = getProgress();
 
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
@@ -145,9 +143,6 @@ export default function QuizCenter() {
 
     setCorrectCount(correct);
     setChecked(true);
-
-    // XP hanya sekali (sudah di-handle di progressStore lewat addXPOnce key)
-    addXPOnce("quiz_final_score", 30, "Menyelesaikan kuis utama");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -190,9 +185,6 @@ export default function QuizCenter() {
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-extrabold text-slate-600">
                 Terjawab: {answeredCount}/{questions.length}
-              </div>
-              <div className="rounded-2xl border border-green-200 bg-green-50 px-3 py-2 text-xs font-extrabold text-green-800">
-                XP: {progress.xp}/300
               </div>
             </div>
           </div>
@@ -353,10 +345,6 @@ export default function QuizCenter() {
                 <SecondaryButton onClick={() => nav("/")}>
                   Kembali ke Home
                 </SecondaryButton>
-              </div>
-
-              <div className="text-xs text-slate-500">
-                XP saat ini: {progress.xp}/300
               </div>
             </div>
           </Card>
