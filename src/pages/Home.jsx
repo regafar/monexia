@@ -51,7 +51,7 @@ export default function Home() {
 
     // Load video ID dari localStorage jika ada
     try {
-      const savedVideo = localStorage.getItem("monexia_video_id");
+      const savedVideo = localStorage.getItem("moneEdu_video_id");
       if (savedVideo) {
         setVideoID(savedVideo);
       }
@@ -70,7 +70,7 @@ export default function Home() {
         <div className="relative max-w-3xl">
           {nama ? (
             <div className="mb-2 text-sm font-semibold text-green-700">
-              Selamat datang, {nama} di Monexia
+              Selamat datang, {nama} di MoneEdu
             </div>
           ) : null}
 
@@ -83,7 +83,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-700">
-            Monexia membantu kamu memahami layanan keuangan digital melalui
+            MonEdu membantu kamu memahami layanan keuangan digital melalui
             pembelajaran bertahap, simulasi anti-penipuan, evaluasi pemahaman,
             perencanaan keuangan sederhana, dan panduan pelaporan resmi.
           </p>
@@ -176,7 +176,7 @@ export default function Home() {
                 <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                   <iframe
                     src={`https://www.youtube.com/embed/${videoID}?rel=0`}
-                    title="Video Pembelajaran Monexia"
+                    title="Video Pembelajaran MoneEdu"
                     className="absolute left-0 top-0 h-full w-full"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
