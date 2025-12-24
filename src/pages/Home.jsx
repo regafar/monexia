@@ -34,7 +34,7 @@ export default function Home() {
   const [nama, setNama] = useState("");
 
   // State untuk video - VIDEO DIGANTI DI SINI
-  const [videoID, setVideoID] = useState("Ash_fKK-daU"); // Video baru
+  const [videoID, setVideoID] = useState("epebQIryA1c"); // Video baru
 
   useEffect(() => {
     try {
