@@ -52,7 +52,7 @@ export default function Onboarding({ onDone }) {
       <div className="w-full max-w-xl rounded-2xl border border-green-200 bg-white p-6 shadow-lg">
         <div className="mb-6">
           <div className="text-2xl font-extrabold">
-            Selamat datang di Monexia
+            Selamat datang di MoneEdu
           </div>
           <div className="text-sm text-black/70 mt-2">
             Isi nama dan tujuan dulu. Setelah itu kamu masuk ke Home.
