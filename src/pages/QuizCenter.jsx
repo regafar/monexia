@@ -178,7 +178,7 @@ export default function QuizCenter() {
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-slate-500">Monexia • Kuis</div>
+            <div className="text-sm font-semibold text-slate-500">MoneEdu • Kuis</div>
             <div className="mt-1 text-3xl font-extrabold text-slate-900">
               Kuis Evaluasi Literasi Fintech
             </div>
