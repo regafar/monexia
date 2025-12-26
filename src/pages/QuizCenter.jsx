@@ -11,7 +11,8 @@ const FintechLiteracyQuiz = () => {
         "Semua hal tentang kripto",
         "Satu perusahaan dompet digital"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Fintech (financial technology) adalah inovasi teknologi yang digunakan untuk mempermudah dan meningkatkan layanan keuangan, bukan hanya terbatas pada satu jenis aplikasi atau produk tertentu."
     },
     {
       id: 2,
@@ -22,7 +23,8 @@ const FintechLiteracyQuiz = () => {
         "Keterlambatan pos",
         "Uang tunai rusak"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Phishing dan pencurian OTP merupakan ancaman keamanan siber yang paling umum dalam layanan fintech. Pelaku sering menyamar sebagai pihak resmi untuk mencuri data pribadi dan OTP pengguna."
     },
     {
       id: 3,
@@ -33,7 +35,8 @@ const FintechLiteracyQuiz = () => {
         "Memahami manfaat, biaya, risiko, dan cara pakai aman",
         "Selalu mengikuti tren produk"
       ],
-      correctAnswer: 2
+      correctAnswer: 2,
+      explanation: "Literasi keuangan digital memberikan pemahaman menyeluruh tentang produk fintech, termasuk manfaat, biaya tersembunyi, risiko yang mungkin terjadi, dan praktik keamanan dalam penggunaannya."
     },
     {
       id: 4,
@@ -44,7 +47,8 @@ const FintechLiteracyQuiz = () => {
         "Manajemen investasi dan risiko",
         "Jasa finansial lainnya"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Payment (pembayaran), settlement (penyelesaian), dan clearing (kliring) adalah komponen inti dari sistem pembayaran yang memfasilitasi transfer dana antar pihak."
     },
     {
       id: 5,
@@ -55,7 +59,8 @@ const FintechLiteracyQuiz = () => {
         "Mengubah saldo tanpa transaksi",
         "Mengirim OTP ke pengguna"
       ],
-      correctAnswer: 0
+      correctAnswer: 0,
+      explanation: "Market aggregator adalah platform yang mengumpulkan dan menampilkan berbagai produk atau layanan dari berbagai penyedia, memudahkan pengguna untuk membandingkan dan memilih yang terbaik."
     },
     {
       id: 6,
@@ -66,7 +71,8 @@ const FintechLiteracyQuiz = () => {
         "Peminjaman dan pembiayaan",
         "Jasa finansial lainnya"
       ],
-      correctAnswer: 2
+      correctAnswer: 2,
+      explanation: "Crowdfunding dan P2P (peer-to-peer) lending adalah model peminjaman dan pembiayaan alternatif yang menghubungkan pemberi pinjaman langsung dengan peminjam tanpa melalui lembaga keuangan tradisional."
     },
     {
       id: 7,
@@ -77,7 +83,8 @@ const FintechLiteracyQuiz = () => {
         "Dirahasiakan dan tidak dibagikan",
         "Diposting jika diminta admin"
       ],
-      correctAnswer: 2
+      correctAnswer: 2,
+      explanation: "OTP (One-Time Password) adalah kode rahasia yang bersifat pribadi dan hanya boleh diketahui oleh pemilik akun. Tidak ada pihak resmi yang akan meminta OTP Anda, termasuk customer service."
     },
     {
       id: 8,
@@ -88,7 +95,8 @@ const FintechLiteracyQuiz = () => {
         "Selalu memakai email resmi",
         "Tidak pernah meminta data"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Pesan penipuan digital biasanya menciptakan rasa urgensi dan panik untuk membuat korban bertindak cepat tanpa berpikir, sering kali disertai link mencurigakan yang harus segera diklik."
     },
     {
       id: 9,
@@ -99,7 +107,8 @@ const FintechLiteracyQuiz = () => {
         "Abaikan dan cek lewat aplikasi resmi",
         "Teruskan ke grup chat"
       ],
-      correctAnswer: 2
+      correctAnswer: 2,
+      explanation: "Jangan pernah mengklik link mencurigakan. Selalu verifikasi informasi dengan membuka aplikasi resmi atau menghubungi layanan pelanggan melalui saluran resmi yang tertera di website perusahaan."
     },
     {
       id: 10,
@@ -110,7 +119,8 @@ const FintechLiteracyQuiz = () => {
         "Mewajibkan semua orang memakai e-wallet",
         "Menghapus seluruh risiko teknologi"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Regulasi fintech dirancang untuk melindungi hak dan keamanan konsumen sambil memberikan kepastian hukum bagi pelaku industri, sehingga inovasi dapat berkembang dengan aman dan terpercaya."
     },
     {
       id: 11,
@@ -121,7 +131,8 @@ const FintechLiteracyQuiz = () => {
         "Syarat disembunyikan agar cepat",
         "Pengaduan tidak diperlukan"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Transparansi adalah prinsip fundamental dalam perlindungan konsumen. Penyedia layanan fintech wajib menjelaskan secara jelas semua biaya, syarat, dan risiko yang mungkin dihadapi pengguna."
     },
     {
       id: 12,
@@ -132,7 +143,8 @@ const FintechLiteracyQuiz = () => {
         "Mengirim ulang uang agar dikembalikan",
         "Memberikan password ke pihak lain"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Dokumentasikan semua bukti transaksi, screenshot percakapan, dan detail kejadian. Segera laporkan ke penyedia layanan, bank terkait, dan jika perlu ke pihak berwenang seperti OJK atau kepolisian."
     },
     {
       id: 13,
@@ -143,7 +155,8 @@ const FintechLiteracyQuiz = () => {
         "Menghilangkan seluruh risiko keuangan",
         "Menggantikan peran pengguna"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Fintech memberikan akses layanan keuangan yang lebih mudah, cepat, dan efisien, terutama bagi masyarakat yang sebelumnya sulit menjangkau layanan perbankan konvensional."
     },
     {
       id: 14,
@@ -154,7 +167,8 @@ const FintechLiteracyQuiz = () => {
         "Pajak tinggi",
         "Nilai tukar rupiah"
       ],
-      correctAnswer: 1
+      correctAnswer: 1,
+      explanation: "Information asymmetry (kesenjangan informasi) terjadi ketika pemilik usaha memiliki informasi lebih lengkap dibanding investor, yang dapat menyebabkan keputusan investasi yang kurang tepat."
     },
     {
       id: 15,
@@ -165,13 +179,15 @@ const FintechLiteracyQuiz = () => {
         "Otoritas Jasa Keuangan (OJK)",
         "Kementerian Keuangan"
       ],
-      correctAnswer: 2
+      correctAnswer: 2,
+      explanation: "OJK (Otoritas Jasa Keuangan) adalah lembaga yang berwenang mengawasi dan mengatur seluruh kegiatan jasa keuangan di Indonesia, termasuk platform P2P lending dan fintech lainnya."
     }
   ];
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showResult, setShowResult] = useState(false);
+  const [showEvaluation, setShowEvaluation] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
 
@@ -249,9 +265,120 @@ const FintechLiteracyQuiz = () => {
     setCurrentQuestion(0);
     setAnswers({});
     setShowResult(false);
+    setShowEvaluation(false);
     setSelectedOption(null);
     setIsLocked(false);
   };
+
+  if (showEvaluation) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <main className="max-w-4xl mx-auto px-6 py-12">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-8 mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Evaluasi Jawaban
+            </h1>
+            <p className="text-gray-700 text-lg">
+              Berikut adalah evaluasi lengkap dari jawaban Anda beserta penjelasan untuk setiap pertanyaan.
+            </p>
+          </div>
+
+          <div className="space-y-6 mb-8">
+            {questions.map((q, index) => {
+              const userAnswer = answers[index];
+              const isCorrect = userAnswer === q.correctAnswer;
+              
+              return (
+                <div key={q.id} className="bg-white rounded-2xl shadow-sm p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                      isCorrect ? 'bg-green-600' : 'bg-red-500'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">
+                        {q.question}
+                      </h3>
+                      
+                      <div className="space-y-2 mb-4">
+                        {q.options.map((option, optIndex) => {
+                          const isUserAnswer = userAnswer === optIndex;
+                          const isCorrectAnswer = q.correctAnswer === optIndex;
+                          
+                          return (
+                            <div
+                              key={optIndex}
+                              className={`p-3 rounded-lg border-2 ${
+                                isCorrectAnswer
+                                  ? 'border-green-600 bg-green-50'
+                                  : isUserAnswer
+                                  ? 'border-red-500 bg-red-50'
+                                  : 'border-gray-200 bg-gray-50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                {isCorrectAnswer && (
+                                  <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                                {isUserAnswer && !isCorrectAnswer && (
+                                  <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                                <span className={`${
+                                  isCorrectAnswer
+                                    ? 'text-green-900 font-semibold'
+                                    : isUserAnswer
+                                    ? 'text-red-900 font-semibold'
+                                    : 'text-gray-700'
+                                }`}>
+                                  {option}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <div className="flex items-start gap-2">
+                          <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                          <div>
+                            <p className="text-sm font-semibold text-blue-900 mb-1">Penjelasan:</p>
+                            <p className="text-sm text-blue-800">{q.explanation}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            <button 
+              onClick={resetQuiz}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            >
+              Ulangi Kuis
+            </button>
+            <button 
+              onClick={() => setShowEvaluation(false)}
+              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+            >
+              Kembali ke Hasil
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (showResult) {
     const score = getScore();
@@ -287,8 +414,11 @@ const FintechLiteracyQuiz = () => {
               >
                 Ulangi Kuis
               </button>
-              <button className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-                Kembali ke Beranda
+              <button 
+                onClick={() => setShowEvaluation(true)}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              >
+                Evaluasi
               </button>
             </div>
           </div>
