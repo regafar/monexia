@@ -1,215 +1,275 @@
 import React, { useState, useMemo } from "react";
 
-export default function AntiPhishingInteractivePage() {
+export default function AntiPhishingSimulationV2() {
   const [level, setLevel] = useState(1);
+  const [caseIndex, setCaseIndex] = useState(0); // 0 atau 1
   const [stage, setStage] = useState("scenario"); 
-  // scenario | consequence | insight | warning
+  // scenario | consequence | explanation
   const [action, setAction] = useState(null);
-  const [marked, setMarked] = useState([]);
 
   const levels = useMemo(() => ({
     1: {
-      tag: "LEVEL 1 · AWARENESS",
-      title: "Refleks Panik yang Berbahaya",
-      narrative:
-        "Bayangkan ini pagi hari. Kamu belum sepenuhnya sadar. Ponselmu bergetar. Pesannya terlihat serius.",
-      channel: "SMS",
-      sender: "BANK ALERT",
-      message: `⚠️ NOTIFIKASI KEAMANAN ⚠️
+      label: "LEVEL 1 · DASAR (AWARENESS)",
+      goal:
+        "Melatih refleks awal: tidak panik dan tidak asal klik ketika menerima pesan mencurigakan.",
+      cases: [
+        {
+          title: "Akun Terancam Diblokir",
+          channel: "SMS",
+          sender: "BANK ALERT",
+          message: `⚠️ NOTIFIKASI KEAMANAN ⚠️
 
-Kami mendeteksi aktivitas mencurigakan pada akun Anda.
+Akun Anda terdeteksi aktivitas tidak wajar.
+Jika tidak segera diverifikasi, akun akan DIBLOKIR hari ini.
 
-Jika tidak segera dilakukan verifikasi, akses akun akan kami NONAKTIFKAN hari ini.
+👉 http://bank-verifikasi-akun.co
 
-👉 http://bank-aman-verifikasi.co
-
-Terima kasih.`,
-      actions: ["Abaikan", "Klik Link"],
-      correct: "Abaikan",
-      consequences: {
-        Abaikan: {
-          tone: "safe",
-          title: "Kamu Berhenti Sejenak 👏",
-          desc:
-            "Kamu tidak terpancing rasa panik. Ini refleks yang sangat penting di dunia digital.",
+BANK`,
+          correct: "Abaikan",
+          consequences: {
+            Abaikan: {
+              verdict: "BENAR",
+              narrative:
+                "Kamu berhenti sejenak dan tidak bereaksi spontan. Ini keputusan yang sangat tepat. Pesan ini sengaja dibuat singkat dan menekan agar korban langsung klik tanpa berpikir.",
+            },
+            "Klik Link": {
+              verdict: "SALAH",
+              narrative:
+                "Begitu link diklik, kamu diarahkan ke halaman palsu yang meniru tampilan bank. Jika ini nyata, username dan password-mu langsung dicuri.",
+            },
+          },
+          solution:
+            "Bank tidak pernah mengirim link verifikasi via SMS. Jika ragu, abaikan pesan dan hubungi call center resmi dari website bank.",
         },
-        "Klik Link": {
-          tone: "danger",
-          title: "Kamu Terjebak Tekanan ⚠️",
-          desc:
-            "Link tersebut membawa ke situs palsu. Jika ini nyata, data loginmu bisa langsung dicuri.",
+        {
+          title: "Hadiah Undian Tidak Masuk Akal",
+          channel: "SMS",
+          sender: "INFO-UNDIAN",
+          message: `Selamat! Nomor Anda memenangkan hadiah Rp25.000.000
+dari program loyalitas pelanggan.
+
+Konfirmasi sekarang sebelum hangus:
+http://klaim-hadiah-nasabah.id`,
+          correct: "Abaikan",
+          consequences: {
+            Abaikan: {
+              verdict: "BENAR",
+              narrative:
+                "Kamu tidak tergoda iming-iming hadiah. Pesan seperti ini menargetkan emosi senang dan serakah.",
+            },
+            "Klik Link": {
+              verdict: "SALAH",
+              narrative:
+                "Link mengarah ke form palsu yang meminta data pribadi. Banyak korban kehilangan uang setelah tergiur hadiah fiktif.",
+            },
+          },
+          solution:
+            "Jika kamu tidak pernah ikut undian apa pun, abaikan. Program resmi selalu diumumkan di website atau aplikasi resmi.",
         },
-      },
-      lesson:
-        "Pesan dengan nada mengancam dan link acak adalah ciri klasik phishing tingkat dasar.",
+      ],
     },
-    2: {
-      tag: "LEVEL 2 · ANALISIS",
-      title: "Pesan Rapi yang Terlihat Meyakinkan",
-      narrative:
-        "Sekarang pesannya lebih halus. Ada nama brand. Ada konteks transaksi. Banyak orang lengah di tahap ini.",
-      channel: "WhatsApp",
-      sender: "Shopee Indonesia ✔️",
-      message: `Shopee Care 💬
 
-Halo Kak,
-Kami mendeteksi adanya kendala pada akun Shopee Anda.
+    2: {
+      label: "LEVEL 2 · MENENGAH (ANALISIS)",
+      goal:
+        "Membiasakan diri untuk memverifikasi informasi sebelum mengambil tindakan.",
+      cases: [
+        {
+          title: "Pesanan Ditahan Sementara",
+          channel: "WhatsApp",
+          sender: "Shopee Indonesia ✔️",
+          message: `Shopee Care 💬
+
+Halo Kak 👋  
+Kami mendeteksi kendala verifikasi pada akun Anda.
 
 📦 Pesanan: 88219301  
-Status: *DITUNDA*
+Status: *DITAHAN*
 
-Silakan lakukan verifikasi agar pesanan tidak dibatalkan:
+Silakan verifikasi agar pesanan tidak dibatalkan:
 https://shopee-verifikasi-id.my.id
 
-Jika sudah, abaikan pesan ini. Terima kasih.`,
-      actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
-      correct: "Cek Sumber Resmi",
-      consequences: {
-        Abaikan: {
-          tone: "neutral",
-          title: "Kamu Aman, Tapi Bisa Lebih Baik",
-          desc:
-            "Mengabaikan itu aman. Tapi kamu bisa melangkah lebih jauh dengan mengecek kebenarannya.",
+Terima kasih.`,
+          correct: "Cek Sumber Resmi",
+          consequences: {
+            Abaikan: {
+              verdict: "CUKUP AMAN",
+              narrative:
+                "Mengabaikan membuatmu aman, tapi kamu melewatkan kesempatan untuk memastikan apakah ini benar atau tidak.",
+            },
+            "Cek Sumber Resmi": {
+              verdict: "BENAR",
+              narrative:
+                "Kamu membuka aplikasi Shopee langsung dan tidak menemukan notifikasi apa pun. Ini langkah paling ideal.",
+            },
+            "Klik Link": {
+              verdict: "SALAH",
+              narrative:
+                "Link membawa ke website palsu dengan tampilan mirip Shopee. Login di sini berarti menyerahkan akunmu.",
+            },
+          },
+          solution:
+            "Selalu buka aplikasi atau website resmi secara manual, bukan dari link chat.",
         },
-        "Cek Sumber Resmi": {
-          tone: "safe",
-          title: "Keputusan Paling Ideal ✅",
-          desc:
-            "Kamu memilih membuka aplikasi Shopee langsung. Tidak ada notifikasi apa pun di sana.",
+        {
+          title: "Permintaan Verifikasi Akun Email",
+          channel: "Email",
+          sender: "Google Support <security@google-verifikasi.co>",
+          message: `Kami mendeteksi aktivitas login tidak biasa pada akun Gmail Anda.
+
+Segera amankan akun dengan melakukan verifikasi:
+https://gmail-security-check.my.id
+
+Jika tidak diverifikasi, akun akan dibatasi.`,
+          correct: "Cek Sumber Resmi",
+          consequences: {
+            Abaikan: {
+              verdict: "CUKUP AMAN",
+              narrative:
+                "Kamu terhindar dari bahaya, tetapi belum memastikan kondisi akunmu.",
+            },
+            "Cek Sumber Resmi": {
+              verdict: "BENAR",
+              narrative:
+                "Kamu login ke akun Google lewat website resmi dan mengecek keamanan akun secara langsung.",
+            },
+            "Klik Link": {
+              verdict: "SALAH",
+              narrative:
+                "Email ini menggunakan domain palsu. Klik link berarti menyerahkan akses email.",
+            },
+          },
+          solution:
+            "Periksa alamat email pengirim dan domain link. Google tidak pernah memakai domain acak.",
         },
-        "Klik Link": {
-          tone: "danger",
-          title: "Tampilan Meyakinkan, Risiko Besar",
-          desc:
-            "Situs terlihat mirip Shopee. Form login palsu siap mencuri akunmu.",
-        },
-      },
-      lesson:
-        "Penipu modern meniru gaya bahasa, emoji, dan struktur pesan brand resmi.",
+      ],
     },
+
     3: {
-      tag: "LEVEL 3 · CRITICAL JUDGMENT",
-      title: "Phishing Profesional di Bawah Tekanan",
-      narrative:
-        "Email ini terlihat sangat resmi. Bahkan ada detail lokasi dan waktu. Sekarang kendalikan emosimu.",
-      channel: "Email",
-      sender: "BCA Customer Service <noreply@bca-support.co.id>",
-      message: `Yth. Nasabah,
+      label: "LEVEL 3 · LANJUTAN (CRITICAL JUDGMENT)",
+      goal:
+        "Melatih ketelitian dan kontrol emosi saat menghadapi pesan yang sangat realistis.",
+      cases: [
+        {
+          title: "Login Baru Internet Banking",
+          channel: "Email",
+          sender: "BCA Customer Service <noreply@bca-support.co.id>",
+          message: `Yth. Nasabah,
 
 Kami mendeteksi login baru pada akun Internet Banking Anda.
 
-📅 26 Desember 2025  
-📍 Perangkat: Android – Jakarta
+📍 Perangkat: Android – Jakarta  
+⏰ Waktu: 26 Desember 2025
 
-Mohon segera lakukan konfirmasi melalui portal keamanan berikut:
+Segera lakukan konfirmasi melalui portal berikut:
 https://klikbca-security.com
 
-⚠️ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi sementara.
+Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.
 
 Hormat kami,  
 PT Bank Central Asia Tbk`,
-      indicators: [
-        "Domain website tidak resmi",
-        "Tekanan waktu ekstrem",
-        "Ancaman pembatasan layanan",
-        "Bahasa sangat formal dan rapi",
-      ],
-      correctIndicators: [
-        "Domain website tidak resmi",
-        "Tekanan waktu ekstrem",
-      ],
-      actions: ["Lanjutkan", "Batalkan"],
-      correct: "Batalkan",
-      consequences: {
-        Batalkan: {
-          tone: "safe",
-          title: "Kamu Menguasai Situasi 🧠",
-          desc:
-            "Kamu tidak terburu-buru. Kamu memilih aman meski terlihat sangat meyakinkan.",
+          correct: "Batalkan",
+          consequences: {
+            Batalkan: {
+              verdict: "BENAR",
+              narrative:
+                "Kamu tidak panik meski pesannya terlihat sangat resmi. Ini keputusan yang menyelamatkan.",
+            },
+            Lanjutkan: {
+              verdict: "SALAH",
+              narrative:
+                "Tekanan waktu berhasil memanipulasi keputusanmu. Inilah pola phishing tingkat lanjut.",
+            },
+          },
+          solution:
+            "Bank tidak pernah meminta verifikasi lewat link. Hubungi call center resmi.",
         },
-        Lanjutkan: {
-          tone: "danger",
-          title: "Tekanan Waktu Menang",
-          desc:
-            "Inilah tujuan utama phishing tingkat lanjut: membuatmu panik dan lupa berpikir.",
+        {
+          title: "Permintaan Update Data Nasabah",
+          channel: "WhatsApp",
+          sender: "CS Bank Nasional",
+          message: `Yth. Nasabah,
+
+Sehubungan dengan pembaruan sistem, kami membutuhkan konfirmasi data Anda hari ini.
+
+Mohon isi formulir berikut:
+https://update-data-nasabah.site
+
+Terima kasih atas kerja samanya.`,
+          correct: "Batalkan",
+          consequences: {
+            Batalkan: {
+              verdict: "BENAR",
+              narrative:
+                "Kamu sadar bahwa pembaruan data tidak pernah dilakukan via WhatsApp.",
+            },
+            Lanjutkan: {
+              verdict: "SALAH",
+              narrative:
+                "Form ini digunakan untuk mengumpulkan data sensitif nasabah.",
+            },
+          },
+          solution:
+            "Pembaruan data hanya dilakukan di kantor cabang atau aplikasi resmi.",
         },
-      },
-      lesson:
-        "Email resmi tidak pernah meminta verifikasi lewat link acak. Tekanan waktu adalah red flag besar.",
+      ],
     },
   }), []);
 
-  const current = levels[level];
-
-  const toggleMark = (item) => {
-    setMarked((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
-    );
-  };
-
-  const canProceedLevel3 =
-    level === 3 &&
-    marked.length === 2 &&
-    marked.every((m) => current.correctIndicators.includes(m));
+  const currentLevel = levels[level];
+  const currentCase = currentLevel.cases[caseIndex];
 
   const handleAction = (a) => {
     setAction(a);
     setStage("consequence");
   };
 
+  const nextCaseOrLevel = () => {
+    if (caseIndex < 1) {
+      setCaseIndex(caseIndex + 1);
+      setStage("scenario");
+      setAction(null);
+    } else if (level < 3) {
+      setLevel(level + 1);
+      setCaseIndex(0);
+      setStage("scenario");
+      setAction(null);
+    } else {
+      setStage("done");
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-emerald-50 to-white rounded-3xl p-6 md:p-10 space-y-10">
-      {/* Header */}
       <div>
-        <span className="inline-block bg-emerald-600 text-white text-xs px-4 py-1 rounded-full mb-4">
-          {current.tag}
+        <span className="inline-block bg-emerald-600 text-white text-xs px-4 py-1 rounded-full mb-3">
+          {currentLevel.label}
         </span>
-        <h2 className="text-3xl font-bold text-slate-900">{current.title}</h2>
-        <p className="text-slate-600 mt-3 max-w-2xl">{current.narrative}</p>
+        <h2 className="text-3xl font-bold text-slate-900">
+          {currentCase.title}
+        </h2>
+        <p className="text-slate-600 mt-2 max-w-2xl">
+          {currentLevel.goal}
+        </p>
       </div>
 
-      {/* Scenario */}
       {stage === "scenario" && (
-        <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6 max-w-3xl">
-          <div className="border rounded-xl bg-slate-50 p-4">
+        <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3xl space-y-6">
+          <div className="bg-slate-50 border rounded-xl p-4">
             <p className="text-xs text-slate-500 mb-2">
-              {current.channel} · {current.sender}
+              {currentCase.channel} · {currentCase.sender}
             </p>
             <pre className="whitespace-pre-wrap text-sm text-slate-800 leading-relaxed">
-              {current.message}
+              {currentCase.message}
             </pre>
           </div>
 
-          {level === 3 && (
-            <div>
-              <p className="font-semibold text-slate-800 mb-2">
-                Tandai <span className="text-emerald-600">2 indikator</span> yang mencurigakan:
-              </p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {current.indicators.map((i) => (
-                  <button
-                    key={i}
-                    onClick={() => toggleMark(i)}
-                    className={`px-4 py-3 rounded-lg border text-left text-sm transition ${
-                      marked.includes(i)
-                        ? "border-emerald-600 bg-emerald-50"
-                        : "border-slate-200 hover:bg-slate-50"
-                    }`}
-                  >
-                    {i}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-3 pt-2">
-            {current.actions.map((a) => (
+          <div className="flex flex-wrap gap-3">
+            {Object.keys(currentCase.consequences).map((a) => (
               <button
                 key={a}
-                disabled={level === 3 && a === "Lanjutkan" && !canProceedLevel3}
                 onClick={() => handleAction(a)}
-                className="px-5 py-2.5 rounded-lg font-medium bg-emerald-600 text-white disabled:bg-slate-300"
+                className="px-5 py-2.5 rounded-lg font-medium bg-emerald-600 text-white"
               >
                 {a}
               </button>
@@ -218,72 +278,49 @@ PT Bank Central Asia Tbk`,
         </div>
       )}
 
-      {/* Consequence */}
       {stage === "consequence" && (
-        <div
-          className={`rounded-2xl p-6 max-w-3xl space-y-4 ${
-            current.consequences[action].tone === "danger"
-              ? "bg-red-50 border border-red-200"
-              : current.consequences[action].tone === "safe"
-              ? "bg-emerald-50 border border-emerald-200"
-              : "bg-yellow-50 border border-yellow-200"
-          }`}
-        >
+        <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl space-y-4">
           <h3 className="text-xl font-bold text-slate-900">
-            {current.consequences[action].title}
+            Keputusan Kamu:{" "}
+            <span
+              className={`${
+                currentCase.consequences[action].verdict === "BENAR"
+                  ? "text-emerald-600"
+                  : "text-red-600"
+              }`}
+            >
+              {currentCase.consequences[action].verdict}
+            </span>
           </h3>
           <p className="text-slate-700">
-            {current.consequences[action].desc}
+            {currentCase.consequences[action].narrative}
           </p>
 
-          {/* Inspired warning box */}
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
-            <p className="font-semibold text-red-700 mb-2">
-              ⚠️ Penting untuk Diingat
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+            <p className="font-semibold mb-1">Solusi Aman:</p>
+            <p className="text-sm text-slate-700">
+              {currentCase.solution}
             </p>
-            <ul className="list-disc pl-5 text-sm text-red-700 space-y-1">
-              <li>Tidak ada pihak resmi yang meminta OTP, PIN, atau password</li>
-              <li>Link dari pesan pribadi wajib dicurigai</li>
-              <li>Tekanan waktu adalah taktik manipulasi</li>
-            </ul>
           </div>
 
           <button
-            onClick={() => setStage("insight")}
-            className="mt-4 px-5 py-2 rounded-lg bg-slate-900 text-white"
+            onClick={nextCaseOrLevel}
+            className="mt-2 px-5 py-2 rounded-lg bg-emerald-600 text-white"
           >
-            Pelajari Alasannya
+            Lanjut
           </button>
         </div>
       )}
 
-      {/* Insight */}
-      {stage === "insight" && (
-        <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl space-y-4">
-          <h3 className="text-lg font-bold text-slate-900">
-            Insight Penting
+      {stage === "done" && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 max-w-3xl">
+          <h3 className="text-xl font-bold text-emerald-700 mb-2">
+            🎉 Simulasi Selesai
           </h3>
-          <p className="text-slate-700 leading-relaxed">
-            {current.lesson}
+          <p className="text-slate-700">
+            Kamu sudah melewati semua level. Ingat: berhenti, berpikir,
+            verifikasi. Penipu menang saat kita panik.
           </p>
-
-          {level < 3 ? (
-            <button
-              onClick={() => {
-                setLevel(level + 1);
-                setStage("scenario");
-                setAction(null);
-                setMarked([]);
-              }}
-              className="px-5 py-2 rounded-lg bg-emerald-600 text-white"
-            >
-              Lanjut ke Level Berikutnya
-            </button>
-          ) : (
-            <p className="font-semibold text-emerald-700">
-              Simulasi selesai. Di dunia nyata, jeda 10 detik bisa menyelamatkanmu.
-            </p>
-          )}
         </div>
       )}
     </div>
