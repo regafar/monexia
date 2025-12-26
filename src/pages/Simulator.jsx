@@ -17,12 +17,13 @@ export default function AntiPhishingSimulationPage() {
           title: "Akun Akan Diblokir",
           channel: "SMS",
           sender: "BANK ALERT",
-          message: `⚠️ NOTIFIKASI KEAMANAN ⚠️
+          message: `⚠️ PEMBERITAHUAN KEAMANAN ⚠️
 
-Kami mendeteksi aktivitas tidak wajar pada akun Anda.
-Jika tidak segera diverifikasi, akun akan DIBLOKIR hari ini.
+Terjadi percobaan login tidak dikenal pada akun Anda.
+Untuk mencegah penyalahgunaan, akses akan diblokir sementara.
 
-👉 http://bank-verifikasi-akun.co`,
+Segera lakukan verifikasi maksimal 1x24 jam:
+http://bank-verifikasi-akun.co`,
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
           explanation: `
@@ -41,9 +42,12 @@ Di dunia nyata, bank tidak pernah mengirim link verifikasi lewat SMS.
           title: "Hadiah Undian Pelanggan",
           channel: "SMS",
           sender: "INFO UNDIAN",
-          message: `Selamat! Nomor Anda memenangkan hadiah Rp25.000.000.
+          message: `SELAMAT! 🎉
 
-Segera klaim sebelum hangus:
+Nomor Anda terpilih sebagai pemenang undian pelanggan.
+Hadiah senilai Rp25.000.000 siap diklaim.
+
+Konfirmasi data Anda di:
 http://klaim-hadiah-pelanggan.id`,
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
@@ -74,10 +78,11 @@ maka pesan ini hampir pasti penipuan.
           sender: "Shopee Indonesia ✔️",
           message: `Shopee Care 💬
 
-Pesanan Anda *DITAHAN* sementara.
+Halo, kami informasikan bahwa pesanan Anda saat ini
+DITAHAN karena proses verifikasi tambahan.
 
-📦 ID: 88219301  
-Silakan verifikasi:
+📦 ID Pesanan: 88219301  
+Silakan lakukan verifikasi agar pesanan dapat diproses:
 https://shopee-verifikasi-id.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
@@ -97,9 +102,12 @@ Langkah paling aman adalah membuka aplikasi Shopee langsung.
           title: "Keamanan Akun Google",
           channel: "Email",
           sender: "Google Security <security@google-verifikasi.co>",
-          message: `Kami mendeteksi login mencurigakan.
+          message: `Kami mendeteksi aktivitas login yang tidak biasa
+pada akun Google Anda.
 
-Amankan akun Anda:
+Perangkat baru mencoba mengakses akun Anda.
+Jika ini bukan Anda, segera amankan akun melalui tautan berikut:
+
 https://gmail-security-check.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
@@ -128,11 +136,12 @@ Google hanya menggunakan akun.google.com.
           title: "Update Data Nasabah",
           channel: "WhatsApp",
           sender: "CS Bank Nasional",
-          message: `Yth. Nasabah,
+          message: `Yth. Bapak/Ibu Nasabah,
 
-Kami membutuhkan pembaruan data Anda hari ini.
+Sehubungan dengan peningkatan sistem layanan,
+kami memerlukan pembaruan data nasabah.
 
-Silakan akses:
+Mohon segera melakukan pembaruan melalui tautan berikut:
 https://update-data-nasabah.site`,
           options: [
             "Permintaan data lewat WhatsApp",
@@ -166,15 +175,17 @@ Fokuslah pada jalur komunikasi dan domain.
           title: "Login Baru Internet Banking",
           channel: "Email",
           sender: "BCA Support <noreply@bca-support.co.id>",
-          message: `Kami mendeteksi login baru.
+          message: `Pemberitahuan Keamanan BCA
+
+Kami mendeteksi login baru pada akun Internet Banking Anda.
 
 ⏰ 26 Desember 2025  
-📍 Android – Jakarta
+📍 Perangkat: Android – Jakarta
 
-Cek segera:
+Jika ini bukan Anda, segera lakukan pengecekan:
 http://klikbca-security.com
 
-Jika tidak, akses dibatasi 60 menit.`,
+Akses akan dibatasi otomatis dalam 60 menit.`,
           options: [
             "Link masih http",
             "Tekanan waktu 60 menit",
