@@ -17,52 +17,69 @@ export default function AntiPhishingSimulationPage() {
           title: "Akun Akan Diblokir",
           channel: "SMS",
           sender: "BANK ALERT",
-          message: `BCA INFO
+          message: `⚠️ PERINGATAN TERAKHIR ⚠️
 
-Kami mendeteksi percobaan login tidak wajar pada rekening Anda.
+Sistem kami mendeteksi aktivitas tidak wajar pada rekening Anda.
+Jika TIDAK dikonfirmasi hari ini, akun akan diblokir otomatis
+dan seluruh transaksi akan dihentikan.
 
-Untuk mencegah pemblokiran otomatis oleh sistem, silakan lakukan verifikasi data maksimal hari ini melalui tautan berikut:
-http://bank-verifikasi-akun.co
-
-Jika Anda tidak merasa melakukan aktivitas tersebut, segera lakukan pengecekan.`,
+👉 Konfirmasi sekarang:
+http://bank-verifikasi-akun.co`,
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
           explanation: `
-Pilihan aman adalah mengabaikan pesan ini.
+Pesan ini dirancang untuk menciptakan rasa panik dan takut kehilangan akses ke uang Anda.
 
-Pesan seperti ini sengaja dibuat mendesak agar korban panik.
-Di dunia nyata, bank tidak pernah mengirim link verifikasi melalui SMS.
+Penipu sengaja menggunakan kata seperti "PERINGATAN TERAKHIR", "hari ini", dan "diblokir"
+agar korban bereaksi cepat tanpa berpikir jernih.
+
+Dalam praktik nyata:
+- Bank tidak pernah meminta verifikasi melalui link SMS
+- Pemblokiran rekening tidak dilakukan sepihak hanya dari satu pesan
+- Nasabah selalu diarahkan ke aplikasi atau kantor cabang resmi
+
+Mengklik link semacam ini berisiko pencurian data login dan OTP,
+yang dapat berujung pada pengurasan saldo.
 `,
           reminder: [
             "Bank tidak mengirim link verifikasi via SMS",
-            "Nada mengancam = red flag",
-            "Verifikasi hanya lewat aplikasi resmi",
+            "Pesan mendesak bertujuan memicu panik",
+            "Akses rekening hanya lewat aplikasi resmi",
           ],
         },
         {
           title: "Hadiah Undian Pelanggan",
           channel: "SMS",
           sender: "INFO UNDIAN",
-          message: `Selamat! Nomor Anda terdaftar sebagai penerima Program Undian Pelanggan.
+          message: `🎉 SELAMAT ANDA PEMENANG 🎉
 
-Hadiah: Rp25.000.000
+Nomor Anda terdaftar sebagai pemenang undian pelanggan
+dengan hadiah utama Rp25.000.000 (dua puluh lima juta rupiah).
 
-Untuk proses klaim, silakan lakukan konfirmasi data sebelum pukul 21.00 WIB melalui tautan berikut:
-http://klaim-hadiah-pelanggan.id
-
-Jika tidak dikonfirmasi sesuai batas waktu, hadiah akan dialihkan.`,
+Hadiah harus diklaim hari ini.
+Isi data Anda melalui link berikut:
+http://klaim-hadiah-pelanggan.id`,
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
           explanation: `
-Hadiah mendadak seperti ini memanfaatkan emosi senang dan rasa takut kehilangan.
+Modus hadiah adalah salah satu teknik penipuan paling umum.
 
-Jika kamu tidak pernah mengikuti undian apa pun,
-maka pesan ini hampir pasti penipuan.
+Penipu memanfaatkan emosi senang dan rasa tidak ingin kehilangan kesempatan.
+Korban sering lupa bertanya:
+"Undian apa?" dan "Kapan saya ikut?"
+
+Ciri kuat penipuan pada pesan ini:
+- Tidak menyebutkan penyelenggara yang jelas
+- Tidak ada informasi program undian yang pernah diikuti
+- Mendesak klaim dalam waktu singkat
+
+Jika data pribadi atau biaya administrasi diminta,
+korban berisiko mengalami kerugian finansial dan penyalahgunaan identitas.
 `,
           reminder: [
-            "Hadiah resmi diumumkan di kanal resmi",
-            "Waspadai hadiah tanpa konteks",
-            "Jangan klik link dari nomor tidak dikenal",
+            "Undian resmi selalu transparan",
+            "Hadiah tanpa konteks hampir pasti penipuan",
+            "Jangan klik link hadiah dari nomor asing",
           ],
         },
       ],
@@ -78,59 +95,70 @@ maka pesan ini hampir pasti penipuan.
           title: "Pesanan Shopee Ditahan",
           channel: "WhatsApp",
           sender: "Shopee Indonesia ✔️",
-          message: `Halo Kak 👋
+          message: `Shopee Care 💬
 
-Kami dari *Shopee Care* ingin menginformasikan bahwa pesanan Kakak dengan detail berikut:
+Halo Kak,
+kami informasikan bahwa pesanan Anda saat ini
+DITAHAN karena terdeteksi aktivitas tidak biasa.
 
 📦 ID Pesanan: 88219301  
-Status: *DITAHAN SEMENTARA*
-
-Penahanan terjadi karena proses verifikasi sistem.
-Agar pesanan dapat diproses kembali, silakan lakukan konfirmasi melalui link berikut:
-https://shopee-verifikasi-id.my.id
-
-Terima kasih atas kerja samanya 🙏`,
+Agar pesanan tidak dibatalkan otomatis,
+silakan lakukan verifikasi akun melalui link berikut:
+https://shopee-verifikasi-id.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
           explanation: `
-Pesan terlihat rapi dan profesional.
-Namun domain link bukan domain resmi Shopee.
+Pesan ini terlihat sangat meyakinkan karena:
+- Menggunakan nama brand besar
+- Gaya bahasa sopan dan profesional
+- Menyebutkan ID pesanan
 
-Langkah paling aman adalah membuka aplikasi Shopee langsung.
+Namun, ada satu kejanggalan krusial:
+link yang digunakan bukan domain resmi Shopee.
+
+Penipu tahu bahwa korban sering panik soal pesanan online,
+sehingga cenderung langsung klik tanpa membuka aplikasi.
+
+Langkah paling aman adalah:
+membuka aplikasi Shopee secara manual
+dan mengecek notifikasi di dalam aplikasi, bukan dari chat.
 `,
           reminder: [
-            "Brand besar tetap bisa dipalsukan",
-            "Cek notifikasi di aplikasi resmi",
-            "Domain link harus benar",
+            "Nama brand bisa dipalsukan",
+            "Link resmi Shopee hanya shopee.co.id",
+            "Cek pesanan langsung di aplikasi",
           ],
         },
         {
           title: "Keamanan Akun Google",
           channel: "Email",
           sender: "Google Security <security@google-verifikasi.co>",
-          message: `Kami mendeteksi aktivitas login baru pada akun Google Anda.
+          message: `Kami mendeteksi login mencurigakan ke akun Google Anda.
 
-Detail aktivitas:
-Perangkat: Android
-Lokasi: Jawa Barat
-Waktu: 26 Desember 2025
+Perangkat baru mencoba mengakses akun Anda dari lokasi berbeda.
+Jika aktivitas ini bukan Anda, akun berisiko diambil alih.
 
-Jika ini bukan Anda, segera amankan akun melalui tautan berikut:
-https://gmail-security-check.my.id
-
-Jika tidak ada tindakan dalam 30 menit, beberapa fitur akun dapat dibatasi.`,
+Amankan akun Anda segera:
+https://gmail-security-check.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
           explanation: `
-Email meniru gaya komunikasi Google,
-namun domain pengirim dan link tidak resmi.
+Email keamanan sering dijadikan senjata phishing
+karena korban takut kehilangan akses email.
 
-Google hanya menggunakan akun.google.com.
+Sekilas email ini terlihat sah,
+namun terdapat tanda berbahaya:
+- Domain pengirim bukan google.com
+- Link tidak mengarah ke akun.google.com
+
+Jika korban memasukkan email dan password,
+penipu bisa langsung mengambil alih akun,
+mengakses data pribadi, dan melakukan reset akun lain.
 `,
           reminder: [
-            "Periksa domain pengirim email",
-            "Login manual ke akun resmi",
-            "Jangan klik link keamanan dari email acak",
+            "Google hanya pakai domain resmi",
+            "Jangan klik link keamanan dari email",
+            "Login manual ke akun.google.com",
           ],
         },
       ],
@@ -146,60 +174,65 @@ Google hanya menggunakan akun.google.com.
           title: "Update Data Nasabah",
           channel: "WhatsApp",
           sender: "CS Bank Nasional",
-          message: `Yth. Bapak/Ibu Nasabah,
+          message: `Yth. Nasabah,
 
-Sehubungan dengan penerapan kebijakan keamanan terbaru,
-kami mewajibkan seluruh nasabah melakukan pemutakhiran data.
+Sesuai ketentuan OJK terbaru,
+seluruh nasabah WAJIB melakukan validasi ulang data.
 
-Silakan lengkapi data melalui formulir berikut:
-https://update-data-nasabah.site
+Apabila tidak dilakukan hari ini,
+layanan transfer dan kartu ATM akan dinonaktifkan.
 
-Apabila hingga hari ini data belum diperbarui,
-beberapa layanan transaksi dapat dibatasi sementara.`,
+Silakan isi formulir validasi berikut:
+https://bank-validasi-nasabah.com/form`,
           options: [
             "Permintaan data lewat WhatsApp",
-            "Domain link .site",
+            "Ancaman penonaktifan layanan",
+            "Mengatasnamakan OJK",
             "Nada pesan formal",
-            "Tidak menyebut nama",
           ],
           correctOptions: [
             "Permintaan data lewat WhatsApp",
-            "Domain link .site",
+            "Ancaman penonaktifan layanan",
           ],
           explanation: {
             correct: `
-Kamu berhasil menemukan indikator utama.
+Kamu berhasil mengenali indikator berbahaya utama.
 
-Bank tidak meminta update data melalui WhatsApp,
-dan domain umum sering digunakan phishing.
+Bank tidak pernah meminta data sensitif melalui WhatsApp.
+Selain itu, ancaman penonaktifan layanan adalah teknik tekanan psikologis.
+
+Penipu sering mencatut nama lembaga resmi seperti OJK
+untuk meningkatkan kepercayaan korban.
 `,
             wrong: `
-Nada formal sering dipakai untuk menyamarkan penipuan.
-Fokuslah pada jalur komunikasi dan domain.
+Nada formal dan penyebutan lembaga resmi
+sering digunakan untuk menipu korban.
+
+Fokuslah pada jalur komunikasi dan bentuk ancaman,
+bukan sekadar gaya bahasa.
 `,
           },
           reminder: [
-            "Bank tidak update data via chat",
-            "Domain resmi bank selalu jelas",
-            "Jangan isi data dari link eksternal",
+            "Bank tidak minta data lewat chat",
+            "Ancaman layanan dinonaktifkan = red flag",
+            "Validasi hanya lewat kanal resmi",
           ],
         },
         {
           title: "Login Baru Internet Banking",
           channel: "Email",
           sender: "BCA Support <noreply@bca-support.co.id>",
-          message: `Notifikasi Keamanan Internet Banking
+          message: `Pemberitahuan Keamanan BCA
 
 Kami mendeteksi login baru pada akun Internet Banking Anda.
 
 ⏰ 26 Desember 2025  
 📍 Android – Jakarta
 
-Jika aktivitas ini bukan Anda, segera lakukan pengecekan melalui:
+Jika ini bukan Anda, segera lakukan verifikasi keamanan:
 http://klikbca-security.com
 
-Apabila tidak dikonfirmasi dalam 60 menit,
-akses Internet Banking akan dibatasi sementara.`,
+Akses akan dibatasi otomatis dalam 60 menit.`,
           options: [
             "Link masih http",
             "Tekanan waktu 60 menit",
@@ -212,18 +245,26 @@ akses Internet Banking akan dibatasi sementara.`,
           ],
           explanation: {
             correct: `
-HTTPS wajib untuk layanan perbankan.
-Tekanan waktu adalah teknik manipulasi emosi.
+Layanan perbankan wajib menggunakan HTTPS,
+bukan HTTP yang tidak terenkripsi.
+
+Batas waktu 60 menit adalah teknik klasik phishing
+untuk membuat korban bertindak terburu-buru.
+
+Detail lokasi dan waktu sengaja ditambahkan
+agar pesan terlihat sah.
 `,
             wrong: `
-Detail teknis sering dipakai untuk memberi kesan sah.
-Namun justru itu jebakan.
+Detail teknis sering mengecoh korban.
+
+Namun keamanan website dan tekanan waktu
+adalah indikator yang jauh lebih penting.
 `,
           },
           reminder: [
-            "Website bank wajib HTTPS",
-            "Ultimatum waktu = red flag",
-            "Akses hanya lewat aplikasi resmi",
+            "Website bank selalu HTTPS",
+            "Tekanan waktu = manipulasi emosi",
+            "Akses rekening hanya lewat aplikasi",
           ],
         },
       ],
