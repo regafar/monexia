@@ -8,7 +8,7 @@ export default function AntiPhishingSimulation() {
   const [score, setScore] = useState(0);
   const [selectedIndicators, setSelectedIndicators] = useState([]);
   const [showIndicatorSelection, setShowIndicatorSelection] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(true);
 
   const levels = [
     {
@@ -202,193 +202,12 @@ export default function AntiPhishingSimulation() {
     setScore(0);
     setSelectedIndicators([]);
     setShowIndicatorSelection(false);
-    setHasStarted(false);
+    setHasStarted(true);
   };
 
   const currentLevelData = levels[currentLevel];
   const currentScenarioData = currentLevelData?.scenarios[currentScenario];
   const totalScenarios = levels.reduce((acc, level) => acc + level.scenarios.length, 0);
-
-  if (!hasStarted) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4">
-        <div className="max-w-5xl mx-auto">
-          {/* Hero Section */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 md:p-12 mb-8 border border-green-100">
-            <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              🛡️ PUSAT PELAPORAN RESMI
-            </div>
-            
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Panduan Pelaporan Penipuan Transaksi Keuangan
-            </h1>
-            
-            <p className="text-gray-700 text-lg leading-relaxed mb-8">
-              Jika Anda menjadi korban penipuan transaksi keuangan, jangan panik. Halaman ini memberikan panduan langkah praktis dan jalur resmi untuk melaporkan kejadian dengan tepat dan cepat. Tujuan kami adalah membantu Anda bertindak dengan benar.
-            </p>
-
-            {/* Tabs */}
-            <div className="flex gap-4 mb-8">
-              <button className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium shadow-sm hover:bg-green-700 transition">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
-                Buka IASC OJK
-              </button>
-              
-              <button className="flex items-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-medium border border-gray-200 hover:bg-gray-50 transition">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Salin Link
-              </button>
-            </div>
-
-            {/* Portal Card */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-start gap-4">
-                <div className="bg-gray-100 p-3 rounded-lg">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-green-700 font-bold text-lg mb-1">PORTAL RESMI OJK</h3>
-                  <p className="text-gray-900 font-medium mb-2">https://iasc.ojk.go.id/</p>
-                  <p className="text-gray-600 text-sm">Portal resmi untuk preventif dan penanganan layanan jasa keuangan</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Steps Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              Langkah-Langkah Penanganan
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Ikuti panduan berikut secara berurutan untuk penanganan yang efektif
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Step 1 */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="bg-green-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold flex-shrink-0">
-                    1
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Amankan Akun Segera</h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      Langkah pertama yang harus dilakukan adalah mengamankan semua akun yang terkait dengan transaksi keuangan Anda.
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <span className="text-yellow-600 flex-shrink-0">💡</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Ganti password dengan kombinasi yang kuat, aktifkan autentikasi dua faktor (2FA), dan pastikan email utama Anda aman.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="bg-green-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold flex-shrink-0">
-                    2
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Kumpulkan Bukti Transaksi</h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      Dokumentasikan semua bukti yang berhubungan dengan penipuan untuk mempermudah proses pelaporan.
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <span className="text-yellow-600 flex-shrink-0">💡</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Screenshot percakapan, bukti transfer, nomor rekening pelaku, link website palsu, dan catat kronologi kejadian secara detail.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="bg-green-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold flex-shrink-0">
-                    3
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Hubungi Layanan Resmi</h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      Segera hubungi penyedia layanan keuangan melalui kanal resmi mereka, bukan dari kontak yang diberikan oleh pihak mencurigakan.
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <span className="text-yellow-600 flex-shrink-0">💡</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Gunakan aplikasi resmi, website resmi, atau datang langsung ke kantor cabang. Hindari nomor dari DM, komentar, atau pesan tidak dikenal.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 4 */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="bg-green-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold flex-shrink-0">
-                    4
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Laporkan ke Portal Resmi</h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      Laporkan kejadian ke institusi berwenang melalui jalur resmi sektor jasa keuangan untuk penanganan yang tepat.
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <span className="text-yellow-600 flex-shrink-0">💡</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Gunakan portal IASC OJK untuk pelaporan resmi transaksi keuangan yang mencurigakan atau penipuan finansial.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Simulation CTA */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 md:p-12 border border-blue-100">
-            <div className="text-center max-w-2xl mx-auto">
-              <div className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                🎯 LATIHAN INTERAKTIF
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                Simulasi Anti-Phishing
-              </h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                Sebelum kamu menghadapi ancaman nyata, yuk latihan dulu! Simulasi ini akan melatih instingmu mengenali pesan phishing dari yang paling jelas hingga yang super meyakinkan.
-              </p>
-              <button
-                onClick={handleStartSimulation}
-                className="bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl"
-              >
-                🚀 Mulai Simulasi Sekarang
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (feedback?.type === 'complete') {
     return (
@@ -483,127 +302,127 @@ export default function AntiPhishingSimulation() {
                     <p className="text-sm text-gray-700">
                       Sebelum mengambil keputusan, identifikasi DUA indikator yang mencurigakan
                       dari pesan di atas. Ini melatihmu untuk tidak reaktif dan selalu observasi dulu.
-</p>
-</div>
-</div>
-</div>
-              <p className="font-bold text-gray-900 mb-3">
-            Pilih 2 indikator mencurigakan: ({selectedIndicators.length}/2)
-          </p>
-          
-          <div className="space-y-2">
-            {currentScenarioData.indicators.map((indicator, index) => (
-              <button
-                key={index}
-                onClick={() => handleIndicatorSelect(index)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition ${
-                  selectedIndicators.includes(index)
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    selectedIndicators.includes(index)
-                      ? 'border-green-500 bg-green-500'
-                      : 'border-gray-300'
-                  }`}>
-                    {selectedIndicators.includes(index) && (
-                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
+                    </p>
                   </div>
-                  <span className="text-gray-700">{indicator.text}</span>
                 </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+              </div>
+              <p className="font-bold text-gray-900 mb-3">
+                Pilih 2 indikator mencurigakan: ({selectedIndicators.length}/2)
+              </p>
+              
+              <div className="space-y-2">
+                {currentScenarioData.indicators.map((indicator, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleIndicatorSelect(index)}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition ${
+                      selectedIndicators.includes(index)
+                        ? 'border-green-500 bg-green-50'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                        selectedIndicators.includes(index)
+                          ? 'border-green-500 bg-green-500'
+                          : 'border-gray-300'
+                      }`}>
+                        {selectedIndicators.includes(index) && (
+                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-gray-700">{indicator.text}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-      {/* Actions */}
-      {(currentLevel !== 2 || showIndicatorSelection) && (
-        <div>
-          <p className="font-bold text-gray-900 mb-3">Apa yang akan kamu lakukan?</p>
-          <div className="space-y-3">
-            {currentScenarioData.actions.map((action, index) => (
+          {/* Actions */}
+          {(currentLevel !== 2 || showIndicatorSelection) && (
+            <div>
+              <p className="font-bold text-gray-900 mb-3">Apa yang akan kamu lakukan?</p>
+              <div className="space-y-3">
+                {currentScenarioData.actions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleActionSelect(action)}
+                    disabled={selectedAction !== null}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition font-medium ${
+                      selectedAction === action
+                        ? action.correct
+                          ? 'border-green-500 bg-green-50 text-green-700'
+                          : 'border-red-500 bg-red-50 text-red-700'
+                        : selectedAction !== null
+                        ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 bg-white hover:border-green-500 hover:bg-green-50'
+                    }`}
+                  >
+                    {action.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Level 3: Submit Indicator Button */}
+          {currentLevel === 2 && !showIndicatorSelection && selectedIndicators.length === 2 && (
+            <button
+              onClick={() => handleActionSelect({ correct: true })}
+              className="w-full mt-4 bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition"
+            >
+              Lanjut ke Pilihan Tindakan
+            </button>
+          )}
+        </div>
+
+        {/* Feedback */}
+        {feedback && feedback.type !== 'complete' && (
+          <div className={`rounded-2xl p-6 md:p-8 mb-6 ${
+            feedback.type === 'success' ? 'bg-green-50 border border-green-200' :
+            feedback.type === 'error' ? 'bg-red-50 border border-red-200' :
+            'bg-yellow-50 border border-yellow-200'
+          }`}>
+            <div className="flex gap-3 mb-3">
+              <span className="text-2xl flex-shrink-0">
+                {feedback.type === 'success' ? '✅' : feedback.type === 'error' ? '❌' : '⚠️'}
+              </span>
+              <div>
+                <h3 className={`font-bold text-lg mb-2 ${
+                  feedback.type === 'success' ? 'text-green-900' :
+                  feedback.type === 'error' ? 'text-red-900' :
+                  'text-yellow-900'
+                }`}>
+                  {feedback.type === 'success' ? 'Keputusan Tepat!' :
+                   feedback.type === 'error' ? 'Wah, Hati-Hati!' :
+                   'Perhatikan Lagi'}
+                </h3>
+                <p className={`leading-relaxed ${
+                  feedback.type === 'success' ? 'text-green-800' :
+                  feedback.type === 'error' ? 'text-red-800' :
+                  'text-yellow-800'
+                }`}>
+                  {feedback.message}
+                </p>
+              </div>
+            </div>
+            
+            {selectedAction && (
               <button
-                key={index}
-                onClick={() => handleActionSelect(action)}
-                disabled={selectedAction !== null}
-                className={`w-full text-left p-4 rounded-xl border-2 transition font-medium ${
-                  selectedAction === action
-                    ? action.correct
-                      ? 'border-green-500 bg-green-50 text-green-700'
-                      : 'border-red-500 bg-red-50 text-red-700'
-                    : selectedAction !== null
-                    ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
-                    : 'border-gray-300 bg-white hover:border-green-500 hover:bg-green-50'
-                }`}
+                onClick={handleNext}
+                className="w-full bg-gray-900 text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition mt-4"
               >
-                {action.label}
+                {currentScenario < currentLevelData.scenarios.length - 1 ? 'Lanjut Skenario Berikutnya' :
+                 currentLevel < levels.length - 1 ? 'Lanjut ke Level Berikutnya' :
+                 'Lihat Hasil Akhir'}
               </button>
-            ))}
+            )}
           </div>
-        </div>
-      )}
-
-      {/* Level 3: Submit Indicator Button */}
-      {currentLevel === 2 && !showIndicatorSelection && selectedIndicators.length === 2 && (
-        <button
-          onClick={() => handleActionSelect({ correct: true })}
-          className="w-full mt-4 bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition"
-        >
-          Lanjut ke Pilihan Tindakan
-        </button>
-      )}
-    </div>
-
-    {/* Feedback */}
-    {feedback && feedback.type !== 'complete' && (
-      <div className={`rounded-2xl p-6 md:p-8 mb-6 ${
-        feedback.type === 'success' ? 'bg-green-50 border border-green-200' :
-        feedback.type === 'error' ? 'bg-red-50 border border-red-200' :
-        'bg-yellow-50 border border-yellow-200'
-      }`}>
-        <div className="flex gap-3 mb-3">
-          <span className="text-2xl flex-shrink-0">
-            {feedback.type === 'success' ? '✅' : feedback.type === 'error' ? '❌' : '⚠️'}
-          </span>
-          <div>
-            <h3 className={`font-bold text-lg mb-2 ${
-              feedback.type === 'success' ? 'text-green-900' :
-              feedback.type === 'error' ? 'text-red-900' :
-              'text-yellow-900'
-            }`}>
-              {feedback.type === 'success' ? 'Keputusan Tepat!' :
-               feedback.type === 'error' ? 'Wah, Hati-Hati!' :
-               'Perhatikan Lagi'}
-            </h3>
-            <p className={`leading-relaxed ${
-              feedback.type === 'success' ? 'text-green-800' :
-              feedback.type === 'error' ? 'text-red-800' :
-              'text-yellow-800'
-            }`}>
-              {feedback.message}
-            </p>
-          </div>
-        </div>
-        
-        {selectedAction && (
-          <button
-            onClick={handleNext}
-            className="w-full bg-gray-900 text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition mt-4"
-          >
-            {currentScenario < currentLevelData.scenarios.length - 1 ? 'Lanjut Skenario Berikutnya' :
-             currentLevel < levels.length - 1 ? 'Lanjut ke Level Berikutnya' :
-             'Lihat Hasil Akhir'}
-          </button>
         )}
       </div>
-    )}
-  </div>
-</div>
-    );
+    </div>
+  );
 }
