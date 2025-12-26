@@ -1,355 +1,447 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "../components/ui/Card";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import SecondaryButton from "../components/ui/SecondaryButton";
+import React, { useState } from 'react';
 
-const questions = [
-  {
-    q: "Seseorang yang sebelumnya tidak memiliki rekening bank kini dapat menyimpan dan mengirim uang melalui aplikasi. Kondisi ini menunjukkan peran fintech dalam hal…",
-    options: [
-      "Meningkatkan konsumsi digital",
-      "Mendorong inklusi keuangan",
-      "Menghilangkan peran lembaga keuangan",
-      "Membatasi akses layanan keuangan"
-    ],
-    answer: 1
-  },
-  {
-    q: "Fintech sering disebut sebagai jembatan antara teknologi dan keuangan karena…",
-    options: [
-      "Menggunakan internet sebagai media hiburan",
-      "Menggabungkan inovasi teknologi dengan layanan finansial",
-      "Menggantikan seluruh sistem perbankan",
-      "Beroperasi tanpa aturan"
-    ],
-    answer: 1
-  },
-  {
-    q: "Penggunaan fintech tanpa pemahaman yang baik dapat menimbulkan risiko karena…",
-    options: [
-      "Semua fintech memiliki biaya tinggi",
-      "Teknologi selalu gagal",
-      "Pengguna dapat salah mengambil keputusan finansial",
-      "Fintech tidak bisa diakses masyarakat"
-    ],
-    answer: 2
-  },
-  {
-    q: "Literasi keuangan digital membantu pengguna terutama dalam hal…",
-    options: [
-      "Mengikuti tren aplikasi populer",
-      "Memahami manfaat, risiko, dan tanggung jawab sebagai pengguna",
-      "Menghindari seluruh layanan keuangan digital",
-      "Menggunakan fintech tanpa membaca ketentuan"
-    ],
-    answer: 1
-  },
-  {
-    q: "Fitur pembayaran menggunakan QR di berbagai merchant merupakan contoh penerapan fintech pada bidang…",
-    options: ["Pendukung pasar", "Manajemen investasi", "Sistem pembayaran", "Crowdfunding"],
-    answer: 2
-  },
-  {
-    q: "Aplikasi yang menampilkan perbandingan produk pinjaman dari berbagai penyedia berperan sebagai…",
-    options: ["Lembaga pembiayaan", "Market aggregator", "Penyedia modal", "Manajer investasi"],
-    answer: 1
-  },
-  {
-    q: "Platform yang mempertemukan pemberi dana dan peminjam secara langsung termasuk kategori…",
-    options: ["Sistem pembayaran", "Pendukung pasar", "Peminjaman dan pembiayaan", "Jasa finansial lainnya"],
-    answer: 2
-  },
-  {
-    q: "Aplikasi yang membantu pengguna mengelola portofolio investasi secara digital termasuk dalam fintech…",
-    options: ["Manajemen investasi dan risiko", "Sistem pembayaran", "Pendukung pasar", "Crowdfunding"],
-    answer: 0
-  },
-  {
-    q: "Layanan asuransi digital dan remitansi online dikelompokkan ke dalam…",
-    options: ["Pendukung pasar", "Jasa finansial lainnya", "Manajemen investasi", "Sistem pembayaran"],
-    answer: 1
-  },
-  {
-    q: "Jika seseorang meminta kode verifikasi dengan alasan pembaruan akun, tindakan paling tepat adalah…",
-    options: [
-      "Memberikan kode agar proses cepat",
-      "Mengabaikan dan mengecek lewat aplikasi resmi",
-      "Mengirim ulang data pribadi",
-      "Menyimpan kode di pesan"
-    ],
-    answer: 1
-  },
-  {
-    q: "Mengapa pengguna disarankan tidak mengklik tautan dari pesan yang tidak dikenal?",
-    options: [
-      "Karena internet lambat",
-      "Karena tautan bisa mengandung malware atau phishing",
-      "Karena semua pesan tidak penting",
-      "Karena aplikasi akan rusak"
-    ],
-    answer: 1
-  },
-  {
-    q: "Salah satu indikator pesan penipuan adalah…",
-    options: [
-      "Menggunakan bahasa formal dan tenang",
-      "Memberi waktu berpikir yang cukup",
-      "Mendesak pengguna agar segera bertindak",
-      "Mengarah ke aplikasi resmi"
-    ],
-    answer: 2
-  },
-  {
-    q: "Perlindungan data pribadi dalam fintech penting karena…",
-    options: ["Data tidak memiliki nilai", "Data dapat disalahgunakan untuk kejahatan finansial", "Semua data aman otomatis", "Pengguna tidak perlu peduli"],
-    answer: 1
-  },
-  {
-    q: "Keberadaan regulasi fintech bertujuan utama untuk…",
-    options: ["Membatasi penggunaan teknologi", "Melindungi konsumen dan menjaga stabilitas sistem", "Menguntungkan perusahaan tertentu", "Menghilangkan risiko sepenuhnya"],
-    answer: 1
-  },
-  {
-    q: "Ketika terjadi penipuan transaksi digital, langkah yang paling tepat dilakukan pengguna adalah…",
-    options: ["Menghubungi pelaku penipuan", "Menyebarkan data di media sosial", "Mengumpulkan bukti dan melapor melalui jalur resmi", "Menghapus akun tanpa laporan"],
-    answer: 2
-  }
-];
+const FintechLiteracyQuiz = () => {
+  const questions = [
+    {
+      id: 1,
+      question: "Fintech paling tepat berarti …",
+      options: [
+        "Aplikasi hiburan dengan fitur transfer",
+        "Layanan keuangan yang dipermudah teknologi",
+        "Semua hal tentang kripto",
+        "Satu perusahaan dompet digital"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 2,
+      question: "Risiko fintech yang paling sering terjadi adalah …",
+      options: [
+        "Antrian panjang",
+        "Phishing dan pencurian OTP",
+        "Keterlambatan pos",
+        "Uang tunai rusak"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 3,
+      question: "Literasi keuangan digital membantu pengguna untuk …",
+      options: [
+        "Membagikan OTP ke customer service",
+        "Mengabaikan syarat dan biaya",
+        "Memahami manfaat, biaya, risiko, dan cara pakai aman",
+        "Selalu mengikuti tren produk"
+      ],
+      correctAnswer: 2
+    },
+    {
+      id: 4,
+      question: "Payment, settlement, dan clearing termasuk dalam kategori …",
+      options: [
+        "Market aggregator",
+        "Sistem pembayaran",
+        "Manajemen investasi dan risiko",
+        "Jasa finansial lainnya"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 5,
+      question: "Market aggregator paling tepat digunakan untuk …",
+      options: [
+        "Membandingkan produk dari banyak penyedia",
+        "Menghapus semua risiko penipuan",
+        "Mengubah saldo tanpa transaksi",
+        "Mengirim OTP ke pengguna"
+      ],
+      correctAnswer: 0
+    },
+    {
+      id: 6,
+      question: "Crowdfunding dan P2P lending termasuk kategori …",
+      options: [
+        "Sistem pembayaran",
+        "Pendukung pasar",
+        "Peminjaman dan pembiayaan",
+        "Jasa finansial lainnya"
+      ],
+      correctAnswer: 2
+    },
+    {
+      id: 7,
+      question: "OTP seharusnya …",
+      options: [
+        "Dibagikan ke siapa pun yang mengaku CS",
+        "Dikirim ke teman dekat",
+        "Dirahasiakan dan tidak dibagikan",
+        "Diposting jika diminta admin"
+      ],
+      correctAnswer: 2
+    },
+    {
+      id: 8,
+      question: "Ciri pesan penipuan digital yang umum adalah …",
+      options: [
+        "Bahasanya tenang dan tidak mendesak",
+        "Mendesak, bikin panik, dan minta klik link cepat",
+        "Selalu memakai email resmi",
+        "Tidak pernah meminta data"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 9,
+      question: "Langkah aman saat menerima link verifikasi mencurigakan adalah …",
+      options: [
+        "Klik dulu baru dicek",
+        "Kirim OTP agar cepat selesai",
+        "Abaikan dan cek lewat aplikasi resmi",
+        "Teruskan ke grup chat"
+      ],
+      correctAnswer: 2
+    },
+    {
+      id: 10,
+      question: "Tujuan utama regulasi fintech adalah …",
+      options: [
+        "Menghambat inovasi digital",
+        "Melindungi konsumen dan memberi kepastian hukum",
+        "Mewajibkan semua orang memakai e-wallet",
+        "Menghapus seluruh risiko teknologi"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 11,
+      question: "Salah satu prinsip perlindungan konsumen dalam layanan fintech adalah …",
+      options: [
+        "OTP boleh diminta oleh CS",
+        "Transparansi biaya, syarat, dan risiko",
+        "Syarat disembunyikan agar cepat",
+        "Pengaduan tidak diperlukan"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 12,
+      question: "Jika menjadi korban penipuan transaksi digital, langkah paling tepat adalah …",
+      options: [
+        "Menghapus semua bukti",
+        "Mengumpulkan bukti dan melapor lewat jalur resmi",
+        "Mengirim ulang uang agar dikembalikan",
+        "Memberikan password ke pihak lain"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 13,
+      question: "Salah satu manfaat utama fintech bagi masyarakat adalah …",
+      options: [
+        "Proses keuangan menjadi lebih rumit",
+        "Akses layanan keuangan lebih mudah dan efisien",
+        "Menghilangkan seluruh risiko keuangan",
+        "Menggantikan peran pengguna"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 14,
+      question: "Salah satu risiko utama dalam investasi digital berbasis equity crowdfunding adalah …",
+      options: [
+        "Inflasi",
+        "Information asymmetry",
+        "Pajak tinggi",
+        "Nilai tukar rupiah"
+      ],
+      correctAnswer: 1
+    },
+    {
+      id: 15,
+      question: "Sebuah platform pinjaman online (P2P lending) melanggar aturan perlindungan konsumen dengan bunga tidak transparan dan penagihan tidak etis. Siapa yang bertugas menanganinya?",
+      options: [
+        "Bank Indonesia (BI)",
+        "Kementerian Komunikasi dan Informatika (Kominfo)",
+        "Otoritas Jasa Keuangan (OJK)",
+        "Kementerian Keuangan"
+      ],
+      correctAnswer: 2
+    }
+  ];
 
-function clamp(n, a, b) {
-  return Math.max(a, Math.min(b, n));
-}
-
-export default function QuizCenter() {
-  const nav = useNavigate();
-
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [correctCount, setCorrectCount] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isLocked, setIsLocked] = useState(false);
 
-  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
+  const handleOptionSelect = (optionIndex) => {
+    if (!isLocked) {
+      setSelectedOption(optionIndex);
+    }
+  };
 
-  function pickAnswer(qi, oi) {
-    if (checked) return;
-    setAnswers((prev) => ({ ...prev, [qi]: oi }));
-  }
+  const handleNext = () => {
+    if (selectedOption !== null) {
+      setAnswers({ ...answers, [currentQuestion]: selectedOption });
+      setSelectedOption(null);
+      setIsLocked(false);
+      
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+      } else {
+        calculateResult();
+      }
+    }
+  };
 
-  function checkQuiz() {
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+      setSelectedOption(answers[currentQuestion - 1] ?? null);
+      setIsLocked(false);
+    }
+  };
+
+  const calculateResult = () => {
     let correct = 0;
-    questions.forEach((q, i) => {
-      if (answers[i] === q.answer) correct += 1;
+    questions.forEach((q, index) => {
+      if (answers[index] === q.correctAnswer) {
+        correct++;
+      }
     });
+    setShowResult(true);
+  };
 
-    setCorrectCount(correct);
-    setChecked(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const getScore = () => {
+    let correct = 0;
+    questions.forEach((q, index) => {
+      if (answers[index] === q.correctAnswer) {
+        correct++;
+      }
+    });
+    return Math.round((correct / questions.length) * 100);
+  };
+
+  const getFeedback = (score) => {
+    if (score >= 80) {
+      return {
+        title: "Luar Biasa!",
+        message: "Pemahaman literasi fintech Anda sangat baik. Terus pertahankan dan praktikkan pengetahuan ini dalam kehidupan sehari-hari.",
+        color: "text-green-700"
+      };
+    } else if (score >= 60) {
+      return {
+        title: "Cukup Baik",
+        message: "Anda memiliki pemahaman dasar yang baik tentang literasi fintech. Tingkatkan pengetahuan dengan belajar lebih dalam tentang keamanan dan risiko digital.",
+        color: "text-blue-700"
+      };
+    } else {
+      return {
+        title: "Perlu Peningkatan",
+        message: "Literasi fintech Anda masih perlu ditingkatkan. Pelajari lebih lanjut tentang layanan keuangan digital dan cara menggunakannya dengan aman.",
+        color: "text-orange-700"
+      };
+    }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResult(false);
+    setSelectedOption(null);
+    setIsLocked(false);
+  };
+
+  if (showResult) {
+    const score = getScore();
+    const feedback = getFeedback(score);
+    
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                M
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold text-gray-900">MoneEdu</span>
+                  <span className="bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded">EDU</span>
+                </div>
+                <p className="text-sm text-gray-600">Edukasi fintech, aman, terarah</p>
+              </div>
+            </div>
+            <button className="flex items-center gap-2 px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Beranda
+            </button>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto px-6 py-12">
+          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Kuis Selesai!</h1>
+            <p className="text-gray-600 mb-8">Berikut adalah hasil evaluasi literasi fintech Anda</p>
+            
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8 mb-6">
+              <div className="text-6xl font-bold text-green-600 mb-2">{score}</div>
+              <div className="text-gray-700 text-lg">dari 100</div>
+            </div>
+            
+            <div className={`bg-gray-50 rounded-xl p-6 mb-8 text-left`}>
+              <h3 className={`text-xl font-bold mb-2 ${feedback.color}`}>{feedback.title}</h3>
+              <p className="text-gray-700">{feedback.message}</p>
+            </div>
+            
+            <div className="flex gap-4 justify-center">
+              <button 
+                onClick={resetQuiz}
+                className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+              >
+                Ulangi Kuis
+              </button>
+              <button className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                Kembali ke Beranda
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
   }
-
-  // Skor skala 1–100
-  const score100 = useMemo(() => {
-    const raw = Math.round((correctCount / questions.length) * 100);
-    return clamp(raw, 0, 100);
-  }, [correctCount]);
-
-  function getFeedback() {
-    if (score100 >= 85) return "Sangat baik. Kamu sudah memahami materi fintech dan risikonya dengan kuat.";
-    if (score100 >= 70) return "Baik. Kamu sudah paham, tinggal perkuat bagian keamanan digital dan verifikasi sumber.";
-    if (score100 >= 55) return "Cukup. Coba baca ulang modul jenis fintech dan regulasi agar makin yakin.";
-    return "Perlu belajar ulang. Fokus pada keamanan digital, phishing, OTP, dan jalur pelaporan resmi.";
-  }
-
-  const ringStyle = useMemo(() => {
-    const pct = checked ? score100 : Math.round((answeredCount / questions.length) * 100);
-    const deg = Math.round((pct / 100) * 360);
-    return {
-      background: `conic-gradient(#16a34a ${deg}deg, #e5e7eb 0deg)`
-    };
-  }, [checked, score100, answeredCount]);
 
   return (
-    <div className="space-y-6">
-      {/* Header seperti referensi */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div className="min-w-0">
-            <div className="text-sm font-semibold text-slate-500">MoneEdu • Kuis</div>
-            <div className="mt-1 text-3xl font-extrabold text-slate-900">
-              Kuis Evaluasi Literasi Fintech
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              M
             </div>
-            <div className="mt-2 max-w-2xl text-sm text-slate-600">
-              Jawab 15 pertanyaan untuk menguji pemahaman kamu dari seluruh modul pembelajaran.
-              Nilai akhir menggunakan skala 1–100.
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-extrabold text-slate-600">
-                Terjawab: {answeredCount}/{questions.length}
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-gray-900">MoneEdu</span>
+                <span className="bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded">EDU</span>
               </div>
+              <p className="text-sm text-gray-600">Edukasi fintech, aman, terarah</p>
             </div>
           </div>
-
-          <div className="flex flex-wrap gap-2">
-            <SecondaryButton onClick={() => nav(-1)}>← Kembali</SecondaryButton>
-            <SecondaryButton onClick={() => nav("/")}>Beranda</SecondaryButton>
-          </div>
+          <button className="flex items-center gap-2 px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Beranda
+          </button>
         </div>
-      </div>
+      </header>
 
-      {/* Ringkasan progress / hasil */}
-      <div className="grid gap-4 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="text-sm font-extrabold text-slate-900">
-              {checked ? "Hasil Kuis" : "Progres Kuis"}
+      <main className="max-w-4xl mx-auto px-6 py-12">
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-8 mb-8">
+          <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <span className="mr-2">📚</span>
+            KUIS EVALUASI LITERASI FINTECH
+          </div>
+          
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Kuis Literasi Fintech
+          </h1>
+          
+          <p className="text-gray-700 text-lg">
+            Uji pemahaman Anda tentang layanan keuangan digital, keamanan transaksi, dan cara menggunakan fintech dengan bijak. Kuis ini terdiri dari 15 pertanyaan pilihan ganda.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm p-8">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-gray-600">
+                Pertanyaan {currentQuestion + 1} dari {questions.length}
+              </span>
+              <span className="text-sm font-semibold text-green-600">
+                {Math.round(((currentQuestion + 1) / questions.length) * 100)}%
+              </span>
             </div>
-            <div className="mt-2 text-sm text-slate-600">
-              {checked
-                ? "Lihat nilai akhir dan jumlah jawaban benar."
-                : "Selesaikan semua soal, lalu klik Cek Jawaban."}
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+              ></div>
             </div>
+          </div>
 
-            <div className="mt-4 flex items-center gap-4">
-              <div className="relative h-20 w-20 rounded-full p-[6px]" style={ringStyle}>
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-sm font-extrabold text-slate-900">
-                  {checked ? `${score100}` : `${Math.round((answeredCount / questions.length) * 100)}%`}
-                </div>
-              </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            {questions[currentQuestion].question}
+          </h2>
 
-              <div className="flex-1">
-                {checked ? (
-                  <>
-                    <div className="text-xs font-semibold text-slate-500">Jawaban benar</div>
-                    <div className="mt-1 text-lg font-extrabold text-slate-900">
-                      {correctCount}/{questions.length}
-                    </div>
-                    <div className="mt-2 text-xs font-semibold text-slate-500">Nilai akhir</div>
-                    <div className="mt-1 text-2xl font-extrabold text-green-700">
-                      {score100}/100
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-xs font-semibold text-slate-500">Checklist</div>
-                    <div className="mt-1 text-sm font-bold text-slate-900">
-                      Pastikan semua soal terjawab
-                    </div>
-                    <div className="mt-2 text-xs text-slate-600">
-                      Kamu baru bisa cek jawaban setelah 15 soal terisi.
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {checked ? (
-              <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-slate-700">
-                <div className="font-extrabold text-green-800">Feedback</div>
-                <div className="mt-1">{getFeedback()}</div>
-              </div>
-            ) : (
-              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-                Tips: kalau ragu, ingat prinsip aman: verifikasi sumber, jangan bagikan OTP, dan hindari klik link mencurigakan.
-              </div>
-            )}
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <PrimaryButton
-                onClick={checkQuiz}
-                disabled={answeredCount < questions.length || checked}
+          <div className="space-y-3 mb-8">
+            {questions[currentQuestion].options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleOptionSelect(index)}
+                disabled={isLocked}
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                  selectedOption === index
+                    ? 'border-green-600 bg-green-50'
+                    : 'border-gray-200 hover:border-green-300 hover:bg-gray-50'
+                } ${isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
               >
-                Cek Jawaban
-              </PrimaryButton>
-              <SecondaryButton onClick={() => nav("/modul")}>Buka Modul</SecondaryButton>
-            </div>
-          </div>
-        </div>
-
-        {/* Daftar pertanyaan */}
-        <div className="lg:col-span-8">
-          <Card
-            title="Pertanyaan"
-            desc="Pilih satu jawaban untuk setiap nomor. Setelah dicek, jawaban tidak bisa diubah."
-          >
-            <div className="space-y-4">
-              {questions.map((item, qi) => (
-                <div key={qi} className="rounded-3xl border border-slate-200 bg-white p-5">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="text-xs font-extrabold text-slate-500">Soal {qi + 1}</div>
-                      <div className="mt-1 text-sm font-extrabold text-slate-900">
-                        {item.q}
-                      </div>
-                    </div>
-
-                    {checked ? (
-                      <div
-                        className={
-                          "rounded-2xl px-3 py-1 text-xs font-extrabold " +
-                          (answers[qi] === item.answer
-                            ? "bg-green-600 text-white"
-                            : "bg-red-600 text-white")
-                        }
-                      >
-                        {answers[qi] === item.answer ? "Benar" : "Salah"}
-                      </div>
-                    ) : (
-                      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-extrabold text-slate-600">
-                        {typeof answers[qi] === "number" ? "Terjawab" : "Belum"}
-                      </div>
+                <div className="flex items-center gap-4">
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                    selectedOption === index
+                      ? 'border-green-600 bg-green-600'
+                      : 'border-gray-300'
+                  }`}>
+                    {selectedOption === index && (
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
                     )}
                   </div>
-
-                  <div className="mt-4 grid gap-2">
-                    {item.options.map((opt, oi) => {
-                      let cls = "rounded-2xl border p-3 text-left text-sm transition";
-
-                      if (!checked) {
-                        cls += answers[qi] === oi
-                          ? " border-green-300 bg-green-50"
-                          : " border-slate-200 hover:bg-slate-50";
-                      } else {
-                        if (oi === item.answer) cls += " border-green-300 bg-green-50";
-                        else if (answers[qi] === oi) cls += " border-red-300 bg-red-50";
-                        else cls += " border-slate-200 bg-white";
-                      }
-
-                      return (
-                        <button
-                          key={oi}
-                          onClick={() => pickAnswer(qi, oi)}
-                          className={cls}
-                          disabled={checked}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="text-slate-800">{opt}</div>
-                            {!checked && answers[qi] === oi ? (
-                              <div className="text-xs font-extrabold text-green-700">Dipilih</div>
-                            ) : null}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <span className="text-gray-800">{option}</span>
                 </div>
-              ))}
+              </button>
+            ))}
+          </div>
 
-              <div className="flex flex-wrap gap-2">
-                <PrimaryButton
-                  onClick={checkQuiz}
-                  disabled={answeredCount < questions.length || checked}
-                >
-                  Cek Jawaban
-                </PrimaryButton>
-
-                <SecondaryButton onClick={() => nav("/")}>
-                  Kembali ke Home
-                </SecondaryButton>
-              </div>
-            </div>
-          </Card>
+          <div className="flex justify-between">
+            <button
+              onClick={handlePrevious}
+              disabled={currentQuestion === 0}
+              className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+                currentQuestion === 0
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Sebelumnya
+            </button>
+            
+            <button
+              onClick={handleNext}
+              disabled={selectedOption === null}
+              className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+                selectedOption === null
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              {currentQuestion === questions.length - 1 ? 'Selesai' : 'Selanjutnya'}
+            </button>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
-}
+};
+
+export default FintechLiteracyQuiz;
