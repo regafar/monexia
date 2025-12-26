@@ -92,7 +92,7 @@ export default function Home() {
           </div>
 
           <h1 className="mt-2 text-3xl font-extrabold text-slate-900 md:text-4xl">
-            Belajar fintech dengan cara yang aman dan terarah
+            Belajar Fintech dengan Cara yang Aman dan Terarah
           </h1>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-700">
@@ -120,7 +120,7 @@ export default function Home() {
               Pusat Pelaporan Resmi
             </div>
             <div className="mt-1 text-xl font-extrabold text-slate-900">
-              Jadi korban penipuan transaksi?
+              Jadi Korban Penipuan Transaksi?
             </div>
             <p className="mt-2 text-sm text-slate-700">
               Ketahui langkah aman dan jalur resmi untuk melaporkan penipuan
