@@ -4,7 +4,7 @@ const FintechLiteracyQuiz = () => {
   const questions = [
     {
       id: 1,
-      question: "Fintech paling tepat berarti …",
+      question: "Fintech adalah …",
       options: [
         "Aplikasi hiburan dengan fitur transfer",
         "Layanan keuangan yang dipermudah teknologi",
