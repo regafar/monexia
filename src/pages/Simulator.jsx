@@ -1,15 +1,5 @@
 import React, { useState, useMemo } from "react";
 
-/**
- * ============================================================
- * ANTI PHISHING INTERACTIVE SIMULATION
- * - FULL PAGE
- * - TIDAK ADA LOGIKA DIHAPUS
- * - NARASI DITAMBAH
- * - UI INSPIRED OLEH GAMBAR REFERENSI
- * ============================================================
- */
-
 export default function AntiPhishingSimulationPage() {
   const [screen, setScreen] = useState("levelSelect");
   const [level, setLevel] = useState(1);
@@ -19,8 +9,7 @@ export default function AntiPhishingSimulationPage() {
   const levels = useMemo(() => ({
     1: {
       label: "Level 1 · Dasar (Awareness)",
-      goal:
-        "Di level ini, kamu dilatih untuk tidak reaktif. Fokusnya sederhana: jangan panik dan jangan asal klik.",
+      goal: "Belajar menahan diri. Jangan panik. Jangan asal klik.",
       cases: [
         {
           title: "Akun Akan Diblokir",
@@ -35,15 +24,14 @@ Jika tidak segera diverifikasi, akun akan DIBLOKIR hari ini.
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
           explanation: `
-Pilihan yang aman adalah **Abaikan**.
+Keputusan AMAN adalah mengabaikan pesan ini.
 
-Pesan ini menggunakan taktik klasik phishing: nada panik, ancaman pemblokiran, dan batas waktu singkat.
-Di dunia nyata, bank **tidak pernah** mengirim link verifikasi lewat SMS.
+Pesan ini sengaja dibuat menekan dan mendesak agar kamu panik.
+Di dunia nyata, bank tidak pernah mengirim link verifikasi lewat SMS.
 
-Bayangkan jika kamu benar-benar klik link ini.
-Kemungkinan besar kamu akan diarahkan ke website palsu yang meminta data sensitif seperti PIN atau OTP.
-Sekali data itu masuk, akunmu bisa diambil alih dalam hitungan menit.
-          `,
+Jika kamu klik link tersebut, kamu kemungkinan besar akan diarahkan ke situs palsu
+yang meminta data sensitif seperti PIN, OTP, atau password.
+`,
         },
         {
           title: "Hadiah Undian Pelanggan",
@@ -56,21 +44,19 @@ http://klaim-hadiah-pelanggan.id`,
           actions: ["Abaikan", "Klik Link"],
           correct: "Abaikan",
           explanation: `
-Pesan ini memancing emosi positif: senang, kaget, dan tergoda.
-Justru di kondisi emosional seperti ini, banyak orang lengah.
+Hadiah mendadak adalah salah satu bentuk phishing paling klasik.
 
 Refleksi dunia nyata:
-Jika kamu tidak pernah mengikuti undian apa pun, maka hadiah ini tidak masuk akal.
-Perusahaan resmi tidak mengirim klaim hadiah lewat link acak.
-          `,
+Jika kamu tidak pernah mengikuti undian apa pun,
+maka hadiah ini hampir pasti penipuan.
+`,
         },
       ],
     },
 
     2: {
       label: "Level 2 · Menengah (Analisis)",
-      goal:
-        "Pesan terlihat lebih rapi dan profesional. Di level ini, kamu dilatih untuk melakukan verifikasi.",
+      goal: "Belajar memverifikasi sebelum bertindak.",
       cases: [
         {
           title: "Pesanan Shopee Ditahan",
@@ -87,16 +73,11 @@ https://shopee-verifikasi-id.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
           explanation: `
-Pilihan terbaik adalah **Cek Sumber Resmi**.
+Pilihan paling tepat adalah memeriksa langsung melalui aplikasi Shopee resmi.
 
-Pesan ini terlihat meyakinkan karena:
-- Ada ID pesanan
-- Menggunakan bahasa customer service
-- Mengatasnamakan brand besar
-
-Namun, link bukan domain resmi Shopee.
-Di dunia nyata, langkah aman adalah membuka aplikasi Shopee langsung dan mengecek notifikasi dari sana.
-          `,
+Link pada pesan ini menggunakan domain tidak resmi.
+Membuka aplikasi langsung adalah langkah verifikasi paling aman.
+`,
         },
         {
           title: "Keamanan Akun Google",
@@ -109,20 +90,18 @@ https://gmail-security-check.my.id`,
           actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
           correct: "Cek Sumber Resmi",
           explanation: `
-Email ini meniru gaya komunikasi Google, tetapi domain pengirim dan link tidak resmi.
+Google hanya menggunakan domain akun.google.com.
 
-Refleksi:
-Google selalu menggunakan domain **akun.google.com**.
-Email keamanan asli tidak akan mengarahkan ke domain aneh.
-          `,
+Email dengan domain selain itu patut dicurigai,
+meskipun tampilannya terlihat profesional.
+`,
         },
       ],
     },
 
     3: {
       label: "Level 3 · Lanjutan (Critical Judgment)",
-      goal:
-        "Di level ini, pesan sangat realistis. Kamu harus benar-benar jeli mencari kejanggalan kecil.",
+      goal: "Pesan terlihat profesional. Fokus mencari kejanggalan.",
       cases: [
         {
           title: "Update Data Nasabah",
@@ -148,15 +127,13 @@ https://update-data-nasabah.site`,
             correct: `
 Kamu jeli.
 
-Bank tidak pernah meminta update data lewat WhatsApp.
-Selain itu, domain umum seperti .site sering digunakan untuk phishing.
-
-Keputusan ini menunjukkan kamu mampu mengontrol emosi dan fokus pada detail penting.
-            `,
+Bank tidak pernah meminta update data lewat WhatsApp,
+dan domain umum seperti .site sering dipakai untuk phishing.
+`,
             wrong: `
-Nada formal justru sering dipakai penipu agar terlihat sah.
-Fokuslah pada jalur komunikasi dan alamat website, bukan sekadar gaya bahasa.
-            `,
+Nada formal justru sering digunakan penipu
+untuk menyamarkan aksinya.
+`,
           },
         },
         {
@@ -184,13 +161,13 @@ Jika tidak, akses dibatasi 60 menit.`,
           ],
           explanation: {
             correct: `
-Layanan perbankan wajib menggunakan HTTPS.
-Tekanan waktu adalah teknik manipulasi psikologis agar korban tidak berpikir panjang.
-            `,
+Layanan bank wajib HTTPS.
+Tekanan waktu adalah taktik manipulasi psikologis.
+`,
             wrong: `
-Detail teknis sering ditambahkan untuk menciptakan ilusi keaslian.
-Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
-            `,
+Detail teknis sering digunakan
+untuk menciptakan kesan sah.
+`,
           },
         },
       ],
@@ -203,9 +180,7 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
   const isCorrect =
     level === 3
       ? selected.length === currentCase.correctOptions.length &&
-        selected.every((o) =>
-          currentCase.correctOptions.includes(o)
-        )
+        selected.every(o => currentCase.correctOptions.includes(o))
       : selected[0] === currentCase.correct;
 
   const next = () => {
@@ -222,19 +197,19 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
   };
 
   return (
-    <div className="min-h-[600px] bg-emerald-50 rounded-3xl p-6 md:p-10">
-      {/* ================= LEVEL SELECT ================= */}
+    <div className="min-h-[700px] bg-emerald-50 rounded-3xl p-8 md:p-12">
+      {/* LEVEL SELECT */}
       {screen === "levelSelect" && (
-        <div className="max-w-4xl space-y-8">
+        <div className="max-w-5xl mx-auto space-y-8">
           <h2 className="text-4xl font-bold text-slate-900">
             Simulasi Anti-Phishing
           </h2>
-          <p className="text-slate-600 text-lg">
-            Simulasi ini dirancang untuk melatih refleks, analisis, dan ketelitian kamu menghadapi pesan mencurigakan di dunia nyata.
+          <p className="text-lg text-slate-600">
+            Pilih level pembelajaran. Kamu bebas mulai dari level mana saja.
           </p>
 
-          <div className="grid sm:grid-cols-3 gap-6">
-            {[1, 2, 3].map((lvl) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {[1, 2, 3].map(lvl => (
               <button
                 key={lvl}
                 onClick={() => {
@@ -242,11 +217,11 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
                   setCaseIndex(0);
                   setScreen("scenario");
                 }}
-                className="bg-white rounded-2xl border shadow-sm p-6 text-left hover:border-emerald-500"
+                className="bg-white rounded-2xl border shadow-sm p-6 text-left hover:border-emerald-500 transition"
               >
-                <p className="font-bold text-lg">
+                <h3 className="font-bold text-lg">
                   {levels[lvl].label}
-                </p>
+                </h3>
                 <p className="text-sm text-slate-600 mt-2">
                   {levels[lvl].goal}
                 </p>
@@ -256,9 +231,9 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
         </div>
       )}
 
-      {/* ================= SCENARIO ================= */}
+      {/* SCENARIO */}
       {screen === "scenario" && (
-        <div className="bg-white rounded-2xl shadow p-6 max-w-4xl space-y-6">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-8 space-y-6">
           <button
             onClick={() => setScreen("levelSelect")}
             className="text-sm underline text-slate-500"
@@ -280,15 +255,15 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
           </div>
 
           {level < 3 && (
-            <div className="flex gap-3">
-              {currentCase.actions.map((a) => (
+            <div className="flex gap-4">
+              {currentCase.actions.map(a => (
                 <button
                   key={a}
                   onClick={() => {
                     setSelected([a]);
                     setScreen("result");
                   }}
-                  className="px-5 py-2 rounded-lg bg-emerald-600 text-white"
+                  className="px-6 py-2 rounded-lg bg-emerald-600 text-white"
                 >
                   {a}
                 </button>
@@ -298,21 +273,21 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
 
           {level === 3 && (
             <>
-              <p className="font-medium text-slate-700">
-                Tandai <b>2 indikator paling mencurigakan</b>:
+              <p className="font-medium">
+                Pilih 2 indikator paling mencurigakan:
               </p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {currentCase.options.map((o) => (
+              <div className="grid md:grid-cols-2 gap-4">
+                {currentCase.options.map(o => (
                   <button
                     key={o}
                     onClick={() =>
-                      setSelected((p) =>
-                        p.includes(o)
-                          ? p.filter((x) => x !== o)
-                          : [...p, o]
+                      setSelected(prev =>
+                        prev.includes(o)
+                          ? prev.filter(x => x !== o)
+                          : [...prev, o]
                       )
                     }
-                    className={`border rounded-lg p-3 text-left ${
+                    className={`border rounded-lg p-4 text-left ${
                       selected.includes(o)
                         ? "bg-emerald-100 border-emerald-500"
                         : "bg-white"
@@ -324,12 +299,9 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
               </div>
 
               <button
-                disabled={
-                  selected.length !==
-                  currentCase.correctOptions.length
-                }
+                disabled={selected.length !== currentCase.correctOptions.length}
                 onClick={() => setScreen("result")}
-                className="px-5 py-2 rounded-lg bg-emerald-600 text-white disabled:bg-slate-300"
+                className="px-6 py-2 rounded-lg bg-emerald-600 text-white disabled:bg-slate-300"
               >
                 Periksa Jawaban
               </button>
@@ -338,21 +310,14 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
         </div>
       )}
 
-      {/* ================= RESULT ================= */}
+      {/* RESULT */}
       {screen === "result" && (
-        <div className="bg-white rounded-2xl shadow p-6 max-w-4xl space-y-6">
-          <button
-            onClick={() => setScreen("scenario")}
-            className="text-sm underline text-slate-500"
-          >
-            ← Kembali ke Pesan
-          </button>
-
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-8 space-y-6">
           <h3 className="text-2xl font-bold">
-            Hasil Evaluasi
+            {isCorrect ? "✅ Jawaban Benar" : "❌ Jawaban Kurang Tepat"}
           </h3>
 
-          <p className="text-slate-700 whitespace-pre-line">
+          <p className="whitespace-pre-line text-slate-700">
             {level < 3
               ? currentCase.explanation
               : isCorrect
@@ -360,36 +325,35 @@ Namun justru tekanan waktu dan protokol tidak aman adalah tanda bahaya utama.
               : currentCase.explanation.wrong}
           </p>
 
-          {/* MENU TAMBAHAN – INSPIRED UI */}
           <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
             <h4 className="font-bold text-red-700 mb-2">
               Penting untuk Diingat
             </h4>
             <ul className="list-disc pl-5 text-sm text-red-700 space-y-1">
-              <li>Tidak ada pihak resmi meminta OTP, PIN, atau password</li>
-              <li>Waspadai pesan dengan tekanan waktu</li>
-              <li>Verifikasi selalu lewat aplikasi atau website resmi</li>
+              <li>Tidak ada pihak resmi meminta OTP atau PIN</li>
+              <li>Waspadai tekanan waktu</li>
+              <li>Verifikasi hanya lewat kanal resmi</li>
             </ul>
           </div>
 
           <button
             onClick={next}
-            className="px-5 py-2 rounded-lg bg-emerald-600 text-white"
+            className="px-6 py-2 rounded-lg bg-emerald-600 text-white"
           >
             Lanjut
           </button>
         </div>
       )}
 
-      {/* ================= DONE ================= */}
+      {/* DONE */}
       {screen === "done" && (
-        <div className="bg-white rounded-2xl shadow p-6 max-w-4xl space-y-3">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow p-8">
           <h3 className="text-2xl font-bold text-emerald-700">
             🎉 Simulasi Selesai
           </h3>
-          <p className="text-slate-700">
-            Kamu sudah melewati seluruh simulasi.  
-            Ingat: **penipu menang saat kita panik, bukan saat kita berpikir.**
+          <p className="text-slate-700 mt-2">
+            Kamu sudah menyelesaikan seluruh simulasi.
+            Ingat: penipu menang saat kita panik, bukan saat kita berpikir.
           </p>
         </div>
       )}
