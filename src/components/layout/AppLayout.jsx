@@ -18,7 +18,7 @@ export default function AppLayout() {
               onClick={() => nav("/")}
               className="rounded-xl border border-green-600 px-4 py-2 text-sm font-extrabold text-green-700 hover:bg-green-50"
             >
-              ⬅ Beranda
+              🏠 Beranda
             </button>
           </div>
         </div>
