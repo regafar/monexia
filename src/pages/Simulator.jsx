@@ -171,53 +171,52 @@ mengakses data pribadi, dan melakukan reset akun lain.
         "Pesan terlihat sangat profesional. Fokus mencari kejanggalan kecil.",
       cases: [
         {
-          title: "Update Data Nasabah",
-          channel: "WhatsApp",
-          sender: "CS Bank Nasional",
-          message: `Yth. Nasabah,
+  title: "Validasi WhatsApp Banking",
+  channel: "WhatsApp",
+  sender: "Bank Nasional Official",
+  message: `Yth. Bapak/Ibu Nasabah,
 
-Sesuai ketentuan OJK terbaru,
-seluruh nasabah WAJIB melakukan validasi ulang data.
+Kami menginformasikan bahwa sistem mendeteksi ketidaksesuaian data pada layanan WhatsApp Banking Anda.
 
-Apabila tidak dilakukan hari ini,
-layanan transfer dan kartu ATM akan dinonaktifkan.
+Untuk menghindari PEMBLOKIRAN TOTAL rekening dan seluruh transaksi,
+silakan segera lakukan pembaruan data dengan membalas pesan WhatsApp ini.
 
-Silakan isi formulir validasi berikut:
-https://bank-validasi-nasabah.com/form`,
-          options: [
-            "Permintaan data lewat WhatsApp",
-            "Ancaman penonaktifan layanan",
-            "Mengatasnamakan OJK",
-            "Nada pesan formal",
-          ],
-          correctOptions: [
-            "Permintaan data lewat WhatsApp",
-            "Ancaman penonaktifan layanan",
-          ],
-          explanation: {
-            correct: `
-Kamu berhasil mengenali indikator berbahaya utama.
+Petugas kami akan memandu proses verifikasi.
 
-Bank tidak pernah meminta data sensitif melalui WhatsApp.
-Selain itu, ancaman penonaktifan layanan adalah teknik tekanan psikologis.
+Terima kasih atas kerja samanya.
+CS Bank Nasional`,
+  options: [
+    "Meminta data lewat balasan WhatsApp",
+    "Ancaman pemblokiran TOTAL rekening",
+    "Mengaku CS tanpa identitas resmi",
+    "Bahasa terlihat sopan dan formal",
+  ],
+  correctOptions: [
+    "Meminta data lewat balasan WhatsApp",
+    "Ancaman pemblokiran TOTAL rekening",
+  ],
+  explanation: {
+    correct: `Kamu berhasil mengenali tanda paling berbahaya.
 
-Penipu sering mencatut nama lembaga resmi seperti OJK
-untuk meningkatkan kepercayaan korban.
-`,
-            wrong: `
-Nada formal dan penyebutan lembaga resmi
-sering digunakan untuk menipu korban.
+Permintaan data melalui BALASAN WhatsApp adalah indikator phishing yang sangat kuat.
+Bank tidak pernah melakukan verifikasi data sensitif lewat chat pribadi.
 
-Fokuslah pada jalur komunikasi dan bentuk ancaman,
-bukan sekadar gaya bahasa.
-`,
-          },
-          reminder: [
-            "Bank tidak minta data lewat chat",
-            "Ancaman layanan dinonaktifkan = red flag",
-            "Validasi hanya lewat kanal resmi",
-          ],
-        },
+Ancaman “pemblokiran TOTAL rekening” adalah bentuk tekanan ekstrem
+yang sengaja digunakan agar korban takut dan langsung menuruti instruksi.`,
+    wrong: `Bahasa sopan dan formal bukan jaminan keamanan.
+Penipu justru sering menggunakan gaya profesional agar terlihat meyakinkan.
+
+Fokus utama seharusnya pada:
+- Jalur komunikasi yang salah (WhatsApp)
+- Ancaman ekstrem terhadap rekening`,
+  },
+  reminder: [
+    "Bank tidak verifikasi data lewat WhatsApp",
+    "Ancaman pemblokiran total = red flag besar",
+    "CS resmi selalu lewat aplikasi atau call center",
+  ],
+},
+
         {
           title: "Login Baru Internet Banking",
           channel: "Email",
