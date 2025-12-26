@@ -259,29 +259,6 @@ const FintechLiteracyQuiz = () => {
     
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                M
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold text-gray-900">MoneEdu</span>
-                  <span className="bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded">EDU</span>
-                </div>
-                <p className="text-sm text-gray-600">Edukasi fintech, aman, terarah</p>
-              </div>
-            </div>
-            <button className="flex items-center gap-2 px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              Beranda
-            </button>
-          </div>
-        </header>
-
         <main className="max-w-4xl mx-auto px-6 py-12">
           <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -322,29 +299,6 @@ const FintechLiteracyQuiz = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              M
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-gray-900">MoneEdu</span>
-                <span className="bg-green-600 text-white text-xs font-semibold px-2 py-0.5 rounded">EDU</span>
-              </div>
-              <p className="text-sm text-gray-600">Edukasi fintech, aman, terarah</p>
-            </div>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Beranda
-          </button>
-        </div>
-      </header>
-
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-8 mb-8">
           <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
