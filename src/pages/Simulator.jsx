@@ -1,160 +1,181 @@
 import React, { useState, useMemo } from "react";
 
-export default function AntiPhishingSimulationPage() {
+export default function AntiPhishingSimulation() {
   const [level, setLevel] = useState(1);
-  const [step, setStep] = useState("scenario"); // scenario | feedback | lesson
-  const [selectedAction, setSelectedAction] = useState(null);
-  const [markedIndicators, setMarkedIndicators] = useState([]);
+  const [phase, setPhase] = useState("scenario"); // scenario | feedback | lesson
+  const [choice, setChoice] = useState(null);
+  const [flags, setFlags] = useState([]);
 
-  const scenarios = useMemo(
+  const data = useMemo(
     () => ({
       1: {
-        title: "Level 1 — Dasar (Awareness)",
+        badge: "Level 1 • Awareness",
+        title: "Pesan Panik yang Terlalu Mendesak",
         intro:
-          "Bayangkan kamu baru saja bangun tidur. Ponselmu berbunyi. Ada pesan masuk. Terlihat penting. Tapi… apakah benar?",
-        message: {
-          source: "SMS",
-          from: "BANK-INFO",
-          content:
-            "Peringatan! Akun Anda terdeteksi aktivitas tidak wajar. Klik link berikut untuk verifikasi agar akun tidak diblokir: http://bank-verifikasi-akun.co",
-        },
+          "Situasi klasik. Pesan datang tiba-tiba, bahasanya singkat, nadanya mengancam. Banyak korban jatuh karena refleks ingin cepat beres.",
+        channel: "SMS",
+        sender: "BCA-INFO",
+        message: `⚠️ PEMBERITAHUAN KEAMANAN ⚠️
+
+Akun BCA Anda terdeteksi aktivitas tidak wajar.
+Jika tidak segera diverifikasi, akun akan DIBLOKIR otomatis.
+
+Silakan klik link berikut untuk verifikasi:
+http://bca-verifikasi-akun.co/login
+
+BCA`,
         actions: ["Abaikan", "Klik Link"],
-        correctAction: "Abaikan",
+        correct: "Abaikan",
         feedback: {
-          correct:
-            "Pilihan yang aman. Pesan ini jelas memancing rasa panik agar kamu langsung klik tanpa berpikir.",
+          right:
+            "Benar. Bank tidak pernah mengirim link verifikasi melalui SMS. Nada panik adalah senjata utama penipu.",
           wrong:
-            "Di dunia nyata, satu klik bisa berujung pencurian data. Refleks aman dimulai dari tidak reaktif.",
+            "Di dunia nyata, link seperti ini biasanya langsung mengarah ke situs palsu pencuri data.",
         },
         lesson:
-          "Phishing dasar biasanya terlihat dari nada panik, link aneh, dan pengirim yang tidak jelas. Jika ragu, berhenti dulu.",
+          "Jika pesan membuatmu panik dan terburu-buru, itu sinyal kuat untuk berhenti. Institusi resmi tidak bekerja dengan cara menekan.",
       },
       2: {
-        title: "Level 2 — Menengah (Analisis)",
+        badge: "Level 2 • Analisis",
+        title: "Meniru Brand Terkenal dengan Rapi",
         intro:
-          "Sekarang skenarionya lebih rapi. Bahasanya sopan. Logonya meyakinkan. Tapi justru di sini banyak orang lengah.",
-        message: {
-          source: "WhatsApp",
-          from: "Shopee Care",
-          content:
-            "Halo Kak 👋 Kami dari Shopee. Ada transaksi yang tertunda karena verifikasi akun diperlukan. Silakan cek detailnya melalui tautan berikut agar pesanan tidak dibatalkan: https://shopee-id-verifikasi.my.id",
-        },
+          "Sekarang pesannya lebih halus. Nama brand dikenal, bahasanya ramah, bahkan ada emoji. Justru di sinilah banyak orang lengah.",
+        channel: "WhatsApp",
+        sender: "Shopee Indonesia",
+        message: `Shopee Care 💬
+
+Halo Kak 👋  
+Kami mendeteksi adanya *kendala verifikasi* pada akun Shopee Anda.
+
+📦 Pesanan: SPX-3928471  
+Status: *DITAHAN SEMENTARA*
+
+Agar pesanan tidak dibatalkan otomatis, silakan lakukan konfirmasi akun melalui link berikut:
+👉 https://shopee-verifikasi-akun.my.id
+
+Jika sudah, abaikan pesan ini.
+Terima kasih 🙏`,
         actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
-        correctAction: "Cek Sumber Resmi",
+        correct: "Cek Sumber Resmi",
         feedback: {
-          correct:
-            "Langkah cerdas. Kamu tidak langsung percaya dan memilih verifikasi lewat jalur resmi.",
+          right:
+            "Keputusan tepat. Kamu memilih verifikasi lewat aplikasi atau website resmi, bukan dari link pesan.",
           wrong:
-            "Pesan seperti ini sering meniru gaya komunikasi brand terkenal. Tanpa cek sumber, risikonya besar.",
+            "Penipu sering meniru gaya komunikasi brand, lengkap dengan emoji dan istilah internal.",
         },
         lesson:
-          "Biasakan cek aplikasi resmi, website asli, atau kontak layanan pelanggan yang kamu cari sendiri — bukan dari pesan.",
+          "Biasakan buka aplikasi resmi secara manual. Jangan pernah percaya link verifikasi yang dikirim lewat chat.",
       },
       3: {
-        title: "Level 3 — Lanjutan (Critical Judgment)",
+        badge: "Level 3 • Critical Judgment",
+        title: "Phishing Profesional yang Nyaris Sempurna",
         intro:
-          "Ini level tersulit. Pesannya terasa sangat nyata. Bahkan waktunya masuk akal. Sekarang, kendalikan emosi dan amati detail.",
-        message: {
-          source: "Email",
-          from: "noreply@bca-support.co.id",
-          content:
-            "Yth. Nasabah BCA,\n\nKami mendeteksi percobaan login baru pada akun Anda. Demi keamanan, mohon lakukan konfirmasi data maksimal 1 jam ke depan melalui portal berikut:\n\nhttps://klikbca-security.com\n\nJika tidak dikonfirmasi, akses internet banking akan dibatasi sementara.\n\nHormat kami,\nPT Bank Central Asia Tbk",
-        },
+          "Ini level tertinggi. Email terlihat resmi, bahasanya formal, bahkan tanda tangan perusahaan ada. Sekarang, ketelitianmu diuji.",
+        channel: "Email",
+        sender: "BCA Customer Service <noreply@bca-support.co.id>",
+        message: `Yth. Bapak/Ibu Nasabah,
+
+Kami mendeteksi percobaan login baru pada akun Internet Banking BCA Anda pada:
+📅 26 Desember 2025  
+📍 Perangkat: Android (Jakarta)
+
+Untuk menjaga keamanan akun Anda, mohon segera melakukan konfirmasi data melalui portal keamanan BCA berikut:
+https://klikbca-security.com
+
+⚠️ Perhatian:
+Apabila konfirmasi tidak dilakukan dalam waktu 60 menit, maka akses Internet Banking Anda akan kami batasi sementara.
+
+Hormat kami,  
+Customer Support  
+PT Bank Central Asia Tbk`,
         indicators: [
-          "Domain link tidak resmi",
-          "Batas waktu mendesak",
-          "Nada ancaman pembatasan",
-          "Alamat email menyerupai resmi",
+          "Domain link menyerupai tapi bukan domain resmi",
+          "Tekanan waktu (60 menit)",
+          "Ancaman pembatasan layanan",
+          "Alamat email terlihat profesional",
         ],
         correctIndicators: [
-          "Domain link tidak resmi",
-          "Batas waktu mendesak",
+          "Domain link menyerupai tapi bukan domain resmi",
+          "Tekanan waktu (60 menit)",
         ],
         actions: ["Lanjutkan", "Batalkan"],
-        correctAction: "Batalkan",
+        correct: "Batalkan",
         feedback: {
-          correct:
-            "Keputusan tepat. Kamu berhasil menahan diri meski pesannya terlihat profesional.",
+          right:
+            "Sangat baik. Kamu tidak terpancing walau pesannya terlihat sangat profesional.",
           wrong:
-            "Phishing tingkat lanjut memang dirancang sangat meyakinkan. Kesalahan kecil bisa berdampak besar.",
+            "Phishing tingkat lanjut memang dirancang menyerupai email asli. Satu klik bisa fatal.",
         },
         lesson:
-          "Penipu memanfaatkan tekanan waktu dan kepercayaan pada institusi besar. Justru di kondisi ini, verifikasi manual adalah kunci.",
+          "Email resmi tidak akan meminta konfirmasi data melalui link acak. Saat ragu, hubungi bank lewat nomor resmi.",
       },
     }),
     []
   );
 
-  const current = scenarios[level];
+  const current = data[level];
 
-  const handleAction = (action) => {
-    setSelectedAction(action);
-    setStep("feedback");
-  };
-
-  const toggleIndicator = (indicator) => {
-    setMarkedIndicators((prev) =>
-      prev.includes(indicator)
-        ? prev.filter((i) => i !== indicator)
-        : [...prev, indicator]
+  const toggleFlag = (f) => {
+    setFlags((prev) =>
+      prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
     );
   };
 
-  const isIndicatorsCorrect =
+  const flagsValid =
     level === 3 &&
-    markedIndicators.length === 2 &&
-    markedIndicators.every((i) => current.correctIndicators.includes(i));
+    flags.length === 2 &&
+    flags.every((f) => current.correctIndicators.includes(f));
 
   return (
-    <div className="bg-emerald-50 rounded-3xl p-6 md:p-10 space-y-8">
-      {/* Header */}
-      <div>
-        <span className="inline-block bg-emerald-600 text-white text-sm px-4 py-1 rounded-full mb-4">
-          Simulasi Anti-Phishing
+    <div className="bg-gradient-to-br from-emerald-50 to-white rounded-3xl p-6 md:p-10 space-y-10">
+      {/* Intro */}
+      <div className="max-w-3xl">
+        <span className="inline-block bg-emerald-600 text-white text-xs px-4 py-1 rounded-full mb-4">
+          {current.badge}
         </span>
         <h2 className="text-3xl font-bold text-slate-900">
           {current.title}
         </h2>
-        <p className="text-slate-600 mt-2 max-w-2xl">
+        <p className="text-slate-600 mt-3 leading-relaxed">
           {current.intro}
         </p>
       </div>
 
       {/* Scenario */}
-      {step === "scenario" && (
-        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+      {phase === "scenario" && (
+        <div className="bg-white rounded-2xl shadow-md p-6 space-y-6 max-w-3xl">
           <div>
-            <p className="text-sm text-slate-500 mb-1">
-              Simulasi Pesan ({current.message.source})
+            <p className="text-xs text-slate-500 mb-2">
+              Simulasi Pesan • {current.channel}
             </p>
-            <div className="border rounded-xl p-4 bg-slate-50">
-              <p className="text-xs text-slate-500 mb-2">
-                Dari: {current.message.from}
+            <div className="rounded-xl border bg-slate-50 p-4">
+              <p className="text-xs text-slate-500 mb-3">
+                Dari: {current.sender}
               </p>
-              <pre className="whitespace-pre-wrap text-slate-800 text-sm">
-                {current.message.content}
+              <pre className="whitespace-pre-wrap text-sm text-slate-800 leading-relaxed font-sans">
+                {current.message}
               </pre>
             </div>
           </div>
 
-          {/* Indicators for Level 3 */}
+          {/* Indicators */}
           {level === 3 && (
             <div>
-              <p className="font-medium text-slate-800 mb-2">
-                Tandai <span className="font-bold">2 indikator mencurigakan</span> yang kamu temukan:
+              <p className="font-semibold text-slate-800 mb-3">
+                Tandai <span className="text-emerald-600">2 hal</span> yang menurutmu mencurigakan:
               </p>
-              <div className="grid md:grid-cols-2 gap-3">
-                {current.indicators.map((indicator) => (
+              <div className="grid sm:grid-cols-2 gap-3">
+                {current.indicators.map((i) => (
                   <button
-                    key={indicator}
-                    onClick={() => toggleIndicator(indicator)}
-                    className={`border rounded-lg px-4 py-2 text-sm text-left ${
-                      markedIndicators.includes(indicator)
+                    key={i}
+                    onClick={() => toggleFlag(i)}
+                    className={`px-4 py-3 rounded-lg text-left text-sm border transition ${
+                      flags.includes(i)
                         ? "border-emerald-600 bg-emerald-50"
-                        : "border-slate-200"
+                        : "border-slate-200 hover:bg-slate-50"
                     }`}
                   >
-                    {indicator}
+                    {i}
                   </button>
                 ))}
               </div>
@@ -162,17 +183,18 @@ export default function AntiPhishingSimulationPage() {
           )}
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-3">
-            {current.actions.map((action) => (
+          <div className="flex flex-wrap gap-3 pt-2">
+            {current.actions.map((a) => (
               <button
-                key={action}
-                disabled={
-                  level === 3 && action === "Lanjutkan" && !isIndicatorsCorrect
-                }
-                onClick={() => handleAction(action)}
-                className="px-5 py-2 rounded-lg font-medium bg-emerald-600 text-white disabled:bg-slate-300"
+                key={a}
+                disabled={level === 3 && a === "Lanjutkan" && !flagsValid}
+                onClick={() => {
+                  setChoice(a);
+                  setPhase("feedback");
+                }}
+                className="px-5 py-2.5 rounded-lg font-medium bg-emerald-600 text-white disabled:bg-slate-300"
               >
-                {action}
+                {a}
               </button>
             ))}
           </div>
@@ -180,19 +202,19 @@ export default function AntiPhishingSimulationPage() {
       )}
 
       {/* Feedback */}
-      {step === "feedback" && (
-        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-4">
+      {phase === "feedback" && (
+        <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl space-y-4">
           <h3 className="text-xl font-bold text-slate-900">
-            Refleksi
+            Refleksi Singkat
           </h3>
-          <p className="text-slate-700">
-            {selectedAction === current.correctAction
-              ? current.feedback.correct
+          <p className="text-slate-700 leading-relaxed">
+            {choice === current.correct
+              ? current.feedback.right
               : current.feedback.wrong}
           </p>
           <button
-            onClick={() => setStep("lesson")}
-            className="mt-4 px-5 py-2 rounded-lg bg-emerald-600 text-white"
+            onClick={() => setPhase("lesson")}
+            className="mt-2 px-5 py-2 rounded-lg bg-emerald-600 text-white"
           >
             Lanjutkan
           </button>
@@ -200,27 +222,30 @@ export default function AntiPhishingSimulationPage() {
       )}
 
       {/* Lesson */}
-      {step === "lesson" && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 space-y-4">
-          <h3 className="text-lg font-bold text-slate-900">
-            Pelajaran Penting
+      {phase === "lesson" && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 max-w-3xl space-y-4">
+          <h3 className="font-bold text-slate-900 text-lg">
+            Catatan Penting
           </h3>
-          <p className="text-slate-700">{current.lesson}</p>
+          <p className="text-slate-700 leading-relaxed">
+            {current.lesson}
+          </p>
+
           {level < 3 ? (
             <button
               onClick={() => {
                 setLevel(level + 1);
-                setStep("scenario");
-                setSelectedAction(null);
-                setMarkedIndicators([]);
+                setPhase("scenario");
+                setChoice(null);
+                setFlags([]);
               }}
               className="px-5 py-2 rounded-lg bg-emerald-600 text-white"
             >
               Lanjut ke Level Berikutnya
             </button>
           ) : (
-            <p className="font-medium text-emerald-700">
-              Simulasi selesai. Ingat: berhenti, pikirkan, dan verifikasi sebelum bertindak.
+            <p className="font-semibold text-emerald-700">
+              Simulasi selesai. Ingat: penipu menang saat kita bereaksi, bukan saat kita berpikir.
             </p>
           )}
         </div>
