@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Logo({
   title = "MoneEdu",
-  subtitle = "Teman Belajar Keuangan Digitalmu.",
+  subtitle = "Teman Belajar Keuangan Digitalmu",
 }) {
   return (
     <div className="flex items-center gap-3 select-none">
