@@ -3,8 +3,8 @@ import React, { useState, useMemo } from "react";
 export default function AntiPhishingSimulationFinal() {
   const [level, setLevel] = useState(1);
   const [caseIndex, setCaseIndex] = useState(0);
-  const [stage, setStage] = useState("scenario");
-  // scenario | observe | result | done
+  const [stage, setStage] = useState("scenario"); 
+  // scenario | result | done
   const [selected, setSelected] = useState([]);
 
   const levels = useMemo(
@@ -29,7 +29,7 @@ BANK`,
             actions: ["Abaikan", "Klik Link"],
             correct: "Abaikan",
             explanation:
-              "Pesan ini menekan secara emosional dan menyertakan link acak. Bank tidak pernah melakukan verifikasi via SMS.",
+              "Pesan ini menggunakan tekanan dan link acak. Bank tidak pernah melakukan verifikasi melalui SMS.",
           },
           {
             title: "Hadiah Undian Pelanggan",
@@ -42,7 +42,7 @@ http://klaim-hadiah-pelanggan.id`,
             actions: ["Abaikan", "Klik Link"],
             correct: "Abaikan",
             explanation:
-              "Penipuan berbasis hadiah memanfaatkan rasa senang dan urgensi. Jika tidak pernah ikut undian, abaikan.",
+              "Jika Anda tidak pernah mengikuti undian, maka pesan ini hampir pasti penipuan.",
           },
         ],
       },
@@ -69,7 +69,7 @@ https://shopee-verifikasi-id.my.id`,
             actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
             correct: "Cek Sumber Resmi",
             explanation:
-              "Langkah paling aman adalah membuka aplikasi Shopee langsung. Link chat sering disalahgunakan penipu.",
+              "Langkah paling aman adalah membuka aplikasi Shopee langsung, bukan dari link pesan.",
           },
           {
             title: "Peringatan Keamanan Akun Google",
@@ -82,7 +82,7 @@ https://gmail-security-check.my.id`,
             actions: ["Abaikan", "Cek Sumber Resmi", "Klik Link"],
             correct: "Cek Sumber Resmi",
             explanation:
-              "Google tidak menggunakan domain acak. Cek keamanan akun hanya melalui akun.google.com.",
+              "Google tidak menggunakan domain verifikasi seperti ini. Selalu cek melalui akun.google.com.",
           },
         ],
       },
@@ -105,20 +105,20 @@ https://update-data-nasabah.site
 
 Terima kasih.`,
             options: [
-              "Permintaan data melalui WhatsApp",
+              "Permintaan pembaruan data melalui WhatsApp",
               "Link menggunakan domain umum (.site)",
-              "Bahasa formal dan sopan",
-              "Ada salam pembuka",
+              "Nada pesan formal dan sopan",
+              "Pesan dikirim tanpa menyebut nama nasabah",
             ],
             correctOptions: [
-              "Permintaan data melalui WhatsApp",
+              "Permintaan pembaruan data melalui WhatsApp",
               "Link menggunakan domain umum (.site)",
             ],
             explanation: {
               correct:
-                "Bank tidak pernah meminta pembaruan data lewat WhatsApp. Domain umum juga sering digunakan untuk phishing.",
+                "Bank tidak pernah meminta pembaruan data lewat WhatsApp. Selain itu, domain umum sering dipakai untuk phishing.",
               wrong:
-                "Bahasa formal dan salam pembuka justru sering dipakai penipu agar terlihat meyakinkan.",
+                "Nada formal dan tidak menyebut nama justru sering digunakan agar pesan terlihat resmi.",
             },
           },
           {
@@ -132,25 +132,25 @@ Kami mendeteksi login baru pada akun Internet Banking Anda.
 📍 Perangkat: Android – Jakarta  
 ⏰ Waktu: 26 Desember 2025
 
-Silakan konfirmasi melalui:
-https://klikbca-security.com
+Silakan lakukan pengecekan melalui tautan berikut:
+http://klikbca-security.com
 
 Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
             options: [
+              "Penggunaan protokol http (bukan https)",
               "Tekanan waktu 60 menit",
-              "Domain link menyerupai BCA",
-              "Ada detail waktu dan lokasi",
-              "Tanda tangan perusahaan",
+              "Alamat email pengirim terlihat profesional",
+              "Pesan mencantumkan detail lokasi dan waktu",
             ],
             correctOptions: [
+              "Penggunaan protokol http (bukan https)",
               "Tekanan waktu 60 menit",
-              "Domain link menyerupai BCA",
             ],
             explanation: {
               correct:
-                "Tekanan waktu adalah taktik manipulasi. Domain resmi BCA tidak menggunakan alamat tersebut.",
+                "Layanan perbankan tidak menggunakan http dan tidak menekan nasabah dengan batas waktu singkat.",
               wrong:
-                "Detail lokasi dan tanda tangan justru ditambahkan agar email terlihat sah.",
+                "Detail lokasi dan email profesional justru sering ditambahkan agar korban merasa pesan ini sah.",
             },
           },
         ],
@@ -169,13 +169,15 @@ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
   };
 
   const isCorrect =
-    level === 3 &&
-    selected.length === currentCase.correctOptions.length &&
-    selected.every((o) => currentCase.correctOptions.includes(o));
+    level === 3
+      ? selected.length === currentCase.correctOptions.length &&
+        selected.every((o) => currentCase.correctOptions.includes(o))
+      : selected[0] === currentCase.correct;
 
   const next = () => {
     setSelected([]);
     setStage("scenario");
+
     if (caseIndex < currentLevel.cases.length - 1) {
       setCaseIndex(caseIndex + 1);
     } else if (level < 3) {
@@ -217,8 +219,8 @@ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
                 <button
                   key={a}
                   onClick={() => {
-                    setStage("result");
                     setSelected([a]);
+                    setStage("result");
                   }}
                   className="px-5 py-2.5 rounded-lg bg-emerald-600 text-white"
                 >
@@ -229,66 +231,39 @@ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
           )}
 
           {level === 3 && (
-            <button
-              onClick={() => setStage("observe")}
-              className="px-5 py-2.5 rounded-lg bg-emerald-600 text-white"
-            >
-              Mulai Analisis Pesan
-            </button>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {currentCase.options.map((o) => (
+                <button
+                  key={o}
+                  onClick={() => toggleSelect(o)}
+                  className={`px-4 py-3 rounded-lg text-left border ${
+                    selected.includes(o)
+                      ? "bg-emerald-50 border-emerald-600"
+                      : "border-slate-200"
+                  }`}
+                >
+                  {o}
+                </button>
+              ))}
+            </div>
           )}
-        </div>
-      )}
 
-      {stage === "observe" && level === 3 && (
-        <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl space-y-4">
-          <h3 className="text-xl font-bold">
-            Temukan Hal yang Janggal
-          </h3>
-          <p className="text-slate-600">
-            Pilih <strong>2 bagian</strong> yang menurutmu tidak wajar.
-          </p>
-
-          <div className="grid sm:grid-cols-2 gap-3">
-            {currentCase.options.map((o) => (
-              <button
-                key={o}
-                onClick={() => toggleSelect(o)}
-                className={`px-4 py-3 rounded-lg text-left border ${
-                  selected.includes(o)
-                    ? "bg-emerald-50 border-emerald-600"
-                    : "border-slate-200"
-                }`}
-              >
-                {o}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-3 pt-3">
-            <button
-              onClick={() => {
-                setSelected([]);
-                setStage("scenario");
-              }}
-              className="px-4 py-2 rounded-lg border"
-            >
-              Kembali
-            </button>
+          {level === 3 && (
             <button
               disabled={selected.length !== currentCase.correctOptions.length}
               onClick={() => setStage("result")}
-              className="px-4 py-2 rounded-lg bg-emerald-600 text-white disabled:bg-slate-300"
+              className="px-5 py-2.5 rounded-lg bg-emerald-600 text-white disabled:bg-slate-300"
             >
               Periksa Jawaban
             </button>
-          </div>
+          )}
         </div>
       )}
 
       {stage === "result" && (
         <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl space-y-4">
           <h3 className="text-xl font-bold">
-            {level < 3 ? "Keputusan Kamu" : "Hasil Analisismu"}:{" "}
+            Jawaban Kamu:{" "}
             <span className={isCorrect ? "text-emerald-600" : "text-red-600"}>
               {isCorrect ? "BENAR" : "SALAH"}
             </span>
@@ -296,9 +271,7 @@ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
 
           <p className="text-slate-700">
             {level < 3
-              ? selected[0] === currentCase.correct
-                ? currentCase.explanation
-                : currentCase.explanation
+              ? currentCase.explanation
               : isCorrect
               ? currentCase.explanation.correct
               : currentCase.explanation.wrong}
@@ -319,8 +292,8 @@ Jika tidak dikonfirmasi dalam 60 menit, akses akan dibatasi.`,
             🎉 Simulasi Selesai
           </h3>
           <p className="text-slate-700">
-            Kamu telah melewati semua simulasi. Ingat: phishing paling berbahaya
-            adalah yang terlihat paling meyakinkan.
+            Kamu telah melewati semua level. Ingat: pesan yang terlihat paling
+            profesional sering kali justru yang paling berbahaya.
           </p>
         </div>
       )}
