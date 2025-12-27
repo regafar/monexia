@@ -337,10 +337,6 @@ export default function Planner() {
         title="Rencana Keuangan"
         desc="Atur pendapatan dan detail pengeluaran. Ringkasan anggaran akan otomatis menyesuaikan nilai yang kamu masukkan."
       >
-        <div className="flex flex-wrap gap-2">
-          <SecondaryButton onClick={() => nav(-1)}>← Kembali</SecondaryButton>
-          <SecondaryButton onClick={() => nav("/")}>Beranda</SecondaryButton>
-        </div>
 
         {/* Pendapatan */}
         <div className="mt-5 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
