@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import PrimaryButton from "../components/ui/PrimaryButton";
-
-// 👉 TAMBAHAN IMPORT GAMBAR INFOGRAFIS
-import InfografisImg from "../../assets/infografis.png";
+import infografis from "../assets/infografis.png"; // ✅ TAMBAHAN
 
 function FeatureCard({ icon, title, desc, cta, onClick }) {
   return (
@@ -123,11 +121,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div>
-            <PrimaryButton onClick={() => nav("/lapor")}>
-              Buka Pusat Pelaporan
-            </PrimaryButton>
-          </div>
+          <PrimaryButton onClick={() => nav("/lapor")}>
+            Buka Pusat Pelaporan
+          </PrimaryButton>
         </div>
       </div>
 
@@ -144,7 +140,6 @@ export default function Home() {
             cta="Buka Modul"
             onClick={() => nav("/modul")}
           />
-
           <FeatureCard
             icon="🛡️"
             title="Simulasi Anti-Phishing"
@@ -152,7 +147,6 @@ export default function Home() {
             cta="Mulai Simulasi"
             onClick={() => nav("/simulasi")}
           />
-
           <FeatureCard
             icon="✅"
             title="Kuis Evaluasi"
@@ -160,7 +154,6 @@ export default function Home() {
             cta="Mulai Kuis"
             onClick={() => nav("/kuis")}
           />
-
           <FeatureCard
             icon="🧾"
             title="Rencana Keuangan"
@@ -171,16 +164,16 @@ export default function Home() {
         </div>
       </Card>
 
-      {/* 👉 INFOGRAFIS (KOMPONEN BARU, DI ATAS VIDEO) */}
+      {/* INFOGRAFIS - ✅ KOMONEN BARU */}
       <Card
         title="Infografis"
         desc="Ringkasan visual edukasi fintech untuk memudahkan pemahaman."
       >
         <div className="mt-4 flex justify-center">
           <img
-            src={InfografisImg}
+            src={infografis}
             alt="Infografis Edukasi Fintech"
-            className="w-full max-w-3xl rounded-2xl border border-slate-200 shadow-sm"
+            className="w-full max-w-3xl rounded-3xl border border-slate-200 shadow-sm"
           />
         </div>
       </Card>
@@ -192,23 +185,17 @@ export default function Home() {
       >
         <div className="mt-4 flex justify-center">
           <div className="w-full max-w-2xl">
-            {videoID ? (
-              <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-black shadow-sm">
-                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${videoID}?rel=0`}
-                    title="Video Pembelajaran MoneEdu"
-                    className="absolute left-0 top-0 h-full w-full"
-                    frameBorder="0"
-                    allowFullScreen
-                  />
-                </div>
+            <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-black shadow-sm">
+              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoID}?rel=0`}
+                  title="Video Pembelajaran MoneEdu"
+                  className="absolute left-0 top-0 h-full w-full"
+                  frameBorder="0"
+                  allowFullScreen
+                />
               </div>
-            ) : (
-              <div className="aspect-video w-full rounded-3xl border border-slate-200 bg-slate-50 flex items-center justify-center text-sm text-slate-500">
-                Placeholder Video
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </Card>
