@@ -4,6 +4,9 @@ import Card from "../components/ui/Card";
 import SecondaryButton from "../components/ui/SecondaryButton";
 import PrimaryButton from "../components/ui/PrimaryButton";
 
+// 👉 TAMBAHAN IMPORT GAMBAR INFOGRAFIS
+import InfografisImg from "../../assets/infografis.png";
+
 function FeatureCard({ icon, title, desc, cta, onClick }) {
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 transition">
@@ -30,11 +33,8 @@ function FeatureCard({ icon, title, desc, cta, onClick }) {
 export default function Home() {
   const nav = useNavigate();
 
-  // Ambil nama dari onboarding
   const [nama, setNama] = useState("");
-
-  // State untuk video - VIDEO DIGANTI DI SINI
-  const [videoID, setVideoID] = useState("epebQIryA1c"); // Video baru
+  const [videoID, setVideoID] = useState("epebQIryA1c");
 
   useEffect(() => {
     try {
@@ -45,24 +45,19 @@ export default function Home() {
           setNama(parsed.name);
         }
       }
-    } catch (e) {
-      // diamkan jika data rusak
-    }
+    } catch (e) {}
 
-    // Load video ID dari localStorage jika ada
     try {
       const savedVideo = localStorage.getItem("MoneEdu_video_id");
       if (savedVideo) {
         setVideoID(savedVideo);
       }
-    } catch (e) {
-      // diamkan jika error
-    }
+    } catch (e) {}
   }, []);
 
   return (
     <div className="space-y-8">
-      {/* WELCOME BANNER - HIGHLIGHTED */}
+      {/* WELCOME BANNER */}
       {nama ? (
         <div className="rounded-3xl border border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 p-6 shadow-sm">
           <div className="flex items-center gap-3">
@@ -112,7 +107,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* PUSAT PELAPORAN — DIHIGHLIGHT & TERPISAH */}
+      {/* PUSAT PELAPORAN */}
       <div className="rounded-3xl border border-green-300 bg-green-50 p-6 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="max-w-xl">
@@ -124,8 +119,7 @@ export default function Home() {
             </div>
             <p className="mt-2 text-sm text-slate-700">
               Ketahui langkah aman dan jalur resmi untuk melaporkan penipuan
-              transaksi keuangan. Panduan ini dibuat agar kamu tidak panik dan
-              tidak salah langkah.
+              transaksi keuangan.
             </p>
           </div>
 
@@ -146,7 +140,7 @@ export default function Home() {
           <FeatureCard
             icon="📚"
             title="Modul Pembelajaran"
-            desc="Belajar fintech secara bertahap per subbab, lengkap dengan navigasi dan mini kuis di akhir modul."
+            desc="Belajar fintech secara bertahap."
             cta="Buka Modul"
             onClick={() => nav("/modul")}
           />
@@ -154,7 +148,7 @@ export default function Home() {
           <FeatureCard
             icon="🛡️"
             title="Simulasi Anti-Phishing"
-            desc="Latihan Level 1–3 untuk mengenali penipuan digital dari SMS, email, WhatsApp, dan website palsu."
+            desc="Latihan mengenali penipuan digital."
             cta="Mulai Simulasi"
             onClick={() => nav("/simulasi")}
           />
@@ -162,7 +156,7 @@ export default function Home() {
           <FeatureCard
             icon="✅"
             title="Kuis Evaluasi"
-            desc="Uji pemahaman melalui 15 pertanyaan. Hasil ditampilkan dalam skor skala 1–100."
+            desc="Uji pemahaman kamu."
             cta="Mulai Kuis"
             onClick={() => nav("/kuis")}
           />
@@ -170,14 +164,28 @@ export default function Home() {
           <FeatureCard
             icon="🧾"
             title="Rencana Keuangan"
-            desc="Atur pendapatan dan pengeluaran. Ringkasan anggaran otomatis menyesuaikan angka yang kamu masukkan."
+            desc="Atur pendapatan dan pengeluaran."
             cta="Buka Rencana Keuangan"
             onClick={() => nav("/planner")}
           />
         </div>
       </Card>
 
-      {/* VIDEO EDUKASI - UPDATED WITH WORKING EMBED */}
+      {/* 👉 INFOGRAFIS (KOMPONEN BARU, DI ATAS VIDEO) */}
+      <Card
+        title="Infografis"
+        desc="Ringkasan visual edukasi fintech untuk memudahkan pemahaman."
+      >
+        <div className="mt-4 flex justify-center">
+          <img
+            src={InfografisImg}
+            alt="Infografis Edukasi Fintech"
+            className="w-full max-w-3xl rounded-2xl border border-slate-200 shadow-sm"
+          />
+        </div>
+      </Card>
+
+      {/* VIDEO EDUKASI */}
       <Card
         title="Video Edukasi"
         desc="Berikut adalah vidio mengenai edukasi fintech."
@@ -192,8 +200,6 @@ export default function Home() {
                     title="Video Pembelajaran MoneEdu"
                     className="absolute left-0 top-0 h-full w-full"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
                     allowFullScreen
                   />
                 </div>
