@@ -31,11 +31,8 @@ function FeatureCard({ icon, title, desc, cta, onClick }) {
 export default function Home() {
   const nav = useNavigate();
 
-  // Ambil nama dari onboarding
   const [nama, setNama] = useState("");
-
-  // State untuk video - VIDEO DIGANTI DI SINI
-  const [videoID, setVideoID] = useState("epebQIryA1c"); // Video baru
+  const [videoID, setVideoID] = useState("epebQIryA1c");
 
   useEffect(() => {
     try {
@@ -46,19 +43,14 @@ export default function Home() {
           setNama(parsed.name);
         }
       }
-    } catch (e) {
-      // diamkan jika data rusak
-    }
+    } catch (e) {}
 
-    // Load video ID dari localStorage jika ada
     try {
       const savedVideo = localStorage.getItem("MoneEdu_video_id");
       if (savedVideo) {
         setVideoID(savedVideo);
       }
-    } catch (e) {
-      // diamkan jika error
-    }
+    } catch (e) {}
   }, []);
 
   return (
@@ -178,7 +170,7 @@ export default function Home() {
         </div>
       </Card>
 
-      {/* INFOGRAFIS — ✅ TAMBAHAN TANPA MENGUBAH KODE ASLI */}
+      {/* INFOGRAFIS — DIKECILKAN & TENGAH (SATU-SATUNYA PERUBAHAN) */}
       <Card
         title="Infografis"
         desc="Ringkasan visual edukasi fintech untuk memudahkan pemahaman."
@@ -187,12 +179,12 @@ export default function Home() {
           <img
             src={infografis}
             alt="Infografis Edukasi Fintech"
-            className="w-full max-w-3xl rounded-3xl border border-slate-200 shadow-sm"
+            className="w-full max-w-2xl rounded-3xl border border-slate-200 shadow-sm"
           />
         </div>
       </Card>
 
-      {/* VIDEO EDUKASI - UPDATED WITH WORKING EMBED */}
+      {/* VIDEO EDUKASI */}
       <Card
         title="Video Edukasi"
         desc="Berikut adalah vidio mengenai edukasi fintech."
@@ -201,7 +193,10 @@ export default function Home() {
           <div className="w-full max-w-2xl">
             {videoID ? (
               <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-black shadow-sm">
-                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <div
+                  className="relative w-full"
+                  style={{ paddingTop: "56.25%" }}
+                >
                   <iframe
                     src={`https://www.youtube.com/embed/${videoID}?rel=0`}
                     title="Video Pembelajaran MoneEdu"
